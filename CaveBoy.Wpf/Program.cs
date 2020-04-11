@@ -1,14 +1,13 @@
-﻿using System;
-using Eto.Forms;
+﻿using CaveBoy.Base;
+using System;
 
 namespace CaveBoy.Wpf
 {
-	class MainClass
+	class Program : BaseProgram<Program>
 	{
+		public override string Platform => Eto.Platforms.Wpf;
+
 		[STAThread]
-		public static void Main(string[] args)
-		{
-			new Application(Eto.Platforms.Wpf).Run(new MainForm());
-		}
+		public static void Main(string[] args) => Run(args);
 	}
 }

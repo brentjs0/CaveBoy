@@ -6,6 +6,7 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\CaveBoy.Base\CaveBoy.Base.csproj" />
     <ProjectReference Include="..\CaveBoy\CaveBoy.csproj" />
   </ItemGroup>
 

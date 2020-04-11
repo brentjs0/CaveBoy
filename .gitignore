@@ -1,7 +1,9 @@
-.vs/
-CaveBoy.Gtk/obj/
-CaveBoy.Mac/obj/
-CaveBoy.Wpf/bin/
-CaveBoy.Wpf/obj/
-CaveBoy/bin/
-CaveBoy/obj/
+/.vs/
+/CaveBoy.Gtk/obj/
+/CaveBoy.Mac/obj/
+/CaveBoy.Wpf/bin/
+/CaveBoy.Wpf/obj/
+/CaveBoy/bin/
+/CaveBoy/obj/
+/CaveBoy.Base/bin/
+/CaveBoy.Base/obj/

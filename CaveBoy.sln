@@ -1,14 +1,26 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2026
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaveBoy", "CaveBoy\CaveBoy.csproj", "{CA707BC2-1038-4AF0-BF8B-7D391EACEB08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CaveBoy", "CaveBoy\CaveBoy.csproj", "{CA707BC2-1038-4AF0-BF8B-7D391EACEB08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaveBoy.Gtk", "CaveBoy.Gtk\CaveBoy.Gtk.csproj", "{5F13CF54-09AC-4C6F-85BD-5077EF8EE63A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CaveBoy.Gtk", "CaveBoy.Gtk\CaveBoy.Gtk.csproj", "{5F13CF54-09AC-4C6F-85BD-5077EF8EE63A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{067DADAB-345D-464B-86ED-11549E793540} = {067DADAB-345D-464B-86ED-11549E793540}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaveBoy.Mac", "CaveBoy.Mac\CaveBoy.Mac.csproj", "{C9F932EE-5275-4B0E-A272-E38E52A3E72F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CaveBoy.Mac", "CaveBoy.Mac\CaveBoy.Mac.csproj", "{C9F932EE-5275-4B0E-A272-E38E52A3E72F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{067DADAB-345D-464B-86ED-11549E793540} = {067DADAB-345D-464B-86ED-11549E793540}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaveBoy.Wpf", "CaveBoy.Wpf\CaveBoy.Wpf.csproj", "{7EE5C2EC-9B45-4092-BC1C-FA67EEB88052}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CaveBoy.Wpf", "CaveBoy.Wpf\CaveBoy.Wpf.csproj", "{7EE5C2EC-9B45-4092-BC1C-FA67EEB88052}"
+	ProjectSection(ProjectDependencies) = postProject
+		{067DADAB-345D-464B-86ED-11549E793540} = {067DADAB-345D-464B-86ED-11549E793540}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaveBoy.Base", "CaveBoy.Base\CaveBoy.Base.csproj", "{067DADAB-345D-464B-86ED-11549E793540}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +44,10 @@ Global
 		{7EE5C2EC-9B45-4092-BC1C-FA67EEB88052}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EE5C2EC-9B45-4092-BC1C-FA67EEB88052}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7EE5C2EC-9B45-4092-BC1C-FA67EEB88052}.Release|Any CPU.Build.0 = Release|Any CPU
+		{067DADAB-345D-464B-86ED-11549E793540}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{067DADAB-345D-464B-86ED-11549E793540}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{067DADAB-345D-464B-86ED-11549E793540}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{067DADAB-345D-464B-86ED-11549E793540}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

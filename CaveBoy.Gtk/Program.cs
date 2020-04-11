@@ -1,14 +1,13 @@
-﻿using System;
-using Eto.Forms;
+﻿using CaveBoy.Base;
+using System;
 
 namespace CaveBoy.Gtk
 {
-	class MainClass
+	class Program : BaseProgram<Program>
 	{
+		public override string Platform => Eto.Platforms.Gtk;
+
 		[STAThread]
-		public static void Main(string[] args)
-		{
-			new Application(Eto.Platforms.Gtk).Run(new MainForm());
-		}
+		public static void Main(string[] args) => Run(args);
 	}
 }
