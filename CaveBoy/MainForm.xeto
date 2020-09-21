@@ -6,9 +6,23 @@
 	ClientSize="400, 350"
 	Padding="10"
 	>
+  <!--
 	<StackLayout>
 		<Label>Some Content</Label>
+    <GridView ID="gridView">
+      <GridView.Columns>
+        <GridColumn ID="drawColumn1" HeaderText="not working" Width="200">
+          <DrawableCell/>
+        </GridColumn>
+        <GridColumn ID="drawColumn2" HeaderText="working" Width="200">
+          <DrawableCell/>
+        </GridColumn>
+      </GridView.Columns>
+    </GridView>
 	</StackLayout>
+  -->
+  
+    <Drawable ID="drawable" BackgroundColor="White"/>
 
 	<Form.Menu>
 		<MenuBar>
