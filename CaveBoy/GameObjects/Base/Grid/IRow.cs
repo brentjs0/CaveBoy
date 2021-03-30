@@ -4,7 +4,8 @@ using System.Text;
 
 namespace CaveBoy.GameObjects.Base.Grid
 {
-    class ICell
+    public interface IRow<TCell>
     {
+        TCell this[int i] { get; set; }
     }
 }

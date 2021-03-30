@@ -24,6 +24,8 @@ namespace CaveBoy
 
 		protected void PaintCanvas(object sender, PaintEventArgs e)
 		{
+			IList<string> eggs = new string[1];
+
 			string paletteGroup =
 				"000uuqoqjqf9koivv0ieuv1b2vd5ncafevvpoojkkdgha666" +
 				"000uuqoqjecljjoenvhevv1b2vd5ncafevmdqfejbdj99666" +

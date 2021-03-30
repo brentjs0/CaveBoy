@@ -22,7 +22,7 @@ namespace CaveBoy.GameObjects
 
         public MinitilePalette(IEnumerable<SFCColor> colors) : this(colors.ToArray()) { }
 
-        public MinitilePalette(string paletteString) : this(paletteString.InSlicesOf(3).Select(colorString => new SFCColor(colorString))) { }
+        public MinitilePalette(IEnumerable<char> paletteString) : this(paletteString.InSlicesOf(3).Select(colorString => new SFCColor(colorString))) { }
 
         public override string PerformToString() => string.Join(string.Empty, (object[])Colors);
     }
