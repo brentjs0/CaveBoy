@@ -15,6 +15,11 @@
   "keywords": [],
   "author": "brentjs0",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brentjs0/CaveBoy.git"
+  },
+  "bugs": "https://github.com/brentjs0/CaveBoy/issues",
   "browserslist": [
     "last 2 versions",
     ">1%"
@@ -42,8 +47,8 @@
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},
       "github_repository": {
-        "owner": "",
-        "name": ""
+        "owner": "brentjs0",
+        "name": "CaveBoy"
       },
       "windowsStoreConfig": {
         "packageName": "",
