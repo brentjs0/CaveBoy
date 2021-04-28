@@ -1,13 +1,43 @@
 {
+    "$schema": "https://json.schemastore.org/tsconfig.json",
     "compilerOptions": {
-        "lib": ["es2020", "dom"],
-        "target": "ES2015",
-        "module": "commonjs",
-        "strict": true,
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": ".",
         "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "jsx": "preserve",
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext",
+            "scripthost"
+        ],
+        "module": "esnext",
+        "moduleResolution": "node",
+        "paths": {
+        "@/*": [
+            "src/*"
+        ]
+        },
         "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true
+        "sourceMap": true,
+        "strict": true,
+        "target": "esnext",
+        "types": [
+            "chai",
+            "mocha",
+            "webpack-env"
+        ]
     },
-    "$schema": "https://json.schemastore.org/tsconfig",
-    "display": "Recommended",
+    "exclude": [
+        "node_modules"
+    ],
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "src/**/*.vue",
+        "tests/**/*.ts",
+        "tests/**/*.tsx"
+    ]
 }

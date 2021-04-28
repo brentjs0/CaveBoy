@@ -1,5 +1,4 @@
+dist/
 node_modules/
 notes/
-out/
 test-data/
-web-dist/
