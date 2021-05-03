@@ -13,8 +13,10 @@
         "url": "git+https://github.com/brentjs0/CaveBoy.git"
     },
     "scripts": {
-        "serve": "vue-cli-service serve",
-        "build": "set NODE_ENV=production && vue-cli-service build",
+        "serve:dev": "set NODE_ENV=development && vue-cli-service serve",
+        "serve:prod": "set NODE_ENV=production && vue-cli-service serve",
+        "build:dev": "set NODE_ENV=development && vue-cli-service build",
+        "build:prod": "set NODE_ENV=production && vue-cli-service build",
         "test:unit": "vue-cli-service test:unit",
         "lint": "vue-cli-service lint"
     },
