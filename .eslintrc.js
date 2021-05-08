@@ -1,3 +1,5 @@
+const nodeEnv = process.env.NODE_ENV.trim();
+
 module.exports = {
   root: true,
   env: {
@@ -14,8 +16,8 @@ module.exports = {
     ecmaVersion: 2020,
   },
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-console': nodeEnv === 'production' ? 'warn' : 'off',
+    'no-debugger': nodeEnv === 'production' ? 'warn' : 'off',
     'quotes': ['error', 'single'],
     'prettier/prettier': [
       'error',
