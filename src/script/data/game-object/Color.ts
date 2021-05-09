@@ -36,6 +36,11 @@ export default class Color {
   public blueComponent: FiveBitNumber = 0;
 
   /**
+   * Instantiates a Color with a value of 0 for the red, green, and blue components (pure black).
+   */
+  public constructor();
+
+  /**
    * Instantiates a Color with provided red, green, and blue components.
    * @param redComponent - The red level of the Color.
    * @param greenComponent - The green level of the Color.
@@ -64,7 +69,11 @@ export default class Color {
   public constructor(coilSnakeColorString: CoilSnakeColorString);
 
   public constructor(
-    param1: FiveBitNumber | CoilSnakeColorString | HexadecimalColorString,
+    param1:
+      | FiveBitNumber
+      | CoilSnakeColorString
+      | HexadecimalColorString
+      | undefined = undefined,
     param2: ColorComponentScalerNames | FiveBitNumber | undefined = undefined,
     param3: FiveBitNumber | undefined = undefined
   ) {
@@ -78,7 +87,9 @@ export default class Color {
       this.constructFromHexadecimalColorString(param1, param2);
     } else if (isCoilSnakeColorString(param1) && param2 === undefined) {
       this.constructFromCoilSnakeColorString(param1);
-    } else {
+    } else if (
+      !(param1 === undefined && param2 === undefined && param3 === undefined)
+    ) {
       throw new CaveBoyError('The arguments provided to Color() were invalid.');
     }
   }

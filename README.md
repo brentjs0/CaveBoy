@@ -6,7 +6,7 @@ A graphical editor for CoilSnake projects.
 This project is still under development and does not yet have a functional release. 
 
 - [ ] Milestone 1: Decode and encode *.fts files.
-  - [ ] Colors
+  - [x] Colors
   - [ ] Minitile Palettes ("Subpalettes")
   - [ ] Minitile Layers
   - [ ] Minitiles
