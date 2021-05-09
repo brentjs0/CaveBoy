@@ -6,8 +6,8 @@ $inverted-text-color: null !default;
 $button-background-color: null !default;
 
 @if $theme == default-theme {
-    $primary-background-color: #1e1e1e;
-    $primary-text-color: #ccc;
-    $inverted-text-color: #1e1e1e;
-    $button-background-color: #11a8cd;
+  $primary-background-color: #1e1e1e;
+  $primary-text-color: #ccc;
+  $inverted-text-color: #1e1e1e;
+  $button-background-color: #11a8cd;
 }

@@ -10,9 +10,14 @@ export type EightBitNumber = number;
  * @returns True if value is a non-negative integer than can be expressed with eight or fewer binary digits. Otherwise, false.
  */
 export function isEightBitNumber(value: any): value is EightBitNumber {
-    if (typeof value === 'number' && (value % 1 === 0) && value >= 0 && value <= 255) {
-        return true;
-    }
-    
-    return false;
+  if (
+    typeof value === 'number' &&
+    value % 1 === 0 &&
+    value >= 0 &&
+    value <= 255
+  ) {
+    return true;
+  }
+
+  return false;
 }

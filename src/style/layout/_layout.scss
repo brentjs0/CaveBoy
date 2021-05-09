@@ -1,20 +1,19 @@
 .page {
-    display: grid;
-    grid-template-areas:
-        'header'
-        'content';
-    grid-template-rows: 
-        1fr
-        9fr;
-    height: calc(100vh - 2em);
-    margin: 1em;
+  display: grid;
+  grid-template-areas:
+    'header'
+    'content';
+  grid-template-rows:
+    1fr
+    9fr;
+  height: calc(100vh - 2em);
+  margin: 1em;
 
-    &__header {
-        grid-area: header;
-    }
+  &__header {
+    grid-area: header;
+  }
 
-    &__content {
-        grid-area: content;
-    }
+  &__content {
+    grid-area: content;
+  }
 }
-

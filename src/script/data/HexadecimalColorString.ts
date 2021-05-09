@@ -4,17 +4,19 @@
  */
 export type HexadecimalColorString = string;
 
-const requiredFormat: RegExp = /^#([0-9a-f]{6}|[0-9a-f]{3})$/i;
+const requiredFormat = /^#([0-9a-f]{6}|[0-9a-f]{3})$/i;
 
 /**
  * Return true if value meets the required type and format for a HexadecimalColorString ('#xxx' or '#xxxxxx').
  * @param value - A value that might be a HexadecimalColorString.
  * @returns True if value meets the required type and format for a HexadecimalColorString. Otherwise, false.
  */
-export function isHexadecimalColorString(value: HexadecimalColorString | any): value is HexadecimalColorString {
-    if (typeof value === 'string') {
-        return requiredFormat.test(value);
-    }
-    
-    return false;
-} 
+export function isHexadecimalColorString(
+  value: any
+): value is HexadecimalColorString {
+  if (typeof value === 'string') {
+    return requiredFormat.test(value);
+  }
+
+  return false;
+}
