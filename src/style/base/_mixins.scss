@@ -1,26 +1,25 @@
 @mixin button($inline: true) {
-    background-color: var(--button-background-color);
-    border-radius: 0.5em;
-    color: var(--button-text-color);
-    cursor: pointer;
+  background-color: var(--button-background-color);
+  border-radius: 0.5em;
+  color: var(--button-text-color);
+  cursor: pointer;
 
-    @if $inline {
-        display: inline-block;
-    }
-    @else {
-        display: block;
-    }
+  @if $inline {
+    display: inline-block;
+  } @else {
+    display: block;
+  }
 
-    line-height: 2;
-    padding: 0 1em;
+  line-height: 2;
+  padding: 0 1em;
 }
 
 @mixin visually-hidden {
-    clip: rect(0 0 0 0); 
-    clip-path: inset(50%);
-    height: 1px;
-    overflow: hidden;
-    position: absolute;
-    white-space: nowrap; 
-    width: 1px;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }

@@ -14,37 +14,37 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+  import { Options, Vue } from 'vue-class-component';
 
-@Options({
-  props: {
-    inputId: String,
-    labelText: String,
-  },
-})
-export default class FileControl extends Vue {
-  inputID!: string;
-  labelText!: string;
-  onChange(event: Event): void {
-    if (event?.target && event.target instanceof HTMLInputElement) {
-      if (event.target.files) {
-        this.$emit('files-selected', event.target.files);
+  @Options({
+    props: {
+      inputId: String,
+      labelText: String,
+    },
+  })
+  export default class FileControl extends Vue {
+    inputID!: string;
+    labelText!: string;
+    onChange(event: Event): void {
+      if (event?.target && event.target instanceof HTMLInputElement) {
+        if (event.target.files) {
+          this.$emit('files-selected', event.target.files);
+        }
       }
     }
   }
-}
 </script>
 
 <style lang="scss">
-@use '../style/base/mixins';
+  @use '../style/base/mixins';
 
-.fileControl {
-  &__label {
-    @include mixins.button(true);
-  }
+  .fileControl {
+    &__label {
+      @include mixins.button(true);
+    }
 
-  &__input {
-    @include mixins.visually-hidden;
+    &__input {
+      @include mixins.visually-hidden;
+    }
   }
-}
 </style>

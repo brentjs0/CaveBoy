@@ -10,7 +10,7 @@ module.exports = {
     'eslint:recommended',
     '@vue/typescript/recommended',
     '@vue/prettier',
-    '@vue/prettier/@typescript-eslint'
+    '@vue/prettier/@typescript-eslint',
   ],
   parserOptions: {
     ecmaVersion: 2020,
@@ -19,18 +19,15 @@ module.exports = {
     'no-console': nodeEnv === 'production' ? 'warn' : 'off',
     'no-debugger': nodeEnv === 'production' ? 'warn' : 'off',
     'quotes': ['error', 'single'],
-    'prettier/prettier': [
-      'error',
-      {
-        'singleQuote': true
-      }
-    ]
+    'prettier/prettier': 'warn',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
   },
   overrides: [
     {
       files: [
         '**/__tests__/*.{j,t}s?(x)',
-        '**/tests/unit/**/*.spec.{j,t}s?(x)'
+        '**/tests/unit/**/*.spec.{j,t}s?(x)',
       ],
       env: {
         mocha: true,
