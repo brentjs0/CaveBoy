@@ -3,18 +3,21 @@ import {
   ColorComponentScalerNames,
   colorComponentScalers,
   getConfiguredColorComponentScaler,
-} from '../../base/ColorComponentScaler';
-import CaveBoyError from '../../base/error/CaveBoyError';
+} from '@/script/base/ColorComponentScaler';
+import CaveBoyError from '@/script/base/error/CaveBoyError';
 import {
   CoilSnakeColorString,
   isCoilSnakeColorString,
-} from '../CoilSnakeColorString';
-import { EightBitNumber, isEightBitNumber } from '../EightBitNumber';
-import { FiveBitNumber, isFiveBitNumber } from '../game-literal/FiveBitNumber';
+} from '@/script/data/coilsnake-literal/CoilSnakeColorString';
+import { EightBitNumber, isEightBitNumber } from '@/script/data/EightBitNumber';
+import {
+  FiveBitNumber,
+  isFiveBitNumber,
+} from '@/script/data/game-literal/FiveBitNumber';
 import {
   HexadecimalColorString,
   isHexadecimalColorString,
-} from '../HexadecimalColorString';
+} from '@/script/data/HexadecimalColorString';
 
 /**
  * A Super Famicom RGB color with 32 possible values for each of the red/green/blue components.

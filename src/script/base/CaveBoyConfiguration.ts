@@ -1,4 +1,4 @@
-import { ColorComponentScalerNames } from './ColorComponentScaler';
+import { ColorComponentScalerNames } from '@/script/base/ColorComponentScaler';
 
 export default class CaveBoyConfiguration {
   /**

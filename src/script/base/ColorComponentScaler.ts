@@ -1,10 +1,10 @@
-import { EightBitNumber, isEightBitNumber } from '../data/EightBitNumber';
+import CaveBoyConfiguration from '@/script/base/CaveBoyConfiguration';
+import CaveBoyError from '@/script/base/error/CaveBoyError';
+import { EightBitNumber, isEightBitNumber } from '@/script/data/EightBitNumber';
 import {
   FiveBitNumber,
   isFiveBitNumber,
-} from '../data/game-literal/FiveBitNumber';
-import CaveBoyConfiguration from './CaveBoyConfiguration';
-import CaveBoyError from './error/CaveBoyError';
+} from '@/script/data/game-literal/FiveBitNumber';
 
 /**
  * A set of methods for converting between five-bit Super Famicom red/green/blue color component values and eight-bit web color component values.
