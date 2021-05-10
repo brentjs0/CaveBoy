@@ -1,4 +1,4 @@
-import CaveBoyConfiguration from '@/script/base/CaveBoyConfiguration';
+import { getCurrentCaveBoyConfiguration } from '@/script/base/CaveBoyConfiguration';
 import CaveBoyError from '@/script/base/error/CaveBoyError';
 import { EightBitNumber, isEightBitNumber } from '@/script/data/EightBitNumber';
 import {
@@ -138,12 +138,17 @@ export const colorComponentScalers: {
 };
 
 /**
- * Return the currently configured ColorComponentScaler.
- * @returns The currently configured ColorComponentScaler.
+ * Return the ColorComponentScaler with the provided name, or the default if no name is provided.
+ * @param colorComponentScalerName - The name of the ColorComponentScaler to retrieve.
+ * @returns The ColorComponentScaler with the provided name, or the default if no name is provided.
  */
-export function getConfiguredColorComponentScaler(): ColorComponentScaler {
-  const configuredScalerName: ColorComponentScalerNames = ((window as any)
-    .caveBoyConfiguration as CaveBoyConfiguration).colorComponentScalerName;
+export function getColorComponentScaler(
+  colorComponentScalerName: ColorComponentScalerNames | undefined = undefined
+): ColorComponentScaler {
+  colorComponentScalerName =
+    colorComponentScalerName === undefined
+      ? getCurrentCaveBoyConfiguration().colorComponentScalerName
+      : colorComponentScalerName;
 
-  return colorComponentScalers[configuredScalerName];
+  return colorComponentScalers[colorComponentScalerName];
 }

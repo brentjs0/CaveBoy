@@ -18,7 +18,7 @@ module.exports = {
   rules: {
     'no-console': nodeEnv === 'production' ? 'warn' : 'off',
     'no-debugger': nodeEnv === 'production' ? 'warn' : 'off',
-    'quotes': ['error', 'single'],
+    'quotes': ['error', 'single', { avoidEscape: true }],
     'prettier/prettier': 'warn',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',

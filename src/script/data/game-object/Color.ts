@@ -1,8 +1,6 @@
 import {
-  ColorComponentScaler,
   ColorComponentScalerNames,
-  colorComponentScalers,
-  getConfiguredColorComponentScaler,
+  getColorComponentScaler,
 } from '@/script/base/ColorComponentScaler';
 import CaveBoyError from '@/script/base/error/CaveBoyError';
 import {
@@ -139,11 +137,9 @@ export default class Color {
       isEightBitNumber(greenNumber) &&
       isEightBitNumber(blueNumber)
     ) {
-      const colorComponentScaler: ColorComponentScaler =
-        colorComponentScalerName === undefined
-          ? getConfiguredColorComponentScaler()
-          : colorComponentScalers[colorComponentScalerName];
-
+      const colorComponentScaler = getColorComponentScaler(
+        colorComponentScalerName
+      );
       const redComponent: FiveBitNumber = colorComponentScaler.convertEightBitToFiveBit(
         redNumber
       );
@@ -161,7 +157,7 @@ export default class Color {
       );
     } else {
       throw new CaveBoyError(
-        `The provided HexadecimalColorString '${hexadecimalColorString}' could not be parsed into a Color.`
+        `An invalid combination of arguments was provided to the Color constructor: ${arguments}.`
       );
     }
   }
@@ -198,10 +194,9 @@ export default class Color {
   public toHexadecimalColorString(
     colorComponentScalerName: ColorComponentScalerNames | undefined = undefined
   ): HexadecimalColorString {
-    const colorComponentScaler: ColorComponentScaler =
-      colorComponentScalerName === undefined
-        ? getConfiguredColorComponentScaler()
-        : colorComponentScalers[colorComponentScalerName];
+    const colorComponentScaler = getColorComponentScaler(
+      colorComponentScalerName
+    );
 
     const redNumber: EightBitNumber = colorComponentScaler.convertFiveBitToEightBit(
       this.redComponent
