@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mocha Tests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../node_modules/mocha/mocha.css" />
+    <style>
+      body {
+        background-color: #1e1e1e;
+        color: #ccc;
+      }
+
+      #mocha-stats em {
+        color: #ccc;
+      }
+
+      #mocha h2 {
+        font-size: 14px;
+      }
+
+      #mocha .test a.replay {
+        position: inherit;
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      #mocha-stats canvas {
+        background-color: white;
+        border-radius: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="mocha"></div>
+
+    <script src="../../node_modules/mocha/mocha.js"></script>
+    <script src="../../node_modules/chai/chai.js"></script>
+
+    <script class="mocha-init">
+      mocha.setup({
+        ui: 'bdd',
+      });
+    </script>
+
+    <script src="main.js"></script>
+
+    <script class="mocha-exec">
+      mocha.run();
+    </script>
+  </body>
+</html>
