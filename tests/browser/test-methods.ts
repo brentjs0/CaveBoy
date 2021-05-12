@@ -2,8 +2,8 @@ export function setUpCanvas(scale: number = 1): CanvasRenderingContext2D {
   const canvas = document.getElementById('canvas') as HTMLCanvasElement;
   const ctx = canvas.getContext('2d');
 
-  const baseWidth = 300;
-  const baseHeight = 150;
+  const baseWidth = 400;
+  const baseHeight = 256;
 
   // Set display size (css pixels).
   canvas.style.width = baseWidth + 'px';
@@ -17,11 +17,22 @@ export function setUpCanvas(scale: number = 1): CanvasRenderingContext2D {
   if (ctx != null) {
     ctx.imageSmoothingEnabled = false;
 
+    const checkerboardImage = document.getElementById(
+      'checkerboard'
+    ) as HTMLImageElement;
+    const pattern = ctx.createPattern(checkerboardImage, 'repeat');
+    if (pattern != null) {
+      ctx.scale(8, 8);
+      ctx.fillStyle = pattern;
+    } else {
+      ctx.fillStyle = '#fff';
+    }
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
     // Normalize coordinate system to use css pixels.
     ctx.scale(devicePixelRatio * scale, devicePixelRatio * scale);
 
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#000';
 
     return ctx;
   }

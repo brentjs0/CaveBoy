@@ -11,8 +11,8 @@ import Color from '@/script/data/game-object/Color';
 /**
  * A list of sixteen Colors that be used to map MinitileLayer indexes to
  * the colors they will represent on-screen. This class roughly correlates
- * to a single array element in the 'subpalettes' array of an EbPalette object
- * in the CoilSnake source.
+ * to a single array element in the 'subpalettes' array of an EbMapPalette
+ * object in the CoilSnake source.
  */
 export default class MinitilePalette {
   /**
