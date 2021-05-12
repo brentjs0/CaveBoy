@@ -1,5 +1,6 @@
 /**
- * A non-negative integer than can be expressed with five or fewer binary digits.
+ * A non-negative integer than can be expressed with
+ * five or fewer binary digits.
  * This includes all integers from 0 to 31, inclusive.
  */
 export type FiveBitNumber =
@@ -37,14 +38,16 @@ export type FiveBitNumber =
   | 31;
 
 /**
- * Return true if value is a non-negative integer than can be expressed with five or fewer binary digits.
+ * Return true if value is a non-negative integer than can be
+ * expressed with five or fewer binary digits.
  * @param value - A value that might be a FiveBitNumber.
- * @returns True if value is a non-negative integer than can be expressed with five or fewer binary digits. Otherwise, false.
+ * @returns True if value is a non-negative integer than can be
+ * expressed with five or fewer binary digits. Otherwise, false.
  */
 export function isFiveBitNumber(value: any): value is FiveBitNumber {
   if (
     typeof value === 'number' &&
-    value % 1 === 0 &&
+    Number.isInteger(value) &&
     value >= 0 &&
     value <= 31
   ) {

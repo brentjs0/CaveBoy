@@ -13,9 +13,9 @@
 
 <script lang="ts">
   import { Options, Vue } from 'vue-class-component';
-  import FileControl from './components/FileControl.vue';
+  import FileControl from '@/components/FileControl.vue';
   import JSZip from 'jszip';
-  import CaveBoyError from './script/base/error/CaveBoyError';
+  import CaveBoyError from '@/script/base/error/CaveBoyError';
 
   @Options({
     components: {

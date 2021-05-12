@@ -1,6 +1,6 @@
-import { ColorComponentScalerNames } from './ColorComponentScaler';
+import { ColorComponentScalerNames } from '@/script/base/ColorComponentScaler';
 
-export default class CaveBoyConfiguration {
+export class CaveBoyConfiguration {
   /**
    * The name of the ColorComponentScaler to use when representing 16-bit Super Famicom colors as 24-bit web colors.
    */
@@ -12,4 +12,20 @@ export default class CaveBoyConfiguration {
   constructor() {
     this.colorComponentScalerName = ColorComponentScalerNames.KindredGammaRamp;
   }
+}
+
+/**
+ * Retrieve the current CaveBoyConfiguration if one exists.
+ * @returns The current CaveBoyConfiguration, if one exists. Otherwise, the default configuration.
+ */
+export function getCurrentCaveBoyConfiguration(): CaveBoyConfiguration {
+  if (window) {
+    const caveBoyConfiguration = (window as any).caveBoyConfiguration;
+
+    if (caveBoyConfiguration instanceof CaveBoyConfiguration) {
+      return caveBoyConfiguration;
+    }
+  }
+
+  return new CaveBoyConfiguration();
 }
