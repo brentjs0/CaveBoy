@@ -18,7 +18,11 @@ import {
 } from '@/script/data/HexadecimalColorString';
 
 /**
- * A Super Famicom RGB color with 32 possible values for each of the red/green/blue components.
+ * A Super Famicom RGB color with 32 possible values for each
+ * of the red/green/blue components. This class roughly correlates
+ * to the EbColor type in the CoilSnake source, except that its red,
+ * green, and blue components are stored as five-bit numbers rather
+ * than as eight-bit numbers.
  */
 export default class Color {
   /**
@@ -37,12 +41,14 @@ export default class Color {
   public blueComponent: FiveBitNumber = 0;
 
   /**
-   * Instantiates a Color with a value of 0 for the red, green, and blue components (pure black).
+   * Instantiate a Color with a value of 0 for the red, green,
+   * and blue components (pure black).
    */
   public constructor();
 
   /**
-   * Instantiates a Color with provided red, green, and blue components.
+   * Instantiate a Color with provided red, green, and blue
+   * components.
    * @param redComponent - The red level of the Color.
    * @param greenComponent - The green level of the Color.
    * @param blueComponent - The blue level of the Color.
@@ -54,9 +60,15 @@ export default class Color {
   );
 
   /**
-   * Instantiates a Color with its component values parsed from a HexadecimalColorString ('#xxxxxx'/'#xxx').
-   * @param hexadecimalColorString - A HexadecimalColorString expression of the color to be parsed.
-   * @param colorComponentScalerName - The name of the ColorComponentScaler to use when converting between the eight-bit color component values encoded in hexadecimalColorString and the five-bit values of the Color. Optional. Defaults to the user-configured scaler.
+   * Instantiate a Color with its component values parsed from a
+   * HexadecimalColorString ('#xxxxxx'/'#xxx').
+   * @param hexadecimalColorString - A HexadecimalColorString expression
+   * of the color to be parsed.
+   * @param colorComponentScalerName - The name of the
+   * ColorComponentScaler to use when converting between the eight-bit
+   * color component values encoded in hexadecimalColorString and the
+   * five-bit values of the Color. Optional. Defaults to the
+   * user-configured scaler.
    */
   public constructor(
     hexadecimalColorString: HexadecimalColorString,
@@ -64,8 +76,10 @@ export default class Color {
   );
 
   /**
-   * Instantiates a Color with its component values parsed from a three-digit base-32 CoilSnakeColorString ('xxx').
-   * @param coilSnakeColorString A CoilSnakeColorString expression of the color to be parsed.
+   * Instantiate a Color with its component values parsed from a
+   * three-digit base-32 CoilSnakeColorString ('xxx').
+   * @param coilSnakeColorString A CoilSnakeColorString expression
+   * of the color to be parsed.
    */
   public constructor(coilSnakeColorString: CoilSnakeColorString);
 
@@ -187,9 +201,15 @@ export default class Color {
   }
 
   /**
-   * Return a HexadecimalColorString expression of the Color in the format '#xxxxxx'.
-   * @param colorComponentScalerName - The name of the ColorComponentScaler to use when converting between the five-bit component values of the Color and the eight-bit color component values encoded in the returned HexadecimalColorString. Optional. Defaults to the user-configured scaler.
-   * @returns A HexadecimalColorString expression of the Color in the format '#xxxxxx'.
+   * Return a HexadecimalColorString expression of the Color in
+   * the format '#xxxxxx'.
+   * @param colorComponentScalerName - The name of the ColorComponentScaler
+   * to use when converting
+   * between the five-bit component values of the Color and the eight-bit
+   * color component values encoded in the returned HexadecimalColorString.
+   * Optional. Defaults to the user-configured scaler.
+   * @returns A HexadecimalColorString expression of the Color in the format
+   * '#xxxxxx'.
    */
   public toHexadecimalColorString(
     colorComponentScalerName: ColorComponentScalerNames | undefined = undefined
@@ -224,8 +244,10 @@ export default class Color {
   }
 
   /**
-   * Return an expression of the Color as a three-digit base-32 CoilSnakeColorString in the format 'xxx'.
-   * @returns An expression of the Color as a three-digit base-32 CoilSnakeColorString in the format 'xxx'.
+   * Return an expression of the Color as a three-digit base-32
+   * CoilSnakeColorString in the format 'xxx'.
+   * @returns An expression of the Color as a three-digit base-32
+   * CoilSnakeColorString in the format 'xxx'.
    */
   public toCoilSnakeColorString(): CoilSnakeColorString {
     const colorString = `${this.redComponent.toString(
@@ -241,5 +263,40 @@ export default class Color {
     throw new CaveBoyError(
       `Color expression '${colorString}' is not a CoilSnakeColorString.`
     );
+  }
+
+  /**
+   * Return a four-element Uint8ClampedArray containing the
+   * color's 8-bit R/G/B/A values.
+   * @param alpha - The value to use for the alpha. Optional.
+   * Defaults to 255.
+   * @param colorComponentScalerName - The name of the
+   * ColorComponentScaler to use when converting between the
+   * five-bit component values of the Color and the eight-bit
+   * color component values in the array. Optional. Defaults
+   * to the user-configured scaler.
+   * @returns A four-element Uint8ClampedArray containing the
+   * color's 8-bit R/G/B/A values.
+   */
+  public toUint8ClampedArray(
+    alpha: EightBitNumber = 255,
+    colorComponentScalerName?: ColorComponentScalerNames
+  ): Uint8ClampedArray {
+    if (!isEightBitNumber(alpha)) {
+      throw new CaveBoyError(
+        `The value of alpha (${alpha}) is not an EightBitNumber.`
+      );
+    }
+
+    const colorComponentScaler = getColorComponentScaler(
+      colorComponentScalerName
+    );
+
+    return new Uint8ClampedArray([
+      colorComponentScaler.convertFiveBitToEightBit(this.redComponent),
+      colorComponentScaler.convertFiveBitToEightBit(this.greenComponent),
+      colorComponentScaler.convertFiveBitToEightBit(this.blueComponent),
+      alpha,
+    ]);
   }
 }

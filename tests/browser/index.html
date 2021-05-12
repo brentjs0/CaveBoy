@@ -9,6 +9,28 @@
       body {
         background-color: #1e1e1e;
         color: #ccc;
+        display: flex;
+      }
+
+      #mocha,
+      #canvas {
+        margin: 15px;
+      }
+
+      #mocha {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+      }
+
+      #mocha-report > .suite {
+        margin-left: 0;
+      }
+
+      #mocha-stats {
+        display: flex;
+        flex-shrink: 1;
+        position: inherit;
       }
 
       #mocha-stats em {
@@ -20,8 +42,9 @@
       }
 
       #mocha .test a.replay {
-        position: inherit;
         display: inline-block;
+        margin-inline-start: 5px;
+        position: inherit;
         vertical-align: top;
       }
 
@@ -29,10 +52,21 @@
         background-color: white;
         border-radius: 50%;
       }
+
+      #mocha-stats .progress {
+        float: none;
+        margin-inline-start: 0;
+      }
+
+      .test > h2 {
+        display: flex;
+      }
     </style>
   </head>
   <body>
     <div id="mocha"></div>
+
+    <canvas id="canvas"></canvas>
 
     <script src="../../node_modules/mocha/mocha.js"></script>
     <script src="../../node_modules/chai/chai.js"></script>

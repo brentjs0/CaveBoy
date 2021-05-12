@@ -12,7 +12,7 @@ export type EightBitNumber = number;
 export function isEightBitNumber(value: any): value is EightBitNumber {
   if (
     typeof value === 'number' &&
-    value % 1 === 0 &&
+    Number.isInteger(value) &&
     value >= 0 &&
     value <= 255
   ) {

@@ -40,5 +40,5 @@ module.exports = {
     mocha: 'root mocha',
     chai: 'root chai',
   },
-  devtool: false,
+  devtool: 'source-map',
 };

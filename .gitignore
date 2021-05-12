@@ -4,3 +4,4 @@ node_modules/
 notes/
 test-data/
 tests/browser/main.js
+tests/browser/main.js.map

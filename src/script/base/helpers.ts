@@ -1,15 +1,20 @@
+import CaveBoyError from '@/script/base/error/CaveBoyError';
+
 /**
- * Generate string segments of the provided string with the specified length. Segments are consecutive and do not overlap.
- * When the provided string is not divisible without a remainder, a trailing segment shorter than the specified length is generated.
+ * Generate string segments of the provided string with the specified
+ * length. Segments are consecutive and do not overlap. When the
+ * provided string is not divisible without a remainder, a trailing
+ * segment shorter than the specified length is generated.
  * @param str - The string to divide.
- * @param segmentLength - The length of the string segments to be generated.
+ * @param segmentLength - The length of the string segments to be
+ * generated.
  */
 export function* segmentString(
   str: string,
   segmentLength: number
 ): Generator<string> {
   if (segmentLength < 1) {
-    throw new Error('Parameter segmentLength must be greater than 0.');
+    throw new CaveBoyError('Parameter segmentLength must be greater than 0.');
   }
 
   let i;
