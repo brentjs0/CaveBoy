@@ -1,3 +1,4 @@
+import { isType } from '@/script/base/primitive-types';
 import Color from '@/script/data/game-object/Color';
 import MinitilePalette from '@/script/data/game-object/MinitilePalette';
 import { expect } from 'chai';
@@ -122,9 +123,15 @@ describe('MinitilePalette', function () {
       cbImageData.colors[14] = new Color(4, 4, 3); // 443
       cbImageData.colors[15] = new Color(0, 0, 0); // 000
 
-      expect(cbImageData.toCoilSnakeMinitilePaletteString()).to.equal(
+      const coilSnakeMinitilePaletteString = cbImageData.toCoilSnakeMinitilePaletteString();
+
+      expect(coilSnakeMinitilePaletteString).to.equal(
         '000jj6kk8gg6cc4883bbchodagcqpknmflkcjh9hg7443000'
       );
+
+      expect(
+        isType(coilSnakeMinitilePaletteString, 'CoilSnakeMinitilePaletteString')
+      ).to.be.true;
     });
   });
 });

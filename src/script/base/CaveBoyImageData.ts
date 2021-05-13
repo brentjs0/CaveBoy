@@ -3,7 +3,7 @@ import {
   getColorComponentScaler,
 } from '@/script/base/ColorComponentScaler';
 import CaveBoyError from '@/script/base/error/CaveBoyError';
-import { EightBitNumber } from '@/script/data/EightBitNumber';
+import { Uint8 } from '@/script/base/primitive-types';
 import Color from '@/script/data/game-object/Color';
 
 /**
@@ -80,7 +80,7 @@ export default class CaveBoyImageData extends ImageData {
     x: number,
     y: number,
     color: Color,
-    alpha: EightBitNumber = 255,
+    alpha: Uint8 = 255,
     colorComponentScalerName?: ColorComponentScalerName
   ): void {
     const colorComponentScaler = getColorComponentScaler(

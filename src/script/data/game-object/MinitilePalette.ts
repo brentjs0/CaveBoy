@@ -4,8 +4,8 @@ import CaveBoyError from '@/script/base/error/CaveBoyError';
 import { segmentString } from '@/script/base/helpers';
 import {
   CoilSnakeMinitilePaletteString,
-  isCoilSnakeMinitilePaletteString,
-} from '@/script/data/coilsnake-literal/CoilSnakeMinitilePaletteString';
+  isType,
+} from '@/script/base/primitive-types';
 import Color from '@/script/data/game-object/Color';
 
 /**
@@ -34,7 +34,9 @@ export default class MinitilePalette {
   ) {
     this.colors = [];
 
-    if (isCoilSnakeMinitilePaletteString(coilSnakeMinitilePaletteString)) {
+    if (
+      isType(coilSnakeMinitilePaletteString, 'CoilSnakeMinitilePaletteString')
+    ) {
       for (let coilSnakeColorString of segmentString(
         coilSnakeMinitilePaletteString,
         3

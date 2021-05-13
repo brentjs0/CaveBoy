@@ -5,14 +5,11 @@ import {
 import CaveBoyError from '@/script/base/error/CaveBoyError';
 import {
   CoilSnakeColorString,
-  isCoilSnakeColorString,
-} from '@/script/data/coilsnake-literal/CoilSnakeColorString';
-import { EightBitNumber, isEightBitNumber } from '@/script/data/EightBitNumber';
-import { FiveBitNumber, isFiveBitNumber } from '@/script/data/FiveBitNumber';
-import {
   HexadecimalColorString,
-  isHexadecimalColorString,
-} from '@/script/data/HexadecimalColorString';
+  isType,
+  Uint5,
+  Uint8,
+} from '@/script/base/primitive-types';
 
 /**
  * A Super Famicom RGB color with 32 possible values for each
@@ -25,17 +22,17 @@ export default class Color {
   /**
    * The red level of the Color, from 0 to 31.
    */
-  public redComponent: FiveBitNumber = 0;
+  public redComponent: Uint5 = 0;
 
   /**
    * The green level of the Color, from 0 to 31.
    */
-  public greenComponent: FiveBitNumber = 0;
+  public greenComponent: Uint5 = 0;
 
   /**
    * The blue level of the Color, from 0 to 31.
    */
-  public blueComponent: FiveBitNumber = 0;
+  public blueComponent: Uint5 = 0;
 
   /**
    * Instantiate a Color with a value of 0 for the red, green,
@@ -51,9 +48,9 @@ export default class Color {
    * @param blueComponent - The blue level of the Color.
    */
   public constructor(
-    redComponent: FiveBitNumber,
-    greenComponent: FiveBitNumber,
-    blueComponent: FiveBitNumber
+    redComponent: Uint5,
+    greenComponent: Uint5,
+    blueComponent: Uint5
   );
 
   /**
@@ -82,22 +79,25 @@ export default class Color {
 
   public constructor(
     param1:
-      | FiveBitNumber
+      | Uint5
       | CoilSnakeColorString
       | HexadecimalColorString
       | undefined = undefined,
-    param2: ColorComponentScalerName | FiveBitNumber | undefined = undefined,
-    param3: FiveBitNumber | undefined = undefined
+    param2: ColorComponentScalerName | Uint5 | undefined = undefined,
+    param3: Uint5 | undefined = undefined
   ) {
     if (
-      isFiveBitNumber(param1) &&
-      isFiveBitNumber(param2) &&
-      isFiveBitNumber(param3)
+      isType(param1, 'Uint5') &&
+      isType(param2, 'Uint5') &&
+      isType(param3, 'Uint5')
     ) {
       this.constructFromComponentValues(param1, param2, param3);
-    } else if (isHexadecimalColorString(param1) && !isFiveBitNumber(param2)) {
+    } else if (
+      isType(param1, 'HexadecimalColorString') &&
+      !isType(param2, 'Uint5')
+    ) {
       this.constructFromHexadecimalColorString(param1, param2);
-    } else if (isCoilSnakeColorString(param1) && param2 === undefined) {
+    } else if (isType(param1, 'CoilSnakeColorString') && param2 === undefined) {
       this.constructFromCoilSnakeColorString(param1);
     } else if (
       !(param1 === undefined && param2 === undefined && param3 === undefined)
@@ -107,9 +107,9 @@ export default class Color {
   }
 
   private constructFromComponentValues(
-    redComponent: FiveBitNumber,
-    greenComponent: FiveBitNumber,
-    blueComponent: FiveBitNumber
+    redComponent: Uint5,
+    greenComponent: Uint5,
+    blueComponent: Uint5
   ): void {
     this.redComponent = redComponent;
     this.greenComponent = greenComponent;
@@ -144,20 +144,20 @@ export default class Color {
     }
 
     if (
-      isEightBitNumber(redNumber) &&
-      isEightBitNumber(greenNumber) &&
-      isEightBitNumber(blueNumber)
+      isType(redNumber, 'Uint8') &&
+      isType(greenNumber, 'Uint8') &&
+      isType(blueNumber, 'Uint8')
     ) {
       const colorComponentScaler = getColorComponentScaler(
         colorComponentScalerName
       );
-      const redComponent: FiveBitNumber = colorComponentScaler.convertEightBitToFiveBit(
+      const redComponent: Uint5 = colorComponentScaler.convertEightBitToFiveBit(
         redNumber
       );
-      const greenComponent: FiveBitNumber = colorComponentScaler.convertEightBitToFiveBit(
+      const greenComponent: Uint5 = colorComponentScaler.convertEightBitToFiveBit(
         greenNumber
       );
-      const blueComponent: FiveBitNumber = colorComponentScaler.convertEightBitToFiveBit(
+      const blueComponent: Uint5 = colorComponentScaler.convertEightBitToFiveBit(
         blueNumber
       );
 
@@ -181,9 +181,9 @@ export default class Color {
     const blueComponent: number = parseInt(coilSnakeColorString[2], 32);
 
     if (
-      isFiveBitNumber(redComponent) &&
-      isFiveBitNumber(greenComponent) &&
-      isFiveBitNumber(blueComponent)
+      isType(redComponent, 'Uint5') &&
+      isType(greenComponent, 'Uint5') &&
+      isType(blueComponent, 'Uint5')
     ) {
       this.constructFromComponentValues(
         redComponent,
@@ -215,13 +215,13 @@ export default class Color {
       colorComponentScalerName
     );
 
-    const redNumber: EightBitNumber = colorComponentScaler.convertFiveBitToEightBit(
+    const redNumber: Uint8 = colorComponentScaler.convertFiveBitToEightBit(
       this.redComponent
     );
-    const greenNumber: EightBitNumber = colorComponentScaler.convertFiveBitToEightBit(
+    const greenNumber: Uint8 = colorComponentScaler.convertFiveBitToEightBit(
       this.greenComponent
     );
-    const blueNumber: EightBitNumber = colorComponentScaler.convertFiveBitToEightBit(
+    const blueNumber: Uint8 = colorComponentScaler.convertFiveBitToEightBit(
       this.blueComponent
     );
 
@@ -231,7 +231,7 @@ export default class Color {
       .toString(16)
       .padStart(2, '0')}${blueNumber.toString(16).padStart(2, '0')}`;
 
-    if (isHexadecimalColorString(colorString)) {
+    if (isType(colorString, 'HexadecimalColorString')) {
       return colorString;
     }
 
@@ -253,7 +253,7 @@ export default class Color {
       32
     )}`.toLowerCase();
 
-    if (isCoilSnakeColorString(colorString)) {
+    if (isType(colorString, 'CoilSnakeColorString')) {
       return colorString;
     }
 
@@ -276,13 +276,11 @@ export default class Color {
    * color's 8-bit R/G/B/A values.
    */
   public toUint8ClampedArray(
-    alpha: EightBitNumber = 255,
+    alpha: Uint8 = 255,
     colorComponentScalerName?: ColorComponentScalerName
   ): Uint8ClampedArray {
-    if (!isEightBitNumber(alpha)) {
-      throw new CaveBoyError(
-        `The value of alpha (${alpha}) is not an EightBitNumber.`
-      );
+    if (!isType(alpha, 'Uint8')) {
+      throw new CaveBoyError(`The value of alpha (${alpha}) is not an Uint8.`);
     }
 
     const colorComponentScaler = getColorComponentScaler(
