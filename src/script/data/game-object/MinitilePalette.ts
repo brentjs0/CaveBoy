@@ -1,5 +1,5 @@
 import CaveBoyImageData from '@/script/base/CaveBoyImageData';
-import { ColorComponentScalerNames } from '@/script/base/ColorComponentScaler';
+import { ColorComponentScalerName } from '@/script/base/ColorComponentScaler';
 import CaveBoyError from '@/script/base/error/CaveBoyError';
 import { segmentString } from '@/script/base/helpers';
 import {
@@ -64,7 +64,7 @@ export default class MinitilePalette {
    * each Color in this MinitilePalette.
    */
   public getPreviewImageData(
-    colorComponentScalerName?: ColorComponentScalerNames
+    colorComponentScalerName?: ColorComponentScalerName
   ): CaveBoyImageData {
     const cbImageData = new CaveBoyImageData(8, 2);
 

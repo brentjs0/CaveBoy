@@ -1,5 +1,5 @@
 import {
-  ColorComponentScalerNames,
+  ColorComponentScalerName,
   getColorComponentScaler,
 } from '@/script/base/ColorComponentScaler';
 import CaveBoyError from '@/script/base/error/CaveBoyError';
@@ -8,10 +8,7 @@ import {
   isCoilSnakeColorString,
 } from '@/script/data/coilsnake-literal/CoilSnakeColorString';
 import { EightBitNumber, isEightBitNumber } from '@/script/data/EightBitNumber';
-import {
-  FiveBitNumber,
-  isFiveBitNumber,
-} from '@/script/data/game-literal/FiveBitNumber';
+import { FiveBitNumber, isFiveBitNumber } from '@/script/data/FiveBitNumber';
 import {
   HexadecimalColorString,
   isHexadecimalColorString,
@@ -72,7 +69,7 @@ export default class Color {
    */
   public constructor(
     hexadecimalColorString: HexadecimalColorString,
-    colorComponentScalerName: ColorComponentScalerNames | undefined
+    colorComponentScalerName: ColorComponentScalerName | undefined
   );
 
   /**
@@ -89,7 +86,7 @@ export default class Color {
       | CoilSnakeColorString
       | HexadecimalColorString
       | undefined = undefined,
-    param2: ColorComponentScalerNames | FiveBitNumber | undefined = undefined,
+    param2: ColorComponentScalerName | FiveBitNumber | undefined = undefined,
     param3: FiveBitNumber | undefined = undefined
   ) {
     if (
@@ -121,7 +118,7 @@ export default class Color {
 
   private constructFromHexadecimalColorString(
     hexadecimalColorString: HexadecimalColorString,
-    colorComponentScalerName: ColorComponentScalerNames | undefined = undefined
+    colorComponentScalerName: ColorComponentScalerName | undefined = undefined
   ): void {
     let redNumber: number;
     let greenNumber: number;
@@ -212,7 +209,7 @@ export default class Color {
    * '#xxxxxx'.
    */
   public toHexadecimalColorString(
-    colorComponentScalerName: ColorComponentScalerNames | undefined = undefined
+    colorComponentScalerName: ColorComponentScalerName | undefined = undefined
   ): HexadecimalColorString {
     const colorComponentScaler = getColorComponentScaler(
       colorComponentScalerName
@@ -280,7 +277,7 @@ export default class Color {
    */
   public toUint8ClampedArray(
     alpha: EightBitNumber = 255,
-    colorComponentScalerName?: ColorComponentScalerNames
+    colorComponentScalerName?: ColorComponentScalerName
   ): Uint8ClampedArray {
     if (!isEightBitNumber(alpha)) {
       throw new CaveBoyError(

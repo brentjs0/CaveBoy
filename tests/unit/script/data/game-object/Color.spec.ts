@@ -1,4 +1,3 @@
-import { ColorComponentScalerNames } from '@/script/base/ColorComponentScaler';
 import Color from '@/script/data/game-object/Color';
 import { expect } from 'chai';
 
@@ -11,38 +10,29 @@ describe('Color', function () {
       expect(color.blueComponent).to.equal(13);
     });
 
-    it('Initializes values from a six-digit HexadecimalColorString using the FactorOfEight scaler.', function () {
-      const color = new Color(
-        '#eE70f1',
-        ColorComponentScalerNames.FactorOfEight
-      );
+    it("Initializes values from a six-digit HexadecimalColorString using the 'factorOfEight' scaler.", function () {
+      const color = new Color('#eE70f1', 'factorOfEight');
       expect(color.redComponent).to.equal(29);
       expect(color.greenComponent).to.equal(14);
       expect(color.blueComponent).to.equal(30);
     });
 
-    it('Initializes values from a three-digit HexadecimalColorString using the FactorOfEight scaler.', function () {
-      const color = new Color('#70d', ColorComponentScalerNames.FactorOfEight);
+    it("Initializes values from a three-digit HexadecimalColorString using the 'factorOfEight' scaler.", function () {
+      const color = new Color('#70d', 'factorOfEight');
       expect(color.redComponent).to.equal(14);
       expect(color.greenComponent).to.equal(0);
       expect(color.blueComponent).to.equal(27);
     });
 
-    it('Initializes values from a six-digit HexadecimalColorString using the KindredGammaRamp scaler.', function () {
-      const color = new Color(
-        '#eE70f1',
-        ColorComponentScalerNames.KindredGammaRamp
-      );
+    it("Initializes values from a six-digit HexadecimalColorString using the 'kindredGammaRamp' scaler.", function () {
+      const color = new Color('#eE70f1', 'kindredGammaRamp');
       expect(color.redComponent).to.equal(29);
       expect(color.greenComponent).to.equal(14);
       expect(color.blueComponent).to.equal(29);
     });
 
-    it('Initializes values from a three-digit HexadecimalColorString using the KindredGammaRamp scaler.', function () {
-      const color = new Color(
-        '#70d',
-        ColorComponentScalerNames.KindredGammaRamp
-      );
+    it("Initializes values from a three-digit HexadecimalColorString using the 'kindredGammaRamp' scaler.", function () {
+      const color = new Color('#70d', 'kindredGammaRamp');
       expect(color.redComponent).to.equal(15);
       expect(color.greenComponent).to.equal(0);
       expect(color.blueComponent).to.equal(27);
@@ -64,20 +54,18 @@ describe('Color', function () {
   });
 
   describe('toHexadecimalColorString()', function () {
-    it('Generates HexadecimalColorStrings using the FactorOfEight scaler.', function () {
+    it("Generates HexadecimalColorStrings using the 'factorOfEight' scaler.", function () {
       const color = new Color(31, 31, 31);
-      expect(
-        color.toHexadecimalColorString(ColorComponentScalerNames.FactorOfEight)
-      ).to.equal('#f8f8f8');
+      expect(color.toHexadecimalColorString('factorOfEight')).to.equal(
+        '#f8f8f8'
+      );
     });
 
-    it('Generates HexadecimalColorStrings using KindredGammaRamp scaler.', function () {
+    it("Generates HexadecimalColorStrings using 'kindredGammaRamp' scaler.", function () {
       const color = new Color(31, 31, 31);
-      expect(
-        color.toHexadecimalColorString(
-          ColorComponentScalerNames.KindredGammaRamp
-        )
-      ).to.equal('#ffffff');
+      expect(color.toHexadecimalColorString('kindredGammaRamp')).to.equal(
+        '#ffffff'
+      );
     });
   });
 

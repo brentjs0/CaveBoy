@@ -1,10 +1,7 @@
 import { getCurrentCaveBoyConfiguration } from '@/script/base/CaveBoyConfiguration';
 import CaveBoyError from '@/script/base/error/CaveBoyError';
 import { EightBitNumber, isEightBitNumber } from '@/script/data/EightBitNumber';
-import {
-  FiveBitNumber,
-  isFiveBitNumber,
-} from '@/script/data/game-literal/FiveBitNumber';
+import { FiveBitNumber, isFiveBitNumber } from '@/script/data/FiveBitNumber';
 
 /**
  * A set of methods for converting between five-bit Super Famicom red/green/blue color component values and eight-bit color component values.
@@ -180,22 +177,17 @@ export const kindredGammaRampScaler: ColorComponentScaler = {
 } as const;
 
 /**
- * A list of all CaveBoy ColorComponentScaler names.
- */
-export enum ColorComponentScalerNames {
-  FactorOfEight = 'factorOfEight',
-  KindredGammaRamp = 'kindredGammaRamp',
-}
-
-/**
  * A list of all CaveBoy ColorComponentScalers by name.
  */
-export const colorComponentScalers: {
-  [name in ColorComponentScalerNames]: ColorComponentScaler;
-} = {
+const colorComponentScalers = {
   factorOfEight: factorOfEightScaler,
   kindredGammaRamp: kindredGammaRampScaler,
 };
+
+/**
+ * A name of one of the ColorComponentScalers implemented by CaveBoy.
+ */
+export type ColorComponentScalerName = keyof typeof colorComponentScalers;
 
 /**
  * Return the ColorComponentScaler with the provided name, or the default if no name is provided.
@@ -203,7 +195,7 @@ export const colorComponentScalers: {
  * @returns The ColorComponentScaler with the provided name, or the default if no name is provided.
  */
 export function getColorComponentScaler(
-  colorComponentScalerName: ColorComponentScalerNames | undefined = undefined
+  colorComponentScalerName: ColorComponentScalerName | undefined = undefined
 ): ColorComponentScaler {
   colorComponentScalerName =
     colorComponentScalerName === undefined
