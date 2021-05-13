@@ -8,7 +8,7 @@ This project is still under development and does not yet have a functional relea
 
 - [ ] Milestone: Decode and encode \*.fts files.
   - [x] Colors
-  - [ ] Minitile Palettes ("Subpalettes")
+  - [x] Minitile Palettes ("Subpalettes")
   - [ ] Minitile Layers
   - [ ] Minitiles
   - [ ] Arrangment Cells
