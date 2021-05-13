@@ -1,89 +1,90 @@
 import { getCurrentCaveBoyConfiguration } from '@/script/base/CaveBoyConfiguration';
 import CaveBoyError from '@/script/base/error/CaveBoyError';
-import { EightBitNumber, isEightBitNumber } from '@/script/data/EightBitNumber';
-import {
-  FiveBitNumber,
-  isFiveBitNumber,
-} from '@/script/data/game-literal/FiveBitNumber';
+import { Uint5, Uint8, isType } from '@/script/base/primitive-types';
 
 /**
- * A set of methods for converting between five-bit Super Famicom red/green/blue color component values and eight-bit color component values.
+ * A set of methods for converting between five-bit Super Famicom red/green/blue
+ * color component values and eight-bit color component values.
  */
 export interface ColorComponentScaler {
   /**
-   * Convert a five-bit Super Famicom red/green/blue color component value to an eight-bit color component value.
-   * @param fiveBitNumber - A number representing a five-bit Super Famicom red/green/blue color component value.
-   * @returns A number representing fiveBitNumber as an eight-bit color component value.
+   * Convert a five-bit Super Famicom red/green/blue color component value to an
+   * eight-bit color component value.
+   * @param uint5Component - A number representing a five-bit Super Famicom
+   * red/green/blue color component value.
+   * @returns A number representing uint5 as an eight-bit color component value.
    */
-  convertFiveBitToEightBit(fiveBitNumber: FiveBitNumber): EightBitNumber;
+  convertFiveBitToEightBit(uint5Component: Uint5): Uint8;
 
   /**
-   * Convert an eight-bit red/green/blue color component value to a five-bit Super Famicom color component value.
-   * @param eightBitNumber - A number representing an eight-bit red/green/blue color component value.
-   * @returns A number representing eightBitNumber as a five-bit Super Famicom color component value.
+   * Convert an eight-bit red/green/blue color component value to a five-bit
+   * Super Famicom color component value.
+   * @param uint8Component - A number representing an eight-bit red/green/blue
+   * color component value.
+   * @returns A number representing uint8 as a five-bit Super Famicom color
+   * component value.
    */
-  convertEightBitToFiveBit(eightBitNumber: EightBitNumber): FiveBitNumber;
+  convertEightBitToFiveBit(uint8Component: Uint8): Uint5;
 
   /**
-   * Convert an eight-bit red/green/blue color component with 256 possible values to the eight-bit number that would represent
-   * its five-bit value for this scaler. For example, 255 (0b11111111) might be converted to 248 (0b11111000).
-   * @param eightBitNumber
-   * @returns
+   * Convert an eight-bit red/green/blue color component with 256 possible
+   * values to the eight-bit number that would represent its five-bit value
+   * for this scaler. For example, 255 (0b11111111) might be converted to
+   * 248 (0b11111000).
+   * @param rawUint8Component - The eight-bit red/green/blue color component
+   * value to normalize.
+   * @returns The eight-bit number that would represent rawUint8Component's
+   * five-bit value for this scaler.
    */
-  normalizeEightBit(eightBitNumber: EightBitNumber): EightBitNumber;
+  normalizeEightBit(rawUint8Component: Uint8): Uint8;
 }
 
 /**
- * A set of methods for converting between five-bit Super Famicom red/green/blue color component values and eight-bit color component values
- * by multiplying or dividing by eight. The maximum eight-bit value is 248 out of 255. This is the method used by JHack/EB Project Editor.
+ * A set of methods for converting between five-bit Super Famicom
+ * red/green/blue color component values and eight-bit color component values
+ * by multiplying or dividing by eight. The maximum eight-bit value is 248
+ * out of 255. This is the method used by JHack/EB Project Editor.
  */
 export const factorOfEightScaler: ColorComponentScaler = {
-  convertFiveBitToEightBit(fiveBitNumber: FiveBitNumber): EightBitNumber {
-    const num = fiveBitNumber << 3;
+  convertFiveBitToEightBit(uint5Component: Uint5): Uint8 {
+    const num = uint5Component << 3;
 
-    if (isEightBitNumber(num)) {
+    if (isType(num, 'Uint8')) {
       return num;
     }
 
     throw new CaveBoyError(
-      `FiveBitNumber '${fiveBitNumber}' could not be converted to an EightBitNumber.`
+      `Uint5 component '${uint5Component}' could not be converted to a Uint8.`
     );
   },
-  convertEightBitToFiveBit(eightBitNumber: EightBitNumber): FiveBitNumber {
-    if (!isEightBitNumber(eightBitNumber)) {
-      throw new CaveBoyError(
-        `The value of eightBitNumber (${eightBitNumber}) is not an EightBitNumber.`
-      );
-    }
-
-    const num = eightBitNumber >>> 3;
-
-    if (isFiveBitNumber(num)) {
-      return num;
+  convertEightBitToFiveBit(uint8Component: Uint8): Uint5 {
+    if (isType(uint8Component, 'Uint8')) {
+      const num = uint8Component >>> 3;
+      if (isType(num, 'Uint5')) {
+        return num;
+      }
     }
 
     throw new CaveBoyError(
-      `EightBitNumber '${eightBitNumber}' could not be converted to a FiveBitNumber.`
+      `Uint8 component '${uint8Component}' could not be converted to a Uint5.`
     );
   },
-  normalizeEightBit(eightBitNumber: EightBitNumber): EightBitNumber {
-    if (!isEightBitNumber(eightBitNumber)) {
-      throw new CaveBoyError('eightBitNumber must be an EightBitNumber.');
-    }
+  normalizeEightBit(rawUint8Component: Uint8): Uint8 {
+    if (isType(rawUint8Component, 'Uint8')) {
+      const num = (rawUint8Component >>> 3) << 3;
 
-    const num = (eightBitNumber >>> 3) << 3;
-
-    if (isEightBitNumber(num)) {
-      return num;
+      if (isType(num, 'Uint8')) {
+        return num;
+      }
     }
 
     throw new CaveBoyError(
-      `EightBitNumber '${eightBitNumber}' could not be normalized.`
+      `Uint8 component '${rawUint8Component}' could not be normalized.`
     );
   },
 } as const;
 
-const kindredGammaRamp: EightBitNumber[] = [
+const kindredGammaRamp: Uint8[] = [
   0x00, //  0 ->   0
   0x01, //  1 ->   1 (+1)
   0x03, //  2 ->   3 (+2)
@@ -119,91 +120,95 @@ const kindredGammaRamp: EightBitNumber[] = [
 ];
 
 /**
- * A set of methods for converting between five-bit Super Famicom red/green/blue color component values and eight-bit web color component
- * values by applying the CRT gamma ramp invented by Overload for the emulator Kindred. Five-bit values between 9 and 16 are compressed so
- * that eight-bit values at both extremes (0 and 255) can exist.
+ * A set of methods for converting between five-bit Super Famicom red/green/blue
+ * color component values and eight-bit web color component values by applying
+ * the CRT gamma ramp invented by Overload for the emulator Kindred. Five-bit
+ * values between 9 and 16 are compressed so that eight-bit values at both
+ * extremes (0 and 255) can exist.
  */
 export const kindredGammaRampScaler: ColorComponentScaler = {
-  convertFiveBitToEightBit(fiveBitNumber: FiveBitNumber): EightBitNumber {
-    const num = kindredGammaRamp[fiveBitNumber];
+  convertFiveBitToEightBit(uint5Component: Uint5): Uint8 {
+    if (isType(uint5Component, 'Uint5')) {
+      const num = kindredGammaRamp[uint5Component];
 
-    if (isEightBitNumber(num)) {
-      return num;
-    }
-
-    throw new CaveBoyError(
-      `FiveBitNumber '${fiveBitNumber}' could not be converted to an EightBitNumber.`
-    );
-  },
-  convertEightBitToFiveBit(eightBitNumber: EightBitNumber): FiveBitNumber {
-    if (!isEightBitNumber(eightBitNumber)) {
-      throw new CaveBoyError(
-        `The value of eightBitNumber (${eightBitNumber}) is not an EightBitNumber.`
-      );
-    }
-
-    let indexofClosestValueSoFar = 0; // Just start with index 0 (value 0).
-    let smallestDifferenceSoFar = eightBitNumber; // eightBitNumber is positive, so |eightBitNumber - 0| is eightBitNumber.
-
-    for (
-      let i = 1;
-      smallestDifferenceSoFar > 0 && i < kindredGammaRamp.length;
-      ++i
-    ) {
-      let currentDifference = Math.abs(eightBitNumber - kindredGammaRamp[i]);
-
-      if (currentDifference < smallestDifferenceSoFar) {
-        indexofClosestValueSoFar = i;
-        smallestDifferenceSoFar = currentDifference;
+      if (isType(num, 'Uint8')) {
+        return num;
       }
     }
 
-    if (isFiveBitNumber(indexofClosestValueSoFar)) {
-      return indexofClosestValueSoFar;
-    }
-
     throw new CaveBoyError(
-      `EightBitNumber '${eightBitNumber}' could not be converted to a FiveBitNumber.`
+      `Uint5 component '${uint5Component}' could not be converted to a Uint8.`
     );
   },
-  normalizeEightBit(eightBitNumber: EightBitNumber): EightBitNumber {
-    const num = kindredGammaRamp[this.convertEightBitToFiveBit(eightBitNumber)];
+  convertEightBitToFiveBit(uint8Component: Uint8): Uint5 {
+    if (isType(uint8Component, 'Uint8')) {
+      // Just start with index 0 (value 0).
+      let indexofClosestValueSoFar = 0;
 
-    if (isEightBitNumber(num)) {
-      return num;
+      // uint8Component is positive, so |uint8Component - 0| is uint8Component.
+      let smallestDifferenceSoFar = uint8Component;
+
+      for (
+        let i = 1;
+        smallestDifferenceSoFar > 0 && i < kindredGammaRamp.length;
+        ++i
+      ) {
+        let currentDifference = Math.abs(uint8Component - kindredGammaRamp[i]);
+
+        if (currentDifference < smallestDifferenceSoFar) {
+          indexofClosestValueSoFar = i;
+          smallestDifferenceSoFar = currentDifference;
+        }
+      }
+
+      if (isType(indexofClosestValueSoFar, 'Uint5')) {
+        return indexofClosestValueSoFar;
+      }
     }
 
     throw new CaveBoyError(
-      `EightBitNumber '${eightBitNumber}' could not be normalized.`
+      `Uint8 component '${uint8Component}' could not be converted to a Uint5.`
+    );
+  },
+  normalizeEightBit(rawUint8Component: Uint8): Uint8 {
+    if (isType(rawUint8Component, 'Uint8')) {
+      const num =
+        kindredGammaRamp[this.convertEightBitToFiveBit(rawUint8Component)];
+
+      if (isType(num, 'Uint8')) {
+        return num;
+      }
+    }
+
+    throw new CaveBoyError(
+      `Uint8 component '${rawUint8Component}' could not be normalized.`
     );
   },
 } as const;
 
 /**
- * A list of all CaveBoy ColorComponentScaler names.
- */
-export enum ColorComponentScalerNames {
-  FactorOfEight = 'factorOfEight',
-  KindredGammaRamp = 'kindredGammaRamp',
-}
-
-/**
  * A list of all CaveBoy ColorComponentScalers by name.
  */
-export const colorComponentScalers: {
-  [name in ColorComponentScalerNames]: ColorComponentScaler;
-} = {
+const colorComponentScalers = {
   factorOfEight: factorOfEightScaler,
   kindredGammaRamp: kindredGammaRampScaler,
 };
 
 /**
- * Return the ColorComponentScaler with the provided name, or the default if no name is provided.
- * @param colorComponentScalerName - The name of the ColorComponentScaler to retrieve.
- * @returns The ColorComponentScaler with the provided name, or the default if no name is provided.
+ * A name of one of the ColorComponentScalers implemented by CaveBoy.
+ */
+export type ColorComponentScalerName = keyof typeof colorComponentScalers;
+
+/**
+ * Return the ColorComponentScaler with the provided name, or the default
+ * if no name is provided.
+ * @param colorComponentScalerName - The name of the ColorComponentScaler
+ * to retrieve.
+ * @returns The ColorComponentScaler with the provided name, or the default
+ * if no name is provided.
  */
 export function getColorComponentScaler(
-  colorComponentScalerName: ColorComponentScalerNames | undefined = undefined
+  colorComponentScalerName: ColorComponentScalerName | undefined = undefined
 ): ColorComponentScaler {
   colorComponentScalerName =
     colorComponentScalerName === undefined

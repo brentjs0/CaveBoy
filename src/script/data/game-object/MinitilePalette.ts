@@ -1,18 +1,18 @@
 import CaveBoyImageData from '@/script/base/CaveBoyImageData';
-import { ColorComponentScalerNames } from '@/script/base/ColorComponentScaler';
+import { ColorComponentScalerName } from '@/script/base/ColorComponentScaler';
 import CaveBoyError from '@/script/base/error/CaveBoyError';
 import { segmentString } from '@/script/base/helpers';
 import {
   CoilSnakeMinitilePaletteString,
-  isCoilSnakeMinitilePaletteString,
-} from '@/script/data/coilsnake-literal/CoilSnakeMinitilePaletteString';
+  isType,
+} from '@/script/base/primitive-types';
 import Color from '@/script/data/game-object/Color';
 
 /**
  * A list of sixteen Colors that be used to map MinitileLayer indexes to
  * the colors they will represent on-screen. This class roughly correlates
- * to a single array element in the 'subpalettes' array of an EbPalette object
- * in the CoilSnake source.
+ * to a single array element in the 'subpalettes' array of an EbMapPalette
+ * object in the CoilSnake source.
  */
 export default class MinitilePalette {
   /**
@@ -34,7 +34,9 @@ export default class MinitilePalette {
   ) {
     this.colors = [];
 
-    if (isCoilSnakeMinitilePaletteString(coilSnakeMinitilePaletteString)) {
+    if (
+      isType(coilSnakeMinitilePaletteString, 'CoilSnakeMinitilePaletteString')
+    ) {
       for (let coilSnakeColorString of segmentString(
         coilSnakeMinitilePaletteString,
         3
@@ -64,7 +66,7 @@ export default class MinitilePalette {
    * each Color in this MinitilePalette.
    */
   public getPreviewImageData(
-    colorComponentScalerName?: ColorComponentScalerNames
+    colorComponentScalerName?: ColorComponentScalerName
   ): CaveBoyImageData {
     const cbImageData = new CaveBoyImageData(8, 2);
 

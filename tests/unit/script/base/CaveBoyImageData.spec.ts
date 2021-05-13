@@ -1,5 +1,4 @@
 import CaveBoyImageData from '@/script/base/CaveBoyImageData';
-import { ColorComponentScalerNames } from '@/script/base/ColorComponentScaler';
 import Color from '@/script/data/game-object/Color';
 import { expect } from 'chai';
 
@@ -117,15 +116,9 @@ describe('CaveBoyImageData', function () {
         ])
       );
     });
-    it('Sets values using the FactorOfEight scaler.', function () {
+    it("Sets values using the 'factorOfEight' scaler.", function () {
       const cbImageData = new CaveBoyImageData(3, 2);
-      cbImageData.setPixel(
-        0,
-        1,
-        new Color(30, 29, 28),
-        255,
-        ColorComponentScalerNames.FactorOfEight
-      );
+      cbImageData.setPixel(0, 1, new Color(30, 29, 28), 255, 'factorOfEight');
       expect(cbImageData.data).to.eql(
         new Uint8ClampedArray([
           0,
