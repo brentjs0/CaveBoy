@@ -22,24 +22,12 @@ describe('CaveBoyImageData', function () {
     });
 
     it('Can initialize values from data and width values.', function () {
+      // prettier-ignore
       const data: Uint8ClampedArray = new Uint8ClampedArray([
-        255,
-        0,
-        0,
-        255,
-        0,
-        255,
-        0,
-        255,
-        0,
-        0,
-        255,
-        255,
-        255,
-        255,
-        0,
-        255,
+        255,   0,   0, 255,   0, 255,   0, 255,
+          0,   0, 255, 255, 255, 255,   0, 255,
       ]);
+
       const cbImageData = new CaveBoyImageData(data, 2);
       expect(cbImageData.data[12]).to.equal(255);
       expect(cbImageData.data[13]).to.equal(255);
@@ -52,32 +40,12 @@ describe('CaveBoyImageData', function () {
 
       expect(cbImageData.width).to.equal(3);
       expect(cbImageData.height).to.equal(2);
+
       expect(cbImageData.data).to.eql(
+        // prettier-ignore
         new Uint8ClampedArray([
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ])
       );
     });
@@ -88,31 +56,10 @@ describe('CaveBoyImageData', function () {
       const cbImageData = new CaveBoyImageData(3, 2);
       cbImageData.setPixel(1, 1, new Color(30, 29, 28));
       expect(cbImageData.data).to.eql(
+        // prettier-ignore
         new Uint8ClampedArray([
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          248,
-          240,
-          232,
-          255,
-          0,
-          0,
-          0,
-          0,
+          0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0, 248, 240, 232, 255,   0,   0,   0,   0,
         ])
       );
     });
@@ -120,31 +67,10 @@ describe('CaveBoyImageData', function () {
       const cbImageData = new CaveBoyImageData(3, 2);
       cbImageData.setPixel(0, 1, new Color(30, 29, 28), 255, 'factorOfEight');
       expect(cbImageData.data).to.eql(
+        // prettier-ignore
         new Uint8ClampedArray([
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          240,
-          232,
-          224,
-          255,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
+            0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          240, 232, 224, 255,   0,   0,   0,   0,   0,   0,   0,   0,
         ])
       );
     });

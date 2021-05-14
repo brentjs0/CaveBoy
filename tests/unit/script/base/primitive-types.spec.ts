@@ -35,4 +35,19 @@ describe('primitive-types', function () {
     ],
     'lower'
   );
+
+  testIsTypeForStringType(
+    'CoilSnakeMinitileLayerString',
+    [
+      'ffffffebffffffebffffff6bffffff6cfffff6bcfffff6bcfffffbbbffff6bbb',
+      'dbaa999adba999aacbaaa2abbaeeaaabba2922bcbee2abdda2922abcee2ba2bc',
+      '2222222233443343342233333233344333344323f33422333f333333ff444444',
+    ],
+    [
+      '2222222233443343342233333233344333344323f33422333f333333ff44444',
+      'dbaa999adba999aacbaaa2abbaeeaaabba2922bcbee2abdda2922abcee2ba2bc1',
+      'a9acaaaa99a6baaaaaa6cbbbcbxfdccd6fffffffcd6ddfffc6cbcccda6bbbbcb',
+    ],
+    'lower'
+  );
 });

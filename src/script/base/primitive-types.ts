@@ -9,69 +9,27 @@ export type TypeName =
   | 'Uint8'
   | 'HexadecimalColorString'
   | 'CoilSnakeColorString'
-  | 'CoilSnakeMinitilePaletteString';
+  | 'CoilSnakeMinitilePaletteString'
+  | 'CoilSnakeMinitileLayerString';
 
 /**
  * A non-negative integer than can be expressed with
  * four or fewer binary digits.
  * This includes all integers from 0 to 15, inclusive.
  */
+// prettier-ignore
 export type Uint4 =
-  | 0
-  | 1
-  | 2
-  | 3
-  | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | 9
-  | 10
-  | 11
-  | 12
-  | 13
-  | 14
-  | 15;
+  0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15;
 
 /**
  * A non-negative integer than can be expressed with
  * five or fewer binary digits.
  * This includes all integers from 0 to 31, inclusive.
  */
+// prettier-ignore
 export type Uint5 =
-  | 0
-  | 1
-  | 2
-  | 3
-  | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | 9
-  | 10
-  | 11
-  | 12
-  | 13
-  | 14
-  | 15
-  | 16
-  | 17
-  | 18
-  | 19
-  | 20
-  | 21
-  | 22
-  | 23
-  | 24
-  | 25
-  | 26
-  | 27
-  | 28
-  | 29
-  | 30
-  | 31;
+   0 |  1 |  2 |  3 |  4 |  5 |  6 |  7 |  8 |  9 | 10 | 11 | 12 | 13 | 14 | 15 |
+  16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31;
 
 /**
  * A non-negative integer than can be expressed with eight or fewer binary digits.
@@ -87,32 +45,35 @@ export type Uint8 = number;
 export type HexadecimalColorString = string;
 
 /**
+ * A three-character string color expression in the format 'xxx', where
+ * 'x' is a base-32 digit. Must be lowercase.
+ */
+export type CoilSnakeColorString = Lowercase<string>;
+
+/**
  * A string expression of a 16-color palette as encoded by CoilSnake.
  * Consists of 48 base-32 digits. Must be lowercase.
  */
 export type CoilSnakeMinitilePaletteString = string;
 
 /**
- * A three-character string color expression in the format 'xxx', where
- * 'x' is a base-32 digit. Must be lowercase.
+ * A 64-character string expression of a minitile layer image as encoded by
+ * CoilSnake. Consists of 64 hexadecimal digits. Must be lowercase.
  */
-export type CoilSnakeColorString = string;
+export type CoilSnakeMinitileLayerString = string;
 
 /**
- * The CaveBoy-defined type with the name T.
+ * A CaveBoy-defined type with the name T.
  */
-export type Type<T extends TypeName> = T extends 'Uint4'
-  ? Uint4
-  : T extends 'Uint5'
-  ? Uint5
-  : T extends 'Uint8'
-  ? Uint8
-  : T extends 'HexadecimaColorString'
-  ? HexadecimalColorString
-  : T extends 'CoilSnakeColorString'
-  ? CoilSnakeColorString
-  : T extends 'CoilSnakeMinitilePaletteString'
-  ? CoilSnakeMinitilePaletteString
+// prettier-ignore
+export type Type<T extends TypeName> =
+    T extends 'Uint4' ? Uint4
+  : T extends 'Uint5' ? Uint5
+  : T extends 'Uint8' ? Uint8
+  : T extends 'HexadecimaColorString' ? HexadecimalColorString
+  : T extends 'CoilSnakeColorString' ? CoilSnakeColorString
+  : T extends 'CoilSnakeMinitilePaletteString' ? CoilSnakeMinitilePaletteString
+  : T extends 'CoilSnakeMinitileLayerString' ? CoilSnakeMinitileLayerString
   : never;
 
 /**
@@ -157,6 +118,8 @@ export function isType<T extends TypeName>(
       return typeof value === 'string' && /^([0-9a-v]{3})$/.test(value);
     case 'CoilSnakeMinitilePaletteString':
       return typeof value === 'string' && /^([0-9a-v]{48})$/.test(value);
+    case 'CoilSnakeMinitileLayerString':
+      return typeof value === 'string' && /^([0-9a-f]{64})$/.test(value);
     default:
       throw new CaveBoyError(`Type constraints for '${type}' are not defined.`);
   }
