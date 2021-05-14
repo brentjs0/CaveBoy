@@ -10,7 +10,8 @@ export type TypeName =
   | 'HexadecimalColorString'
   | 'CoilSnakeColorString'
   | 'CoilSnakeMinitilePaletteString'
-  | 'CoilSnakeMinitileLayerString';
+  | 'CoilSnakeMinitileLayerString'
+  | 'CoilSnakeMinitileString';
 
 /**
  * A non-negative integer than can be expressed with
@@ -63,6 +64,14 @@ export type CoilSnakeMinitilePaletteString = string;
 export type CoilSnakeMinitileLayerString = string;
 
 /**
+ * A string expression of a two-layer minitile image as encoded by CoilSnake.
+ * Consists of two strings of 64 hexadecimal digits each separated by a
+ * carriage return ('\r'), a new line ('\n'), or both ('\r\n'). Must be
+ * lowercase.
+ */
+export type CoilSnakeMinitileString = string;
+
+/**
  * A CaveBoy-defined type with the name T.
  */
 // prettier-ignore
@@ -74,6 +83,7 @@ export type Type<T extends TypeName> =
   : T extends 'CoilSnakeColorString' ? CoilSnakeColorString
   : T extends 'CoilSnakeMinitilePaletteString' ? CoilSnakeMinitilePaletteString
   : T extends 'CoilSnakeMinitileLayerString' ? CoilSnakeMinitileLayerString
+  : T extends 'CoilSnakeMinitileString' ? CoilSnakeMinitileString
   : never;
 
 /**
@@ -112,14 +122,20 @@ export function isType<T extends TypeName>(
       );
     case 'HexadecimalColorString':
       return (
-        typeof value === 'string' && /^#([0-9a-f]{6}|[0-9a-f]{3})$/i.test(value)
+        typeof value === 'string' &&
+        /^#(?:[0-9a-f]{6}|[0-9a-f]{3})$/i.test(value)
       );
     case 'CoilSnakeColorString':
-      return typeof value === 'string' && /^([0-9a-v]{3})$/.test(value);
+      return typeof value === 'string' && /^[0-9a-v]{3}$/.test(value);
     case 'CoilSnakeMinitilePaletteString':
-      return typeof value === 'string' && /^([0-9a-v]{48})$/.test(value);
+      return typeof value === 'string' && /^[0-9a-v]{48}$/.test(value);
     case 'CoilSnakeMinitileLayerString':
-      return typeof value === 'string' && /^([0-9a-f]{64})$/.test(value);
+      return typeof value === 'string' && /^[0-9a-f]{64}$/.test(value);
+    case 'CoilSnakeMinitileString':
+      return (
+        typeof value === 'string' &&
+        /^[0-9a-f]{64}(?:\n|\r\n|\r)[0-9a-f]{64}$/.test(value)
+      );
     default:
       throw new CaveBoyError(`Type constraints for '${type}' are not defined.`);
   }
