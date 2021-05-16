@@ -50,4 +50,23 @@ describe('primitive-types', function () {
     ],
     'lower'
   );
+
+  testIsTypeForStringType(
+    'CoilSnakeMinitileString',
+    [
+      'bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc\nbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc',
+      '999999af99999af19999af11999af11f9aaf11f2aaf11fffaf111111ffffffff\r0000000f000000f100000f110000f11f000f11f200f11fff0f111111ffffffff',
+      'aaaaaaafaaaaaaf19aaaaf1199aaf11f99af11f29af11f22af11f222f11f222f\r\n0000000f000000f100000f110000f11f000f11f200f11f220f11f222f11f222f',
+      `222fffff22f111112f277777f2777777f2717111f2171717f2177717f2717717
+000fffff00f111110f277777f2777777f2717111f2171717f2177717f2717717`,
+    ],
+    [
+      'bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc\n\nbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc',
+      'bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc\n\rbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc',
+      'bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc\r\nbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbg',
+      'bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc\r\nbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb',
+      'bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbbcbcbcbc\r\nbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbg',
+    ],
+    'lower'
+  );
 });
