@@ -1,20 +1,24 @@
 import { isType } from '@/script/base/primitive-types';
 import Color from '@/script/data/game-object/Color';
-import MinitileLayer from '@/script/data/game-object/MinitileLayer';
+import MinitileLayer, {
+  getMinitileLayerPixelCoordinates,
+} from '@/script/data/game-object/MinitileLayer';
 import MinitilePalette from '@/script/data/game-object/MinitilePalette';
 import { expect } from 'chai';
+import reverse from 'lodash/reverse';
 import times from 'lodash/times';
+
 import { setUpCanvas } from '../../../../test-methods';
 
 describe('MinitileLayer', function () {
   describe('constructor()', function () {
-    it('Initializes values from a CoilSnakeMinitilePaletteString.', function () {
+    it('Initializes values from a CoilSnakeMinitileLayerString.', function () {
       const minitileLayer = new MinitileLayer(
         'fffff00011111f00777772f07777772f7177117f1717171f1717171f1717171f'
       );
 
       // prettier-ignore
-      expect(minitileLayer.colorIndexes).to.eql([
+      expect(minitileLayer.pixelValues).to.eql([
         15, 15, 15, 15, 15,  0,  0,  0,
          1,  1,  1,  1,  1, 15,  0,  0,
          7,  7,  7,  7,  7,  2, 15,  0,
@@ -28,7 +32,7 @@ describe('MinitileLayer', function () {
 
     it('Creates an empty instance with 0 for all index values.', function () {
       const minitileLayer = new MinitileLayer();
-      expect(minitileLayer.colorIndexes).to.eql(times(64, () => 0));
+      expect(minitileLayer.pixelValues).to.eql(times(64, () => 0));
     });
   });
 
@@ -70,7 +74,75 @@ describe('MinitileLayer', function () {
 
       const ctx = setUpCanvas(10);
       createImageBitmap(cbImageData).then((imageBitmap) =>
+        ctx.drawImage(imageBitmap, 9, 1)
+      );
+
+      expect(cbImageData.data).to.eql(expectedDataValue);
+    });
+
+    it('Flips image data horizontally.', function () {
+      const minitilePalette = new MinitilePalette(
+        '000uuqoqjqf9koivv0ieuv1b2vd5ncafevvpoojkkdgha666'
+      );
+      const cbImageData = new MinitileLayer(
+        'fffff00011111f00777772f07777772f7177117f1717171f1717171f1717171f'
+      ).getImageData(minitilePalette, true);
+
+      const eff = new Color(6, 6, 6).toUint8ClampedArray();
+      const zro = new Color(0, 0, 0).toUint8ClampedArray(0);
+      const one = new Color(30, 30, 26).toUint8ClampedArray();
+      const two = new Color(24, 26, 19).toUint8ClampedArray();
+      const svn = new Color(31, 1, 11).toUint8ClampedArray();
+
+      // prettier-ignore
+      const expectedDataValue = new Uint8ClampedArray([
+        ...zro, ...zro, ...zro, ...eff, ...eff, ...eff, ...eff, ...eff,
+        ...zro, ...zro, ...eff, ...one, ...one, ...one, ...one, ...one,
+        ...zro, ...eff, ...two, ...svn, ...svn, ...svn, ...svn, ...svn,
+        ...eff, ...two, ...svn, ...svn, ...svn, ...svn, ...svn, ...svn,
+        ...eff, ...svn, ...one, ...one, ...svn, ...svn, ...one, ...svn,
+        ...eff, ...one, ...svn, ...one, ...svn, ...one, ...svn, ...one,
+        ...eff, ...one, ...svn, ...one, ...svn, ...one, ...svn, ...one,
+        ...eff, ...one, ...svn, ...one, ...svn, ...one, ...svn, ...one,
+      ]);
+
+      const ctx = setUpCanvas(10);
+      createImageBitmap(cbImageData).then((imageBitmap) =>
         ctx.drawImage(imageBitmap, 1, 1)
+      );
+
+      expect(cbImageData.data).to.eql(expectedDataValue);
+    });
+
+    it('Flips image data vertically.', function () {
+      const minitilePalette = new MinitilePalette(
+        '000uuqoqjqf9koivv0ieuv1b2vd5ncafevvpoojkkdgha666'
+      );
+      const cbImageData = new MinitileLayer(
+        'fffff00011111f00777772f07777772f7177117f1717171f1717171f1717171f'
+      ).getImageData(minitilePalette, false, true);
+
+      const eff = new Color(6, 6, 6).toUint8ClampedArray();
+      const zro = new Color(0, 0, 0).toUint8ClampedArray(0);
+      const one = new Color(30, 30, 26).toUint8ClampedArray();
+      const two = new Color(24, 26, 19).toUint8ClampedArray();
+      const svn = new Color(31, 1, 11).toUint8ClampedArray();
+
+      // prettier-ignore
+      const expectedDataValue = new Uint8ClampedArray([
+        ...one, ...svn, ...one, ...svn, ...one, ...svn, ...one, ...eff,
+        ...one, ...svn, ...one, ...svn, ...one, ...svn, ...one, ...eff,
+        ...one, ...svn, ...one, ...svn, ...one, ...svn, ...one, ...eff,
+        ...svn, ...one, ...svn, ...svn, ...one, ...one, ...svn, ...eff,
+        ...svn, ...svn, ...svn, ...svn, ...svn, ...svn, ...two, ...eff,
+        ...svn, ...svn, ...svn, ...svn, ...svn, ...two, ...eff, ...zro,
+        ...one, ...one, ...one, ...one, ...one, ...eff, ...zro, ...zro,
+        ...eff, ...eff, ...eff, ...eff, ...eff, ...zro, ...zro, ...zro,
+      ]);
+
+      const ctx = setUpCanvas(10);
+      createImageBitmap(cbImageData).then((imageBitmap) =>
+        ctx.drawImage(imageBitmap, 9, 9)
       );
 
       expect(cbImageData.data).to.eql(expectedDataValue);
@@ -82,7 +154,7 @@ describe('MinitileLayer', function () {
       );
       const cbImageData = new MinitileLayer(
         '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef'
-      ).getImageData(minitilePalette, true, 'factorOfEight');
+      ).getImageData(minitilePalette, false, false, true, 'factorOfEight');
 
       // prettier-ignore
       const expectedDataValue = new Uint8ClampedArray([
@@ -105,7 +177,7 @@ describe('MinitileLayer', function () {
       );
       const cbImageData = new MinitileLayer(
         '0000000000000000000000000000000000000000000000000000000000000000'
-      ).getImageData(minitilePalette, false);
+      ).getImageData(minitilePalette, false, false, false);
 
       expect(cbImageData.data).to.satisfy(function alphasEqual255(
         data: Uint8ClampedArray
@@ -122,15 +194,15 @@ describe('MinitileLayer', function () {
 
   describe('toCoilSnakeMinitileLayerString()', function () {
     it('Generates a valid CoilSnakeMinitileLayerString.', function () {
-      const miniTileLayer = new MinitileLayer();
-      for (let i = 0; i < miniTileLayer.colorIndexes.length; ++i) {
+      const minitileLayer = new MinitileLayer();
+      for (let i = 0; i < minitileLayer.pixelValues.length; ++i) {
         let newIndex = i % 16;
         if (isType(newIndex, 'Uint4')) {
-          miniTileLayer.colorIndexes[i] = newIndex;
+          minitileLayer.pixelValues[i] = newIndex;
         }
       }
 
-      const coilSnakeMinitileLayerString = miniTileLayer.toCoilSnakeMinitileLayerString();
+      const coilSnakeMinitileLayerString = minitileLayer.toCoilSnakeMinitileLayerString();
 
       expect(coilSnakeMinitileLayerString).to.equal(
         '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef'
@@ -139,6 +211,80 @@ describe('MinitileLayer', function () {
       expect(
         isType(coilSnakeMinitileLayerString, 'CoilSnakeMinitileLayerString')
       ).to.be.true;
+    });
+  });
+
+  describe('getMinitileLayerPixelCoordinates()', function () {
+    // prettier-ignore
+    const allCoordinatesInOrder = [
+      [0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0],
+      [0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1],
+      [0, 2], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2],
+      [0, 3], [1, 3], [2, 3], [3, 3], [4, 3], [5, 3], [6, 3], [7, 3],
+      [0, 4], [1, 4], [2, 4], [3, 4], [4, 4], [5, 4], [6, 4], [7, 4],
+      [0, 5], [1, 5], [2, 5], [3, 5], [4, 5], [5, 5], [6, 5], [7, 5],
+      [0, 6], [1, 6], [2, 6], [3, 6], [4, 6], [5, 6], [6, 6], [7, 6],
+      [0, 7], [1, 7], [2, 7], [3, 7], [4, 7], [5, 7], [6, 7], [7, 7],
+    ];
+
+    it('Returns correct unflipped coordinates.', function () {
+      for (let i = 0; i < 64; ++i) {
+        expect(getMinitileLayerPixelCoordinates(i)).to.eql(
+          allCoordinatesInOrder[i]
+        );
+      }
+    });
+
+    it('Returns correct horizontally flipped coordinates.', function () {
+      // prettier-ignore
+      const allHorizontallyFlippedCoordinatesInOrder = [
+        [7, 0], [6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0], [0, 0],
+        [7, 1], [6, 1], [5, 1], [4, 1], [3, 1], [2, 1], [1, 1], [0, 1],
+        [7, 2], [6, 2], [5, 2], [4, 2], [3, 2], [2, 2], [1, 2], [0, 2],
+        [7, 3], [6, 3], [5, 3], [4, 3], [3, 3], [2, 3], [1, 3], [0, 3],
+        [7, 4], [6, 4], [5, 4], [4, 4], [3, 4], [2, 4], [1, 4], [0, 4],
+        [7, 5], [6, 5], [5, 5], [4, 5], [3, 5], [2, 5], [1, 5], [0, 5],
+        [7, 6], [6, 6], [5, 6], [4, 6], [3, 6], [2, 6], [1, 6], [0, 6],
+        [7, 7], [6, 7], [5, 7], [4, 7], [3, 7], [2, 7], [1, 7], [0, 7],
+      ];
+
+      for (let i = 0; i < 64; ++i) {
+        expect(getMinitileLayerPixelCoordinates(i, true)).to.eql(
+          allHorizontallyFlippedCoordinatesInOrder[i]
+        );
+      }
+    });
+
+    it('Returns correct vertically flipped coordinates.', function () {
+      // prettier-ignore
+      const allVerticallyFlippedCoordinatesInOrder = [
+        [0, 7], [1, 7], [2, 7], [3, 7], [4, 7], [5, 7], [6, 7], [7, 7],
+        [0, 6], [1, 6], [2, 6], [3, 6], [4, 6], [5, 6], [6, 6], [7, 6],
+        [0, 5], [1, 5], [2, 5], [3, 5], [4, 5], [5, 5], [6, 5], [7, 5],
+        [0, 4], [1, 4], [2, 4], [3, 4], [4, 4], [5, 4], [6, 4], [7, 4],
+        [0, 3], [1, 3], [2, 3], [3, 3], [4, 3], [5, 3], [6, 3], [7, 3],
+        [0, 2], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2],
+        [0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1],
+        [0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0],
+      ];
+
+      for (let i = 0; i < 64; ++i) {
+        expect(getMinitileLayerPixelCoordinates(i, false, true)).to.eql(
+          allVerticallyFlippedCoordinatesInOrder[i]
+        );
+      }
+    });
+
+    it('Returns correct vertically and horizontally flipped coordinates.', function () {
+      const allHorizontallyAndVerticallyFlippedCoordinatesInOrder = reverse(
+        allCoordinatesInOrder
+      );
+
+      for (let i = 0; i < 64; ++i) {
+        expect(getMinitileLayerPixelCoordinates(i, true, true)).to.eql(
+          allHorizontallyAndVerticallyFlippedCoordinatesInOrder[i]
+        );
+      }
     });
   });
 });

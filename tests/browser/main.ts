@@ -9,3 +9,4 @@ import '../unit/script/base/ColorComponentScaler.spec';
 import '../unit/script/data/game-object/Color.spec';
 import '../unit/script/data/game-object/MinitilePalette.spec';
 import '../unit/script/data/game-object/MinitileLayer.spec';
+import '../unit/script/data/game-object/Minitile.spec';
