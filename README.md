@@ -10,7 +10,7 @@ This project is still under development and does not yet have a functional relea
   - [x] Colors
   - [x] Minitile Palettes ("Subpalettes")
   - [x] Minitile Layers
-  - [ ] Minitiles
+  - [x] Minitiles
   - [ ] Arrangment Cells
   - [ ] Arrangements ("Tiles"/"Metatiles"/"Blocks")
   - [ ] Tilesets
