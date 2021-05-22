@@ -69,4 +69,11 @@ describe('primitive-types', function () {
     ],
     'lower'
   );
+
+  testIsTypeForStringType(
+    'CoilSnakeArrangementCellString',
+    ['abcdef', '000000', '01999e', '10bafd'],
+    ['t12345', 'abcde', '0000000'],
+    'lower'
+  );
 });

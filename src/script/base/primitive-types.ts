@@ -11,7 +11,8 @@ export type TypeName =
   | 'CoilSnakeColorString'
   | 'CoilSnakeMinitilePaletteString'
   | 'CoilSnakeMinitileLayerString'
-  | 'CoilSnakeMinitileString';
+  | 'CoilSnakeMinitileString'
+  | 'CoilSnakeArrangementCellString';
 
 /**
  * A non-negative integer than can be expressed with
@@ -72,6 +73,13 @@ export type CoilSnakeMinitileLayerString = string;
 export type CoilSnakeMinitileString = string;
 
 /**
+ * A string expression containing the minitile number, palette number,
+ * horizontal flip, vertical flip, and surface flags for a single cell in a
+ * 4 x 4 arrangement as encoded by CoilSnake.
+ */
+export type CoilSnakeArrangementCellString = string;
+
+/**
  * A CaveBoy-defined type with the name T.
  */
 // prettier-ignore
@@ -84,6 +92,7 @@ export type Type<T extends TypeName> =
   : T extends 'CoilSnakeMinitilePaletteString' ? CoilSnakeMinitilePaletteString
   : T extends 'CoilSnakeMinitileLayerString' ? CoilSnakeMinitileLayerString
   : T extends 'CoilSnakeMinitileString' ? CoilSnakeMinitileString
+  : T extends 'CoilSnakeArrangementCellString' ? CoilSnakeArrangementCellString
   : never;
 
 /**
@@ -136,6 +145,8 @@ export function isType<T extends TypeName>(
         typeof value === 'string' &&
         /^[0-9a-f]{64}(?:\n|\r\n|\r)[0-9a-f]{64}$/.test(value)
       );
+    case 'CoilSnakeArrangementCellString':
+      return typeof value === 'string' && /^[0-9a-f]{6}$/.test(value);
     default:
       throw new CaveBoyError(`Type constraints for '${type}' are not defined.`);
   }
