@@ -24,8 +24,8 @@ export default class MinitilePalette {
    * Instantiate a MinitilePalette, optionally with its Color values initialized
    * by parsing the provided CoilSnakeMinitilePaletteString.
    * @param coilSnakeMinitilePaletteString - A CoilSnakeMinitilePaletteString
-   * expression of the colors in the palette, in order. Optional. All Colors
-   * default to black if no value is provided.
+   * expression of the colors in the palette, in order. Optional. Default Colors
+   * are created if no value is provided.
    */
   public constructor(
     coilSnakeMinitilePaletteString?: CoilSnakeMinitilePaletteString
@@ -42,9 +42,12 @@ export default class MinitilePalette {
         this.colors.push(new Color(coilSnakeColorString));
       }
     } else if (coilSnakeMinitilePaletteString === undefined) {
-      for (let i = 0; i < 16; ++i) {
+      // This mimics the in-game pattern of "empty" palettes being all black
+      // except for the last color, which is 6-4-4.
+      for (let i = 0; i < 15; ++i) {
         this.colors.push(new Color());
       }
+      this.colors.push(new Color(6, 4, 4));
     } else {
       throw new CaveBoyError(
         `An invalid combination of arguments was provided to the MinitilePalette constructor: ${arguments}.`

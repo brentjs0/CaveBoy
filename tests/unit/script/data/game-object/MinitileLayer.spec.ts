@@ -72,11 +72,6 @@ describe('MinitileLayer', function () {
         ...one, ...svn, ...one, ...svn, ...one, ...svn, ...one, ...eff,
       ]);
 
-      const ctx = setUpCanvas(10);
-      createImageBitmap(cbImageData).then((imageBitmap) =>
-        ctx.drawImage(imageBitmap, 9, 1)
-      );
-
       expect(cbImageData.data).to.eql(expectedDataValue);
     });
 
@@ -106,11 +101,6 @@ describe('MinitileLayer', function () {
         ...eff, ...one, ...svn, ...one, ...svn, ...one, ...svn, ...one,
       ]);
 
-      const ctx = setUpCanvas(10);
-      createImageBitmap(cbImageData).then((imageBitmap) =>
-        ctx.drawImage(imageBitmap, 1, 1)
-      );
-
       expect(cbImageData.data).to.eql(expectedDataValue);
     });
 
@@ -139,11 +129,6 @@ describe('MinitileLayer', function () {
         ...one, ...one, ...one, ...one, ...one, ...eff, ...zro, ...zro,
         ...eff, ...eff, ...eff, ...eff, ...eff, ...zro, ...zro, ...zro,
       ]);
-
-      const ctx = setUpCanvas(10);
-      createImageBitmap(cbImageData).then((imageBitmap) =>
-        ctx.drawImage(imageBitmap, 9, 9)
-      );
 
       expect(cbImageData.data).to.eql(expectedDataValue);
     });

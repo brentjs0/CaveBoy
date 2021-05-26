@@ -11,9 +11,9 @@ This project is still under development and does not yet have a functional relea
   - [x] Minitile Palettes ("Subpalettes")
   - [x] Minitile Layers
   - [x] Minitiles
-  - [ ] Arrangment Cells
+  - [ ] Arrangement Cells
   - [ ] Arrangements ("Tiles"/"Metatiles"/"Blocks")
   - [ ] Tilesets
-  - [ ] Palette Sets ("Palettes"/"Palette Groups")
+  - [x] Palette Sets ("Palettes"/"Palette Groups")
   - [ ] Sector Types ("Map Palettes"/"Areas")
   - [ ] Tileset Files

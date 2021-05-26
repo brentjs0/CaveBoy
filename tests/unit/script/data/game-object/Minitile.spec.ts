@@ -56,10 +56,7 @@ describe('Minitile', function () {
           ...eff, ...two, ...one, ...svn, ...svn, ...svn, ...one, ...svn,
           ...eff, ...two, ...svn, ...one, ...svn, ...svn, ...one, ...svn,
         ]);
-      const ctx = setUpCanvas(10);
-      createImageBitmap(cbImageData).then((imageBitmap) =>
-        ctx.drawImage(imageBitmap, 1, 1)
-      );
+
       expect(cbImageData.data).to.eql(expectedDataValue);
     });
 
@@ -88,10 +85,6 @@ describe('Minitile', function () {
           ...egt, ...egt, ...eff, ...one, ...one, ...one, ...one, ...one,
           ...egt, ...egt, ...egt, ...eff, ...eff, ...eff, ...eff, ...eff,
         ]);
-      const ctx = setUpCanvas(10);
-      createImageBitmap(cbImageData).then((imageBitmap) =>
-        ctx.drawImage(imageBitmap, 1, 9)
-      );
       expect(cbImageData.data).to.eql(expectedDataValue);
     });
   });
