@@ -1,21 +1,22 @@
 import { isType, TypeName } from '@/script/base/primitive-types';
 import { expect } from 'chai';
 
-export function setUpCanvas(scale: number = 1): CanvasRenderingContext2D {
+export function setUpCanvas(
+  scale: number = 1,
+  width: number = 400,
+  height: number = 256
+): [HTMLCanvasElement, CanvasRenderingContext2D] {
   const canvas = document.getElementById('canvas') as HTMLCanvasElement;
   const ctx = canvas.getContext('2d');
 
-  const baseWidth = 400;
-  const baseHeight = 256;
-
   // Set display size (css pixels).
-  canvas.style.width = baseWidth + 'px';
-  canvas.style.height = baseHeight + 'px';
+  canvas.style.width = width + 'px';
+  canvas.style.height = height + 'px';
 
   // Set actual size in memory (scaled to account for extra pixel density).
   var devicePixelRatio = window.devicePixelRatio || 1;
-  canvas.width = Math.floor(baseWidth * devicePixelRatio);
-  canvas.height = Math.floor(baseHeight * devicePixelRatio);
+  canvas.width = Math.floor(width * devicePixelRatio);
+  canvas.height = Math.floor(height * devicePixelRatio);
 
   if (ctx != null) {
     ctx.imageSmoothingEnabled = false;
@@ -23,6 +24,7 @@ export function setUpCanvas(scale: number = 1): CanvasRenderingContext2D {
     const checkerboardImage = document.getElementById(
       'checkerboard'
     ) as HTMLImageElement;
+    checkerboardImage.crossOrigin = 'anonymous';
     const pattern = ctx.createPattern(checkerboardImage, 'repeat');
     if (pattern != null) {
       ctx.fillStyle = pattern;
@@ -36,7 +38,7 @@ export function setUpCanvas(scale: number = 1): CanvasRenderingContext2D {
 
     ctx.fillStyle = '#000';
 
-    return ctx;
+    return [canvas, ctx];
   }
 
   throw new Error('Canvas context could not be retreived.');
