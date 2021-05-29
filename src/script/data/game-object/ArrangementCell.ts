@@ -1,5 +1,7 @@
 import CaveBoyImageData from '@/script/base/CaveBoyImageData';
 import { CoilSnakeArrangementCellString } from '@/script/base/primitive-types';
+import Minitile from '@/script/data/game-object/Minitile';
+import PaletteSet from '@/script/data/game-object/PaletteSet';
 
 export default class ArrangementCell {
   public minitileNumber: number;
@@ -41,7 +43,10 @@ export default class ArrangementCell {
     this.isSolid = false;
   }
 
-  public getImageData(/*graphicSet: GraphicSet*/): CaveBoyImageData {
+  public getImageData(
+    minitiles: Minitile[],
+    paletteSet: PaletteSet
+  ): CaveBoyImageData {
     return new CaveBoyImageData(1, 1);
   }
 
