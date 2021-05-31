@@ -4,15 +4,25 @@ import CaveBoyError from '@/script/base/error/CaveBoyError';
  * A name of one of the types defined by CaveBoy.
  */
 export type TypeName =
+  | 'Uint3'
   | 'Uint4'
   | 'Uint5'
   | 'Uint8'
+  | 'Uint9'
   | 'HexadecimalColorString'
   | 'CoilSnakeColorString'
   | 'CoilSnakeMinitilePaletteString'
   | 'CoilSnakeMinitileLayerString'
   | 'CoilSnakeMinitileString'
+  | 'CoilSnakeArrangementCellString'
   | 'CoilSnakePaletteSetString';
+
+/**
+ * A non-negative integer than can be expressed with
+ * three or fewer binary digits.
+ * This includes all integers from 0 to 7, inclusive.
+ */
+export type Uint3 = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 /**
  * A non-negative integer than can be expressed with
@@ -38,6 +48,12 @@ export type Uint5 =
  * This includes all integers from 0 to 255, inclusive.
  */
 export type Uint8 = number;
+
+/**
+ * A non-negative integer than can be expressed with nine or fewer binary digits.
+ * This includes all integers from 0 to 511, inclusive.
+ */
+export type Uint9 = number;
 
 /**
  * A seven- or four-character string color expression in the format
@@ -73,6 +89,21 @@ export type CoilSnakeMinitileLayerString = string;
 export type CoilSnakeMinitileString = string;
 
 /**
+ * A string expression containing the Minitile number, Minitile Palette number,
+ * flip state, and surface flags for a single cell of a 4 x 4 arrangement.
+ * Encoded by CoilSnake as a string of six hexadecimal digits. Must be lowercase.
+ *
+ * In binary, the data is encoded as follows: `VH?P PPTT TTTT TTTT SSSS SSSS`
+ * - `V` = Vertical flip (1 for flipped, 0 for unflipped)
+ * - `H` = Horizontal flip (1 for flipped, 0 for unflipped)
+ * - `?` = Unused
+ * - `P` = Minitile Pallete number + 2
+ * - `T` = Minitile number (value must not exceed 511, despite using 10 bits)
+ * - `S` = The eight surface flags, which include collision data
+ */
+export type CoilSnakeArrangementCellString = string;
+
+/**
  * A string expression of a set of six sixteen-color palettes as encoded by
  * CoilSnake. Consists of 288 base-32 digits. Must be lowercase.
  */
@@ -83,14 +114,17 @@ export type CoilSnakePaletteSetString = string;
  */
 // prettier-ignore
 export type Type<T extends TypeName> =
-    T extends 'Uint4' ? Uint4
+    T extends 'Uint3' ? Uint3
+  : T extends 'Uint4' ? Uint4
   : T extends 'Uint5' ? Uint5
   : T extends 'Uint8' ? Uint8
+  : T extends 'Uint9' ? Uint9
   : T extends 'HexadecimaColorString' ? HexadecimalColorString
   : T extends 'CoilSnakeColorString' ? CoilSnakeColorString
   : T extends 'CoilSnakeMinitilePaletteString' ? CoilSnakeMinitilePaletteString
   : T extends 'CoilSnakeMinitileLayerString' ? CoilSnakeMinitileLayerString
   : T extends 'CoilSnakeMinitileString' ? CoilSnakeMinitileString
+  : T extends 'CoilSnakeArrangementCellString' ? CoilSnakeArrangementCellString
   : T extends 'CoilSnakePaletteSetString' ? CoilSnakePaletteSetString
   : never;
 
@@ -107,6 +141,13 @@ export function isType<T extends TypeName>(
   type: T
 ): value is Type<T> {
   switch (type) {
+    case 'Uint3':
+      return (
+        typeof value === 'number' &&
+        Number.isInteger(value) &&
+        value >= 0 &&
+        value <= 7
+      );
     case 'Uint4':
       return (
         typeof value === 'number' &&
@@ -128,6 +169,13 @@ export function isType<T extends TypeName>(
         value >= 0 &&
         value <= 255
       );
+    case 'Uint9':
+      return (
+        typeof value === 'number' &&
+        Number.isInteger(value) &&
+        value >= 0 &&
+        value <= 511
+      );
     case 'HexadecimalColorString':
       return (
         typeof value === 'string' &&
@@ -144,6 +192,8 @@ export function isType<T extends TypeName>(
         typeof value === 'string' &&
         /^[0-9a-f]{64}(?:\n|\r\n|\r)[0-9a-f]{64}$/.test(value)
       );
+    case 'CoilSnakeArrangementCellString':
+      return typeof value === 'string' && /^[0-9a-f]{6}$/.test(value);
     case 'CoilSnakePaletteSetString':
       return typeof value === 'string' && /^[0-9a-v]{288}$/.test(value);
     default:

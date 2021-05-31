@@ -1,4 +1,4 @@
-import { segmentString } from '@/script/base/helpers';
+import { getBitValue, segmentString } from '@/script/base/helpers';
 import { expect } from 'chai';
 
 describe('helpers', function () {
@@ -26,6 +26,32 @@ describe('helpers', function () {
       expect(() => [...segmentString('aabbcc', -3)]).to.throw(
         'Parameter segmentLength must be greater than 0.'
       );
+    });
+  });
+  describe('getBitValue()', function () {
+    it('Returns true for 1s up to position 30.', function () {
+      for (let place = 0; place < 31; ++place) {
+        expect(getBitValue(0b01111111111111111111111111111111, place)).to.be
+          .true;
+      }
+    });
+    it('Returns false for 0s up to position 30.', function () {
+      for (let place = 0; place < 31; ++place) {
+        expect(getBitValue(0b00000000000000000000000000000000, place)).to.be
+          .false;
+      }
+    });
+    it('Throws an Error when number is not an integer.', function () {
+      expect(() => getBitValue(0.5, 1)).to.throw;
+    });
+    it('Throws an Error when place is not an integer.', function () {
+      expect(() => getBitValue(0, 0.5)).to.throw;
+    });
+    it('Throws an Error when place is 31 or greater.', function () {
+      expect(() => getBitValue(0, 31)).to.throw;
+    });
+    it('Throws an Error when place is negative.', function () {
+      expect(() => getBitValue(0, -1)).to.throw;
     });
   });
 });

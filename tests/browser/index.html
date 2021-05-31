@@ -12,6 +12,12 @@
         display: flex;
       }
 
+      #canvas {
+        image-rendering: pixelated;
+        image-rendering: -moz-crisp-edges;
+        transform-origin: 0 0;
+      }
+
       #mocha,
       #canvas {
         margin: 15px;
@@ -67,12 +73,6 @@
     <div id="mocha"></div>
 
     <canvas id="canvas"></canvas>
-
-    <img
-      id="checkerboard"
-      style="display: none;"
-      src="../assets/checkerboard.svg"
-    />
 
     <script src="../../node_modules/mocha/mocha.js"></script>
     <script src="../../node_modules/chai/chai.js"></script>

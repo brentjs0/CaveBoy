@@ -10,4 +10,5 @@ import '../unit/script/data/game-object/Color.spec';
 import '../unit/script/data/game-object/MinitilePalette.spec';
 import '../unit/script/data/game-object/MinitileLayer.spec';
 import '../unit/script/data/game-object/Minitile.spec';
+import '../unit/script/data/game-object/ArrangementCell.spec';
 import '../unit/script/data/game-object/PaletteSet.spec';

@@ -28,9 +28,7 @@ export default class MinitilePalette {
    * are created if no value is provided.
    */
   public constructor(
-    coilSnakeMinitilePaletteString:
-      | CoilSnakeMinitilePaletteString
-      | undefined = undefined
+    coilSnakeMinitilePaletteString?: CoilSnakeMinitilePaletteString
   ) {
     this.colors = [];
 

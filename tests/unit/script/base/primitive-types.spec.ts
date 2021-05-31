@@ -4,9 +4,11 @@ import {
 } from '../../../test-methods';
 
 describe('primitive-types', function () {
+  testIsTypeForIntType('Uint3', 0, 7);
   testIsTypeForIntType('Uint4', 0, 15);
   testIsTypeForIntType('Uint5', 0, 31);
   testIsTypeForIntType('Uint8', 0, 255);
+  testIsTypeForIntType('Uint9', 0, 511);
 
   testIsTypeForStringType(
     'HexadecimalColorString',
@@ -67,6 +69,13 @@ describe('primitive-types', function () {
       'bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc\r\nbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb',
       'bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbbcbcbcbc\r\nbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbg',
     ],
+    'lower'
+  );
+
+  testIsTypeForStringType(
+    'CoilSnakeArrangementCellString',
+    ['abcdef', '000000', '01999e', '10bafd'],
+    ['t12345', 'abcde', '0000000'],
     'lower'
   );
 

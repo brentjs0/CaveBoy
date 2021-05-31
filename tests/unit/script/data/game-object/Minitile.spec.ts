@@ -5,8 +5,6 @@ import MinitilePalette from '@/script/data/game-object/MinitilePalette';
 import { expect } from 'chai';
 import times from 'lodash/times';
 
-import { setUpCanvas } from '../../../../test-methods';
-
 describe('Minitile', function () {
   describe('constructor()', function () {
     it('Initializes values from a CoilSnakeMinitileString.', function () {
@@ -14,14 +12,14 @@ describe('Minitile', function () {
         '1111111111111111111111111111111111111111111111111111111111111111\r\n2222222222222222222222222222222222222222222222222222222222222222'
       );
 
-      expect(minitile.backgroundLayer.pixelValues).to.eql(times(64, () => 1));
-      expect(minitile.foregroundLayer.pixelValues).to.eql(times(64, () => 2));
+      expect(minitile.backgroundLayer.colorNumbers).to.eql(times(64, () => 1));
+      expect(minitile.foregroundLayer.colorNumbers).to.eql(times(64, () => 2));
     });
     it("Creates an empty instance with '0' for all color index values.", function () {
       const minitile = new Minitile();
 
-      expect(minitile.backgroundLayer.pixelValues).to.eql(times(64, () => 0));
-      expect(minitile.foregroundLayer.pixelValues).to.eql(times(64, () => 0));
+      expect(minitile.backgroundLayer.colorNumbers).to.eql(times(64, () => 0));
+      expect(minitile.foregroundLayer.colorNumbers).to.eql(times(64, () => 0));
     });
   });
   describe('getImageData()', function () {
@@ -92,17 +90,17 @@ describe('Minitile', function () {
     it('Generates a valid CoilSnakeMinitileString.', function () {
       const minitile = new Minitile();
 
-      for (let i = 0; i < minitile.backgroundLayer.pixelValues.length; ++i) {
+      for (let i = 0; i < minitile.backgroundLayer.colorNumbers.length; ++i) {
         let newIndex = i % 16;
         if (isType(newIndex, 'Uint4')) {
-          minitile.backgroundLayer.pixelValues[i] = newIndex;
+          minitile.backgroundLayer.colorNumbers[i] = newIndex;
         }
       }
 
-      for (let i = 0; i < minitile.foregroundLayer.pixelValues.length; ++i) {
+      for (let i = 0; i < minitile.foregroundLayer.colorNumbers.length; ++i) {
         let newIndex = 15 - (i % 16);
         if (isType(newIndex, 'Uint4')) {
-          minitile.foregroundLayer.pixelValues[i] = newIndex;
+          minitile.foregroundLayer.colorNumbers[i] = newIndex;
         }
       }
 
