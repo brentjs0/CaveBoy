@@ -7,6 +7,13 @@ import MinitileLayer, {
 } from '@/script/data/game-object/MinitileLayer';
 import MinitilePalette from '@/script/data/game-object/MinitilePalette';
 
+/**
+ * Two sets of 64 color numbers representing an 8 x 8 grid, with one serving as
+ * a background layer and another serving as a foreground layer. This class roughly
+ * correlates to as set of two of the array elements in the 'tiles' array of an
+ * EbGraphicTileset object in the CoilSnake source, with the background having an
+ * index of n and the foreground having an index of n + 512.
+ */
 export default class Minitile {
   /**
    * The background MinitileLayer for the Minitile.
@@ -22,7 +29,7 @@ export default class Minitile {
    * Instantiate a Minitile, optionally with its layers initialized by
    * parsing the provided CoilSnakeMinitileString.
    * @param coilSnakeMinitileString - A CoilSnakeMinitileString expression of
-   * the pixel values in both layers. Optional. All values default to 0 if
+   * the color numbers in both layers. Optional. All values default to 0 if
    * no argument is provided.
    */
   public constructor(coilSnakeMinitileString?: CoilSnakeMinitileString) {
@@ -51,10 +58,10 @@ export default class Minitile {
   }
 
   /**
-   * Return an 8 x 8 CaveBoyImageData displaying the foregroundLayer for this
-   * Minitile laid over the backgroundLayer.
+   * Return an 8 x 8 CaveBoyImageData object displaying the foregroundLayer for
+   * this Minitile laid over the backgroundLayer.
    * @param minitilePalette - The MinitilePalette to reference for mapping color
-   * values to Colors.
+   * numbers to Colors.
    * @param flipHorizontally - Whether to return the image with the positions of
    * its pixels flipped horizontally. Optional. Defaults to false.
    * @param flipVertically - Whether to return the image with the positions of
@@ -80,8 +87,8 @@ export default class Minitile {
     );
 
     // Draw the background on any spots not covered by foreground pixels.
-    for (let i = 0; i < this.backgroundLayer.pixelValues.length; ++i) {
-      if (this.foregroundLayer.pixelValues[i] !== 0) {
+    for (let i = 0; i < this.backgroundLayer.colorNumbers.length; ++i) {
+      if (this.foregroundLayer.colorNumbers[i] !== 0) {
         continue;
       }
 
@@ -91,7 +98,7 @@ export default class Minitile {
         flipVertically
       );
 
-      let backgroundPixelValue = this.backgroundLayer.pixelValues[i];
+      let backgroundPixelValue = this.backgroundLayer.colorNumbers[i];
       let backgroundColor = minitilePalette.colors[backgroundPixelValue];
 
       cbImageData.setPixel(

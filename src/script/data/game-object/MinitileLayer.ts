@@ -10,39 +10,39 @@ import MinitilePalette from '@/script/data/game-object/MinitilePalette';
 import times from 'lodash/times';
 
 /**
- * A list of 64 pixel values representing an 8 x 8 grid. Values are integers
+ * A list of 64 color numbers representing an 8 x 8 image. Values are integers
  * between 0 and 15 that each represent the index of a color in a
- * MinitilePalette. This class roughly correlates to a single  array element
+ * MinitilePalette. This class roughly correlates to a single array element
  * in the 'tiles' array of an EbGraphicTileset object in the CoilSnake source.
  */
 export default class MinitileLayer {
   /**
    * A list of 64 4-bit numbers (0-15) representing the indexes of colors in a
-   * palette.
+   * MinitilePalette.
    */
-  public pixelValues: Uint4[];
+  public colorNumbers: Uint4[];
 
   /**
-   * Instantiate a MinitileLayer, optionally with its pixel values initialized
+   * Instantiate a MinitileLayer, optionally with its color numbers initialized
    * by parsing the provided CoilSnakeMinitileLayerString.
    * @param coilSnakeMinitileLayerString - A CoilSnakeMinitileLayerString
-   * expression of the pixel values in the layer. Optional. All values default
+   * expression of the color numbers in the layer. Optional. All values default
    * to 0 if no argument is provided.
    */
   public constructor(
     coilSnakeMinitileLayerString?: CoilSnakeMinitileLayerString
   ) {
     if (coilSnakeMinitileLayerString === undefined) {
-      this.pixelValues = times(64, () => 0);
+      this.colorNumbers = times(64, () => 0);
     } else if (
       isType(coilSnakeMinitileLayerString, 'CoilSnakeMinitileLayerString')
     ) {
-      this.pixelValues = [];
+      this.colorNumbers = [];
       for (let i = 0; i < coilSnakeMinitileLayerString.length; ++i) {
         let character = coilSnakeMinitileLayerString.charAt(i);
         let digitValue = parseInt(character, 16);
         if (isType(digitValue, 'Uint4')) {
-          this.pixelValues.push(digitValue);
+          this.colorNumbers.push(digitValue);
         } else {
           throw new CaveBoyError(
             `Character '${character}' is not a hexadecimal digit.`
@@ -63,28 +63,28 @@ export default class MinitileLayer {
    * CoilSnakeMinitilePaletteString.
    */
   public toCoilSnakeMinitileLayerString(): CoilSnakeMinitileLayerString {
-    return this.pixelValues.reduce<CoilSnakeMinitileLayerString>(
+    return this.colorNumbers.reduce<CoilSnakeMinitileLayerString>(
       (mtls, colorIndex) => (mtls += colorIndex.toString(16)),
       ''
     );
   }
 
   /**
-   * Return an 8 x 8 CaveBoyImageData object with each pixel value from this
+   * Return an 8 x 8 CaveBoyImageData object with each color number from this
    * MinitileLayer translated to a color using the provided MinitilePalette.
    * @param minitilePalette - The MinitilePalette to reference for mapping color
-   * values to Colors.
+   * numbers to Colors.
    * @param flipHorizontally - Whether to return the image with the positions of
    * its pixels flipped horizontally. Optional. Defaults to false.
    * @param flipVertically - Whether to return the image with the positions of
    * its pixels flipped vertically. Optional. Defaults to false.
-   * @param index0IsTransparent - Whether an color value of 0 indicates an alpha
+   * @param index0IsTransparent - Whether an color number of 0 indicates an alpha
    * value of 0 (fully transparent). Optional. Defaults to true.
    * @param colorComponentScalerName - The name of the ColorComponentScaler to
    * use when converting from the five-bit component values of the Colors to the
    * eight-bit color component values of the image data. Optional. Defaults to
    * the user-configured scaler.
-   * @returns An 8 x 8 CaveBoyImageData object with each pixel value from this
+   * @returns An 8 x 8 CaveBoyImageData object with each color number from this
    * MinitileLayer translated to a color using the provided MinitilePalette.
    */
   public getImageData(
@@ -96,8 +96,8 @@ export default class MinitileLayer {
   ): CaveBoyImageData {
     const cbImageData = new CaveBoyImageData(8, 8);
 
-    for (let i = 0; i < this.pixelValues.length; ++i) {
-      let colorIndex = this.pixelValues[i];
+    for (let i = 0; i < this.colorNumbers.length; ++i) {
+      let colorIndex = this.colorNumbers[i];
       if (index0IsTransparent && colorIndex === 0) {
         continue;
       }
@@ -117,24 +117,24 @@ export default class MinitileLayer {
 }
 
 /**
- * Return the zero-based x and y coordinates of a MinitileLayer pixel based on
- * its index in the list of color values.
- * @param colorValueIndex - The color value position for which to determine
+ * Return the zero-based x and y coordinates of the MinitileLayer pixel represented
+ * by the provided index in the colorNumbers array.
+ * @param colorNumberIndex - The index of the color number for which to determine
  * coordinates.
  * @param flipHorizontally - Whether to return the coordinates mirrored
  * horizontally.
  * @param flipVertically - Whether to return the coordinates mirrored
  * vertically.
- * @returns The zero-based x and y coordinates of a MinitileLayer pixel based on
- * its index in the list of color values.
+ * @returns The zero-based x and y coordinates of the MinitileLayer pixel given
+ * the provided flip state.
  */
 export function getMinitileLayerPixelCoordinates(
-  colorValueIndex: number,
+  colorNumberIndex: number,
   flipHorizontally: boolean = false,
   flipVertically: boolean = false
 ): [number, number] {
-  let sourceX = colorValueIndex % 8;
-  let sourceY = colorValueIndex >>> 3; // This is the same as Math.floor(i / 8).
+  let sourceX = colorNumberIndex % 8;
+  let sourceY = colorNumberIndex >>> 3; // This is the same as Math.floor(i / 8).
   let targetX = flipHorizontally ? 8 - sourceX - 1 : sourceX;
   let targetY = flipVertically ? 8 - sourceY - 1 : sourceY;
 

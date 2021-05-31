@@ -2,16 +2,19 @@ import { isType, TypeName } from '@/script/base/primitive-types';
 import { expect } from 'chai';
 
 export function setUpCanvas(
-  scale: number = 1,
-  width: number = 400,
-  height: number = 256
+  scale: number = 2,
+  width: number = 200,
+  height: number = 128
 ): [HTMLCanvasElement, CanvasRenderingContext2D] {
   const canvas = document.getElementById('canvas') as HTMLCanvasElement;
   const ctx = canvas.getContext('2d');
 
+  const transformScale = Math.floor(scale / 2);
+
   // Set display size (css pixels).
   canvas.style.width = width + 'px';
   canvas.style.height = height + 'px';
+  canvas.style.transform = `scale(${transformScale}, ${transformScale})`;
 
   // Set actual size in memory (scaled to account for extra pixel density).
   var devicePixelRatio = window.devicePixelRatio || 1;
@@ -21,27 +24,49 @@ export function setUpCanvas(
   if (ctx != null) {
     ctx.imageSmoothingEnabled = false;
 
-    const checkerboardImage = document.getElementById(
-      'checkerboard'
-    ) as HTMLImageElement;
-    checkerboardImage.crossOrigin = 'anonymous';
-    const pattern = ctx.createPattern(checkerboardImage, 'repeat');
-    if (pattern != null) {
-      ctx.fillStyle = pattern;
-    } else {
-      ctx.fillStyle = '#fff';
-    }
+    ctx.fillStyle = '#999';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.scale(devicePixelRatio * 2, devicePixelRatio * 2);
+    paintCheckerboard(canvas, ctx);
 
-    // Normalize coordinate system to use css pixels.
-    ctx.scale(devicePixelRatio * scale, devicePixelRatio * scale);
-
-    ctx.fillStyle = '#000';
+    ctx.fillStyle = '#666';
+    paintCheckerboard(canvas, ctx);
 
     return [canvas, ctx];
   }
 
   throw new Error('Canvas context could not be retreived.');
+}
+
+function paintCheckerboard(
+  canvas: HTMLCanvasElement,
+  context: CanvasRenderingContext2D
+) {
+  const canvasCSSWidth = parseInt(
+    canvas.style.width.substr(0, canvas.style.width.length - 2)
+  );
+  const canvasCSSHeight = parseInt(
+    canvas.style.height.substr(0, canvas.style.height.length - 2)
+  );
+
+  const squareSize = 4;
+
+  const horizontalSquareCount = Math.ceil(canvasCSSWidth / squareSize);
+  const verticalSquareCount = Math.ceil(canvasCSSHeight / squareSize);
+
+  for (let column = 0; column <= horizontalSquareCount; ++column) {
+    for (let row = 0; row <= verticalSquareCount; ++row) {
+      let rowOddity = row % 2;
+      if ((column + rowOddity) % 2 === 0) {
+        context.fillRect(
+          column * squareSize,
+          row * squareSize,
+          squareSize,
+          squareSize
+        );
+      }
+    }
+  }
 }
 
 export function testIsTypeForIntType(

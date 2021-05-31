@@ -89,9 +89,17 @@ export type CoilSnakeMinitileLayerString = string;
 export type CoilSnakeMinitileString = string;
 
 /**
- * A string expression containing the minitile number, palette number,
- * horizontal flip, vertical flip, and surface flags for a single cell in a
- * 4 x 4 arrangement as encoded by CoilSnake.
+ * A string expression containing the Minitile number, Minitile Palette number,
+ * flip state, and surface flags for a single cell of a 4 x 4 arrangement.
+ * Encoded by CoilSnake as a string of six hexadecimal digits. Must be lowercase.
+ *
+ * In binary, the data is encoded as follows: `VH?P PPTT TTTT TTTT SSSS SSSS`
+ * - `V` = Vertical flip (1 for flipped, 0 for unflipped)
+ * - `H` = Horizontal flip (1 for flipped, 0 for unflipped)
+ * - `?` = Unused
+ * - `P` = Minitile Pallete number + 2
+ * - `T` = Minitile number (value must not exceed 511, despite using 10 bits)
+ * - `S` = The eight surface flags, which include collision data
  */
 export type CoilSnakeArrangementCellString = string;
 

@@ -12,7 +12,7 @@ describe('ArrangementCell', function () {
   describe('constructor()', function () {
     it('Initializes values from a CoilSnakeArrangementCellString.', function () {
       const arrangementCell = new ArrangementCell(
-        // VH?PPP?TTTTTTTTTFFFFFFFF
+        // VH?PPP0TTTTTTTTTSSSSSSSS
         (0b110111011111111111111111).toString(16)
       );
 
@@ -32,20 +32,26 @@ describe('ArrangementCell', function () {
       expect(arrangementCell.isDeepWater).to.be.true;
       expect(arrangementCell.extendsInteractionRange).to.be.true;
     });
+
+    it('Constructs an ArrangementCell with default property values.', function () {
+      const arrangementCell = new ArrangementCell();
+
+      expect(arrangementCell.flippedVertically).to.be.false;
+      expect(arrangementCell.flippedHorizontally).to.be.false;
+      expect(arrangementCell.minitilePaletteNumber).to.equal(0);
+      expect(arrangementCell.minitileNumber).to.equal(0);
+      expect(arrangementCell.isSolid).to.be.false;
+      expect(arrangementCell.flag0x40).to.be.false;
+      expect(arrangementCell.flag0x20).to.be.false;
+      expect(arrangementCell.isInteractive).to.be.false;
+      expect(arrangementCell.isWater).to.be.false;
+      expect(arrangementCell.inflictsSunstroke).to.be.false;
+      expect(arrangementCell.coversUpperBody).to.be.false;
+      expect(arrangementCell.coversLowerBody).to.be.false;
+    });
   });
   describe('getImageData()', function () {
-    it('Generates an 8 x 8 CaveBoyImageData object.', function () {
-      const minitiles = times(512, () => new Minitile());
-
-      const cbImageData = new ArrangementCell().getImageData(
-        minitiles,
-        new PaletteSet()
-      );
-      expect(cbImageData.height).to.equal(8);
-      expect(cbImageData.width).to.equal(8);
-    });
-
-    it('???', function () {
+    it('Draws the correct Minitile with the correct MinitilePalette given the provided values.', function () {
       const paletteSet = new PaletteSet(
         '000000000000000000000000000000000000000000000644' +
           '000000000000000000000000000000000000000000000644' +
@@ -62,8 +68,8 @@ describe('ArrangementCell', function () {
       );
 
       const cbImageData = new ArrangementCell(
-        // VH0PPP0TTTTTTTTTFFFFFFFF
-        (0b110111000000001011111111).toString(16)
+        // VH?PPP0TTTTTTTTTSSSSSSSS
+        (0b000111000000001011111111).toString(16)
       ).getImageData(minitiles, paletteSet);
 
       const one = new Color(30, 30, 26).toUint8ClampedArray();
@@ -83,48 +89,31 @@ describe('ArrangementCell', function () {
           ...eff, ...two, ...one, ...svn, ...svn, ...svn, ...one, ...svn,
           ...eff, ...two, ...svn, ...one, ...svn, ...svn, ...one, ...svn,
         ]);
-      const [canvas, ctx] = setUpCanvas(10);
+      const [canvas, ctx] = setUpCanvas(4);
       createImageBitmap(cbImageData).then((imageBitmap) =>
         ctx.drawImage(imageBitmap, 1, 1)
       );
       expect(cbImageData.data).to.eql(expectedDataValue);
     });
-
-    // it('Flips image data vertically.', function () {
-    //   const cbImageData = new ArrangementCell(
-    //     '8888888888888888888888888888888888888888888888888888888888888888\r000fffff00f111110f277777f2777777f2717111f2171717f2177717f2717717'
-    //   ).getImageData(/**/);
-
-    //   const one = new Color(30, 30, 26).toUint8ClampedArray();
-    //   const two = new Color(24, 26, 19).toUint8ClampedArray();
-    //   const svn = new Color(31, 1, 11).toUint8ClampedArray();
-    //   const egt = new Color(2, 31, 13).toUint8ClampedArray();
-    //   const eff = new Color(6, 6, 6).toUint8ClampedArray();
-
-    //   // prettier-ignore
-    //   const expectedDataValue = new Uint8ClampedArray([
-    //       ...eff, ...two, ...svn, ...one, ...svn, ...svn, ...one, ...svn,
-    //       ...eff, ...two, ...one, ...svn, ...svn, ...svn, ...one, ...svn,
-    //       ...eff, ...two, ...one, ...svn, ...one, ...svn, ...one, ...svn,
-    //       ...eff, ...two, ...svn, ...one, ...svn, ...one, ...one, ...one,
-    //       ...eff, ...two, ...svn, ...svn, ...svn, ...svn, ...svn, ...svn,
-    //       ...egt, ...eff, ...two, ...svn, ...svn, ...svn, ...svn, ...svn,
-    //       ...egt, ...egt, ...eff, ...one, ...one, ...one, ...one, ...one,
-    //       ...egt, ...egt, ...egt, ...eff, ...eff, ...eff, ...eff, ...eff,
-    //     ]);
-    //   const [canvas, ctx] = setUpCanvas(10);
-    //   createImageBitmap(cbImageData).then((imageBitmap) =>
-    //     ctx.drawImage(imageBitmap, 1, 9)
-    //   );
-    //   expect(cbImageData.data).to.eql(expectedDataValue);
-    // });
   });
   describe('toCoilSnakeArrangementCellString()', function () {
     it('Generates a valid CoilSnakeArrangementCellString.', function () {
       const arrangementCell = new ArrangementCell();
+      arrangementCell.flippedVertically = true;
+      arrangementCell.flippedHorizontally = true;
+      arrangementCell.minitilePaletteNumber = 5;
+      arrangementCell.minitileNumber = 511;
+      arrangementCell.isSolid = true;
+      arrangementCell.flag0x40 = true;
+      arrangementCell.flag0x20 = true;
+      arrangementCell.isInteractive = true;
+      arrangementCell.isWater = true;
+      arrangementCell.inflictsSunstroke = true;
+      arrangementCell.coversUpperBody = true;
+      arrangementCell.coversLowerBody = true;
 
       const coilSnakeArrangementCellString = arrangementCell.toCoilSnakeArrangementCellString();
-      expect(coilSnakeArrangementCellString).to.equal('');
+      expect(coilSnakeArrangementCellString).to.equal('ddffff');
       expect(
         isType(coilSnakeArrangementCellString, 'CoilSnakeArrangementCellString')
       ).to.be.true;

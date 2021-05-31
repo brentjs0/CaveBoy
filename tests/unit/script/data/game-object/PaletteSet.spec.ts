@@ -2,7 +2,6 @@ import { isType } from '@/script/base/primitive-types';
 import Color from '@/script/data/game-object/Color';
 import PaletteSet from '@/script/data/game-object/PaletteSet';
 import { expect } from 'chai';
-import { setUpCanvas } from '../../../../test-methods';
 
 describe('PaletteSet', function () {
   const paletteSetColors = [
@@ -127,13 +126,6 @@ describe('PaletteSet', function () {
           paletteSetColors[i]
         );
       }
-
-      const [canvas, ctx] = setUpCanvas(6);
-      createImageBitmap(
-        paletteSet.minitilePalettes[0].getPreviewImageData()
-      ).then((imageBitmap) => {
-        ctx.drawImage(imageBitmap, 1, 1);
-      });
     });
 
     it('Creates an empty instance with default palettes.', function () {

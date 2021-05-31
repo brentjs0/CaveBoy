@@ -8,8 +8,6 @@ import { expect } from 'chai';
 import reverse from 'lodash/reverse';
 import times from 'lodash/times';
 
-import { setUpCanvas } from '../../../../test-methods';
-
 describe('MinitileLayer', function () {
   describe('constructor()', function () {
     it('Initializes values from a CoilSnakeMinitileLayerString.', function () {
@@ -18,7 +16,7 @@ describe('MinitileLayer', function () {
       );
 
       // prettier-ignore
-      expect(minitileLayer.pixelValues).to.eql([
+      expect(minitileLayer.colorNumbers).to.eql([
         15, 15, 15, 15, 15,  0,  0,  0,
          1,  1,  1,  1,  1, 15,  0,  0,
          7,  7,  7,  7,  7,  2, 15,  0,
@@ -32,7 +30,7 @@ describe('MinitileLayer', function () {
 
     it('Creates an empty instance with 0 for all index values.', function () {
       const minitileLayer = new MinitileLayer();
-      expect(minitileLayer.pixelValues).to.eql(times(64, () => 0));
+      expect(minitileLayer.colorNumbers).to.eql(times(64, () => 0));
     });
   });
 
@@ -180,10 +178,10 @@ describe('MinitileLayer', function () {
   describe('toCoilSnakeMinitileLayerString()', function () {
     it('Generates a valid CoilSnakeMinitileLayerString.', function () {
       const minitileLayer = new MinitileLayer();
-      for (let i = 0; i < minitileLayer.pixelValues.length; ++i) {
+      for (let i = 0; i < minitileLayer.colorNumbers.length; ++i) {
         let newIndex = i % 16;
         if (isType(newIndex, 'Uint4')) {
-          minitileLayer.pixelValues[i] = newIndex;
+          minitileLayer.colorNumbers[i] = newIndex;
         }
       }
 
