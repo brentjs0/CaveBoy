@@ -93,4 +93,16 @@ describe('primitive-types', function () {
     ],
     'lower'
   );
+
+  testIsTypeForStringType(
+    'CoilSnakeArrangementString',
+    [
+      'abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdef',
+      '0c14800c14800c14800c14800c14800c14800c14800c14800c14800c14800c14800c14800c14800c14800c14800c1480',
+      '0d1d800c7f900c80800cf8904d2c804d2b800cf8800cf8804d41804d40800cf8800cf8804cf8800cf8800cf8800cf880',
+      '0da4800da5900dd8800dd9900cf8800cf8800dd8800dd9800cf8800cf8800dd8804df1804cf8800da4800da5800dd880',
+    ],
+    ['00000k', '00000', '0000000'],
+    'lower'
+  );
 });
