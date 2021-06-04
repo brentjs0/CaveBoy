@@ -4,6 +4,12 @@ import {
 } from '../../../test-methods';
 
 describe('primitive-types', function () {
+  testIsTypeForIntType(
+    'SafeInteger',
+    Number.MIN_SAFE_INTEGER,
+    Number.MAX_SAFE_INTEGER,
+    true
+  );
   testIsTypeForIntType('Uint3', 0, 7);
   testIsTypeForIntType('Uint4', 0, 15);
   testIsTypeForIntType('Uint5', 0, 31);
@@ -91,6 +97,18 @@ describe('primitive-types', function () {
       '000gnmdkhbcdhkidb06gih7d0de0ac189kvphpkdjgacb444000gnmdkh17ecfg6dg078h7d0de0ac1898de8bc7aa788444000gnmkvpchidjghpvbfmh7d0de0ac189dimcfhadddadd444000gnm9de8bc79a0v06feh7d0de0ac189dfjbdgabd889444000gnmdkhkkdjfhjndbchh7d0de0ac189dimcfhadd9a8444000gnmdkh0v0kkd0v0bbd0af0de0ac189dimcfhadd9a8444',
       '000uuqoqjqf9koivv0ieuv1b2vd5ncafevvpoojkkdgha666000uuqoqjecljjoenvhevv1b2vd5ncafevmdqfejbdj99666000uuqmvnkkdjfbhpvqbvv6b2vd5ncafeuvonqlnlodej668000uuqocdk9bg6c0v06fev6b2vd5ncafemksihnedhaac666000uuqozjkkdjjojndi87v6b2vd5ncafevveqnbmf9hc7666000uuqoqj0v0kkd0v0v6b0nf2vd5ncafevq7vj8vdasbd666',
     ],
+    'lower'
+  );
+
+  testIsTypeForStringType(
+    'CoilSnakeArrangementString',
+    [
+      'abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdef',
+      '0c14800c14800c14800c14800c14800c14800c14800c14800c14800c14800c14800c14800c14800c14800c14800c1480',
+      '0d1d800c7f900c80800cf8904d2c804d2b800cf8800cf8804d41804d40800cf8800cf8804cf8800cf8800cf8800cf880',
+      '0da4800da5900dd8800dd9900cf8800cf8800dd8800dd9800cf8800cf8800dd8804df1804cf8800da4800da5800dd880',
+    ],
+    ['00000k', '00000', '0000000'],
     'lower'
   );
 });

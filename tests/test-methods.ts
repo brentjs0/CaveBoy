@@ -1,58 +1,52 @@
 import { isType, TypeName } from '@/script/base/primitive-types';
 import { expect } from 'chai';
 
-export function setUpCanvas(
-  scale: number = 2,
-  width: number = 200,
+export function createCanvas(
+  scale: number = 1,
+  width: number = 256,
   height: number = 128
 ): [HTMLCanvasElement, CanvasRenderingContext2D] {
-  const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-  const ctx = canvas.getContext('2d');
+  const canvas = document.createElement('CANVAS') as HTMLCanvasElement;
+  canvas.classList.add('test-canvas');
+  canvas.width = width;
+  canvas.height = height;
 
-  const transformScale = Math.floor(scale / 2);
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  canvas.style.width = `${(width / devicePixelRatio) * scale}px`;
+  canvas.style.height = `${(height / devicePixelRatio) * scale}px`;
 
-  // Set display size (css pixels).
-  canvas.style.width = width + 'px';
-  canvas.style.height = height + 'px';
-  canvas.style.transform = `scale(${transformScale}, ${transformScale})`;
+  const context = canvas.getContext('2d');
+  if (context !== null) {
+    context.imageSmoothingEnabled = false;
+    paintCheckerboard(context, width, height);
 
-  // Set actual size in memory (scaled to account for extra pixel density).
-  var devicePixelRatio = window.devicePixelRatio || 1;
-  canvas.width = Math.floor(width * devicePixelRatio);
-  canvas.height = Math.floor(height * devicePixelRatio);
+    const canvasesDiv = document.getElementById('canvases');
+    if (canvasesDiv == null) {
+      throw new Error('Canvas container could not be retrieved.');
+    }
+    canvasesDiv.insertAdjacentElement('beforeend', canvas);
 
-  if (ctx != null) {
-    ctx.imageSmoothingEnabled = false;
-
-    ctx.fillStyle = '#999';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.scale(devicePixelRatio * 2, devicePixelRatio * 2);
-    paintCheckerboard(canvas, ctx);
-
-    ctx.fillStyle = '#666';
-    paintCheckerboard(canvas, ctx);
-
-    return [canvas, ctx];
+    return [canvas, context];
   }
 
-  throw new Error('Canvas context could not be retreived.');
+  throw new Error('Canvas context could not be retrieved.');
 }
 
 function paintCheckerboard(
-  canvas: HTMLCanvasElement,
-  context: CanvasRenderingContext2D
+  context: CanvasRenderingContext2D,
+  physicalWidth: number,
+  physicalHeight: number
 ) {
-  const canvasCSSWidth = parseInt(
-    canvas.style.width.substr(0, canvas.style.width.length - 2)
-  );
-  const canvasCSSHeight = parseInt(
-    canvas.style.height.substr(0, canvas.style.height.length - 2)
-  );
+  const initialFillStyle = context.fillStyle;
 
-  const squareSize = 4;
+  context.fillStyle = '#999';
+  context.fillRect(0, 0, physicalWidth, physicalHeight);
+  context.fillStyle = '#666';
 
-  const horizontalSquareCount = Math.ceil(canvasCSSWidth / squareSize);
-  const verticalSquareCount = Math.ceil(canvasCSSHeight / squareSize);
+  const squareSize = 1;
+
+  const horizontalSquareCount = Math.ceil(physicalWidth / squareSize);
+  const verticalSquareCount = Math.ceil(physicalHeight / squareSize);
 
   for (let column = 0; column <= horizontalSquareCount; ++column) {
     for (let row = 0; row <= verticalSquareCount; ++row) {
@@ -67,12 +61,15 @@ function paintCheckerboard(
       }
     }
   }
+
+  context.fillStyle = initialFillStyle;
 }
 
 export function testIsTypeForIntType(
   type: TypeName,
   validRangeLow: number,
-  validRangeHigh: number
+  validRangeHigh: number,
+  skipNonIntegerCheck: boolean = false
 ) {
   describe(`isType<'${type}'>())`, function () {
     it('Returns true for valid values', function () {
@@ -85,10 +82,12 @@ export function testIsTypeForIntType(
       expect(isType(() => undefined, type)).to.be.false;
       expect(isType('str', type)).to.be.false;
     });
-    it('Returns false for non-integers.', function () {
-      expect(isType(validRangeLow + 0.5, type)).to.be.false;
-      expect(isType(validRangeHigh - 0.999999, type)).to.be.false;
-    });
+    if (!skipNonIntegerCheck) {
+      it('Returns false for non-integers.', function () {
+        expect(isType(validRangeLow + 0.5, type)).to.be.false;
+        expect(isType(validRangeHigh - 0.999999, type)).to.be.false;
+      });
+    }
     it('Returns false for out-of-range values.', function () {
       expect(isType(validRangeLow - 1, type)).to.be.false;
       expect(isType(validRangeHigh + 1, type)).to.be.false;

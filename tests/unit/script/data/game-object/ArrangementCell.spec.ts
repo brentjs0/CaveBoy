@@ -6,8 +6,6 @@ import PaletteSet from '@/script/data/game-object/PaletteSet';
 import { expect } from 'chai';
 import times from 'lodash/times';
 
-import { setUpCanvas } from '../../../../test-methods';
-
 describe('ArrangementCell', function () {
   describe('constructor()', function () {
     it('Initializes values from a CoilSnakeArrangementCellString.', function () {
@@ -80,19 +78,16 @@ describe('ArrangementCell', function () {
 
       // prettier-ignore
       const expectedDataValue = new Uint8ClampedArray([
-          ...egt, ...egt, ...egt, ...eff, ...eff, ...eff, ...eff, ...eff,
-          ...egt, ...egt, ...eff, ...one, ...one, ...one, ...one, ...one,
-          ...egt, ...eff, ...two, ...svn, ...svn, ...svn, ...svn, ...svn,
-          ...eff, ...two, ...svn, ...svn, ...svn, ...svn, ...svn, ...svn,
-          ...eff, ...two, ...svn, ...one, ...svn, ...one, ...one, ...one,
-          ...eff, ...two, ...one, ...svn, ...one, ...svn, ...one, ...svn,
-          ...eff, ...two, ...one, ...svn, ...svn, ...svn, ...one, ...svn,
-          ...eff, ...two, ...svn, ...one, ...svn, ...svn, ...one, ...svn,
-        ]);
-      const [canvas, ctx] = setUpCanvas(4);
-      createImageBitmap(cbImageData).then((imageBitmap) =>
-        ctx.drawImage(imageBitmap, 1, 1)
-      );
+        ...egt, ...egt, ...egt, ...eff, ...eff, ...eff, ...eff, ...eff,
+        ...egt, ...egt, ...eff, ...one, ...one, ...one, ...one, ...one,
+        ...egt, ...eff, ...two, ...svn, ...svn, ...svn, ...svn, ...svn,
+        ...eff, ...two, ...svn, ...svn, ...svn, ...svn, ...svn, ...svn,
+        ...eff, ...two, ...svn, ...one, ...svn, ...one, ...one, ...one,
+        ...eff, ...two, ...one, ...svn, ...one, ...svn, ...one, ...svn,
+        ...eff, ...two, ...one, ...svn, ...svn, ...svn, ...one, ...svn,
+        ...eff, ...two, ...svn, ...one, ...svn, ...svn, ...one, ...svn,
+      ]);
+
       expect(cbImageData.data).to.eql(expectedDataValue);
     });
   });

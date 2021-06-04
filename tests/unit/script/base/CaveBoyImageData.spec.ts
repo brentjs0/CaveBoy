@@ -75,4 +75,85 @@ describe('CaveBoyImageData', function () {
       );
     });
   });
+
+  describe('putImageData()', function () {
+    it('Places data at in-bounds coordinates.', function () {
+      const targetImageData = new CaveBoyImageData(4, 4);
+      for (let i = 0; i < targetImageData.data.length; ++i) {
+        targetImageData.data[i] = 255;
+      }
+
+      const sourceImageData = new ImageData(2, 2);
+      for (let i = 3; i < targetImageData.data.length; i += 4) {
+        sourceImageData.data[i] = 255;
+      }
+
+      targetImageData.putImageData(sourceImageData, 1, 1);
+
+      const black = new Uint8ClampedArray([0, 0, 0, 255]);
+      const white = new Uint8ClampedArray([255, 255, 255, 255]);
+
+      // prettier-ignore
+      const expectation = new Uint8ClampedArray([
+        ...white, ...white, ...white, ...white,
+        ...white, ...black, ...black, ...white,
+        ...white, ...black, ...black, ...white,
+        ...white, ...white, ...white, ...white,
+      ]);
+
+      expect(targetImageData.data).to.eql(expectation);
+    });
+
+    it('Places data at out-of-bounds coordinates.', function () {
+      const targetImageData = new CaveBoyImageData(4, 4);
+      for (let i = 0; i < targetImageData.data.length; ++i) {
+        targetImageData.data[i] = 255;
+      }
+      const sourceImageData = new ImageData(2, 2);
+      for (let i = 3; i < targetImageData.data.length; i += 4) {
+        sourceImageData.data[i] = 255;
+      }
+
+      targetImageData.putImageData(sourceImageData, 3, 3);
+
+      const black = new Uint8ClampedArray([0, 0, 0, 255]);
+      const white = new Uint8ClampedArray([255, 255, 255, 255]);
+
+      // prettier-ignore
+      const expectation = new Uint8ClampedArray([
+        ...white, ...white, ...white, ...white,
+        ...white, ...white, ...white, ...white,
+        ...white, ...white, ...white, ...white,
+        ...white, ...white, ...white, ...black,
+      ]);
+
+      expect(targetImageData.data).to.eql(expectation);
+    });
+
+    it('Places data at negative coordinates.', function () {
+      const targetImageData = new CaveBoyImageData(4, 4);
+      for (let i = 0; i < targetImageData.data.length; ++i) {
+        targetImageData.data[i] = 255;
+      }
+      const sourceImageData = new ImageData(2, 2);
+      for (let i = 3; i < targetImageData.data.length; i += 4) {
+        sourceImageData.data[i] = 255;
+      }
+
+      targetImageData.putImageData(sourceImageData, -1, -1);
+
+      const black = new Uint8ClampedArray([0, 0, 0, 255]);
+      const white = new Uint8ClampedArray([255, 255, 255, 255]);
+
+      // prettier-ignore
+      const expectation = new Uint8ClampedArray([
+        ...black, ...white, ...white, ...white,
+        ...white, ...white, ...white, ...white,
+        ...white, ...white, ...white, ...white,
+        ...white, ...white, ...white, ...white,
+      ]);
+
+      expect(targetImageData.data).to.eql(expectation);
+    });
+  });
 });

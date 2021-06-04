@@ -1,7 +1,3 @@
-import { setUpCanvas } from '../test-methods';
-
-setUpCanvas();
-
 import '../unit/script/base/CaveBoyImageData.spec';
 import '../unit/script/base/helpers.spec';
 import '../unit/script/base/primitive-types.spec';
@@ -12,3 +8,4 @@ import '../unit/script/data/game-object/MinitileLayer.spec';
 import '../unit/script/data/game-object/Minitile.spec';
 import '../unit/script/data/game-object/ArrangementCell.spec';
 import '../unit/script/data/game-object/PaletteSet.spec';
+import '../unit/script/data/game-object/Arrangement.spec';

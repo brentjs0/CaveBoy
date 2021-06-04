@@ -4,6 +4,7 @@ import CaveBoyError from '@/script/base/error/CaveBoyError';
  * A name of one of the types defined by CaveBoy.
  */
 export type TypeName =
+  | 'SafeInteger'
   | 'Uint3'
   | 'Uint4'
   | 'Uint5'
@@ -15,18 +16,24 @@ export type TypeName =
   | 'CoilSnakeMinitileLayerString'
   | 'CoilSnakeMinitileString'
   | 'CoilSnakeArrangementCellString'
-  | 'CoilSnakePaletteSetString';
+  | 'CoilSnakePaletteSetString'
+  | 'CoilSnakeArrangementString';
 
 /**
- * A non-negative integer than can be expressed with
- * three or fewer binary digits.
- * This includes all integers from 0 to 7, inclusive.
+ * A number with no significant fractional value that is within the safe range
+ * for correct representation and comparison of integers (-9,007,199,254,740,991
+ * through 9,007,199,254,740,991).
+ */
+export type SafeInteger = number;
+
+/**
+ * A non-negative integer than can be expressed with three or fewer binary
+ * digits. This includes all integers from 0 to 7, inclusive.
  */
 export type Uint3 = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 /**
- * A non-negative integer than can be expressed with
- * four or fewer binary digits.
+ * A non-negative integer than can be expressed with four or fewer binary digits.
  * This includes all integers from 0 to 15, inclusive.
  */
 // prettier-ignore
@@ -34,8 +41,7 @@ export type Uint4 =
   0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15;
 
 /**
- * A non-negative integer than can be expressed with
- * five or fewer binary digits.
+ * A non-negative integer than can be expressed with five or fewer binary digits.
  * This includes all integers from 0 to 31, inclusive.
  */
 // prettier-ignore
@@ -104,17 +110,24 @@ export type CoilSnakeMinitileString = string;
 export type CoilSnakeArrangementCellString = string;
 
 /**
- * A string expression of a set of six sixteen-color palettes as encoded by
- * CoilSnake. Consists of 288 base-32 digits. Must be lowercase.
+ * A string expression of a set of six sixteen-color MinitilePalettes as
+ * encoded by CoilSnake. Consists of 288 base-32 digits. Must be lowercase.
  */
 export type CoilSnakePaletteSetString = string;
+
+/**
+ * A string expression of a set of sixteen six-digit ArrangementCells as
+ * encoded by CoilSnake. Consists of 96 hexadecimal digits. Must be lowercase.
+ */
+export type CoilSnakeArrangementString = string;
 
 /**
  * A CaveBoy-defined type with the name T.
  */
 // prettier-ignore
 export type Type<T extends TypeName> =
-    T extends 'Uint3' ? Uint3
+    T extends 'SafeInteger' ? SafeInteger
+  : T extends 'Uint3' ? Uint3
   : T extends 'Uint4' ? Uint4
   : T extends 'Uint5' ? Uint5
   : T extends 'Uint8' ? Uint8
@@ -126,6 +139,7 @@ export type Type<T extends TypeName> =
   : T extends 'CoilSnakeMinitileString' ? CoilSnakeMinitileString
   : T extends 'CoilSnakeArrangementCellString' ? CoilSnakeArrangementCellString
   : T extends 'CoilSnakePaletteSetString' ? CoilSnakePaletteSetString
+  : T extends 'CoilSnakeArrangementString' ? CoilSnakeArrangementString
   : never;
 
 /**
@@ -141,6 +155,8 @@ export function isType<T extends TypeName>(
   type: T
 ): value is Type<T> {
   switch (type) {
+    case 'SafeInteger':
+      return Number.isSafeInteger(value);
     case 'Uint3':
       return (
         typeof value === 'number' &&
@@ -196,6 +212,8 @@ export function isType<T extends TypeName>(
       return typeof value === 'string' && /^[0-9a-f]{6}$/.test(value);
     case 'CoilSnakePaletteSetString':
       return typeof value === 'string' && /^[0-9a-v]{288}$/.test(value);
+    case 'CoilSnakeArrangementString':
+      return typeof value === 'string' && /^[0-9a-f]{96}$/.test(value);
     default:
       throw new CaveBoyError(`Type constraints for '${type}' are not defined.`);
   }

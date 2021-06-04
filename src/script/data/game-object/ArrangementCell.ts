@@ -14,8 +14,9 @@ import PaletteSet from '@/script/data/game-object/PaletteSet';
 /**
  * A cell in 4 x 4 Arrangement. Encodes the Minitile number, MinitilePalette
  * number, flip state, and surface flags for an 8 x 8 pixel map area. This
- * class roughly correlates to a single element in the three-dimensional
- * arrangements array of an EbTileset object in the CoilSnake source.
+ * class roughly correlates to a single element in one of the the
+ * two-dimensional array elements of the arrangements array of an EbTileset
+ * object in the CoilSnake source.
  */
 export default class ArrangementCell {
   /**
