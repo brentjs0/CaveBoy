@@ -253,6 +253,6 @@ export default class ArrangementCell {
       arrangementCellData |= 0b000000000000000000000001;
     }
 
-    return arrangementCellData.toString(16);
+    return arrangementCellData.toString(16).padStart(6, '0');
   }
 }

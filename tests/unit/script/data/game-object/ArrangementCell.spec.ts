@@ -94,9 +94,9 @@ describe('ArrangementCell', function () {
   describe('toCoilSnakeArrangementCellString()', function () {
     it('Generates a valid CoilSnakeArrangementCellString.', function () {
       const arrangementCell = new ArrangementCell();
-      arrangementCell.flippedVertically = true;
-      arrangementCell.flippedHorizontally = true;
-      arrangementCell.minitilePaletteNumber = 5;
+      arrangementCell.flippedVertically = false;
+      arrangementCell.flippedHorizontally = false;
+      arrangementCell.minitilePaletteNumber = 0;
       arrangementCell.minitileNumber = 511;
       arrangementCell.isSolid = true;
       arrangementCell.flag0x40 = true;
@@ -108,7 +108,7 @@ describe('ArrangementCell', function () {
       arrangementCell.coversLowerBody = true;
 
       const coilSnakeArrangementCellString = arrangementCell.toCoilSnakeArrangementCellString();
-      expect(coilSnakeArrangementCellString).to.equal('ddffff');
+      expect(coilSnakeArrangementCellString).to.equal('09ffff');
       expect(
         isType(coilSnakeArrangementCellString, 'CoilSnakeArrangementCellString')
       ).to.be.true;
