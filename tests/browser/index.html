@@ -12,15 +12,10 @@
         display: flex;
       }
 
-      #canvas {
-        image-rendering: pixelated;
-        image-rendering: -moz-crisp-edges;
-        transform-origin: 0 0;
-      }
-
       #mocha,
-      #canvas {
+      #canvases {
         margin: 15px;
+        align-self: flex-start;
       }
 
       #mocha {
@@ -67,12 +62,24 @@
       .test > h2 {
         display: flex;
       }
+
+      .test-canvas {
+        image-rendering: pixelated;
+        image-rendering: -moz-crisp-edges;
+      }
+
+      .arrangement {
+        background-size: contain;
+        image-rendering: pixelated;
+        image-rendering: -moz-crisp-edges;
+      }
     </style>
   </head>
   <body>
     <div id="mocha"></div>
 
-    <canvas id="canvas"></canvas>
+    <div id="canvases"></div>
+    <div class="arrangement"></div>
 
     <script src="../../node_modules/mocha/mocha.js"></script>
     <script src="../../node_modules/chai/chai.js"></script>

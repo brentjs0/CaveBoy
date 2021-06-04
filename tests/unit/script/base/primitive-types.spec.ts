@@ -4,6 +4,12 @@ import {
 } from '../../../test-methods';
 
 describe('primitive-types', function () {
+  testIsTypeForIntType(
+    'SafeInteger',
+    Number.MIN_SAFE_INTEGER,
+    Number.MAX_SAFE_INTEGER,
+    true
+  );
   testIsTypeForIntType('Uint3', 0, 7);
   testIsTypeForIntType('Uint4', 0, 15);
   testIsTypeForIntType('Uint5', 0, 31);

@@ -8,7 +8,7 @@ import Color from '@/script/data/game-object/Color';
 
 /**
  * A child of the native ImageData class with functions for manipulating data
- * using CaveBoy Color values.
+ * using CaveBoy Color values and overlaying other ImageData values.
  */
 export default class CaveBoyImageData extends ImageData {
   /**
@@ -99,4 +99,58 @@ export default class CaveBoyImageData extends ImageData {
     );
     this.data[rIndex + 3] = alpha;
   }
+
+  /**
+   * Replace the pixel data of this CaveBoyImageData object at the specified
+   * position with the pixel data from sourceImageData.
+   * @param sourceImageData - An ImageData instance containing the pixel data
+   * to be placed.
+   * @param targetXOrigin - The zero-based horizontal position of the point
+   * at which to place the top left corner of sourceImageData.
+   * @param targetYOrigin - The zero-based vertical position of the point at
+   * which to place the top left corner of sourceImageData.
+   */
+  public putImageData(
+    sourceImageData: ImageData,
+    targetXOrigin: number,
+    targetYOrigin: number
+  ): void {
+    for (let sourceX = 0; sourceX < sourceImageData.width; ++sourceX) {
+      for (let sourceY = 0; sourceY < sourceImageData.height; ++sourceY) {
+        let targetRIndex = getImageDataRIndexForCoordinates(
+          targetXOrigin + sourceX,
+          targetYOrigin + sourceY,
+          this
+        );
+        if (targetRIndex !== null) {
+          let sourceRIndex = getImageDataRIndexForCoordinates(
+            sourceX,
+            sourceY,
+            sourceImageData
+          );
+          if (sourceRIndex !== null) {
+            this.data[targetRIndex] = sourceImageData.data[sourceRIndex];
+            this.data[targetRIndex + 1] =
+              sourceImageData.data[sourceRIndex + 1];
+            this.data[targetRIndex + 2] =
+              sourceImageData.data[sourceRIndex + 2];
+            this.data[targetRIndex + 3] =
+              sourceImageData.data[sourceRIndex + 3];
+          }
+        }
+      }
+    }
+  }
+}
+
+function getImageDataRIndexForCoordinates(
+  x: number,
+  y: number,
+  imageData: ImageData
+): number | null {
+  if (x < imageData.width && y < imageData.height) {
+    return (y * imageData.height + x) * 4;
+  }
+
+  return null;
 }
