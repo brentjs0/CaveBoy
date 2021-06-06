@@ -1,13 +1,14 @@
 import CaveBoyError from '@/script/base/error/CaveBoyError';
 
 /**
- * Generate string segments of the provided string with the specified
- * length. Segments are consecutive and do not overlap. When the
- * provided string is not divisible without a remainder, a trailing
- * segment shorter than the specified length is generated.
+ * Split the provided string into substrings of the specified length and
+ * return them as a generator. Substrings are consecutive and do not
+ * overlap. When the provided string is not divisible without a remainder,
+ * a trailing substring shorter than the specified length is generated.
  * @param str - The string to divide.
- * @param segmentLength - The length of the string segments to be
+ * @param segmentLength - The length of the substrings to be
  * generated.
+ * @returns A generator of substrings of the specified length.
  */
 export function* segmentString(
   str: string,
@@ -28,10 +29,39 @@ export function* segmentString(
 }
 
 /**
- * Return true if the bit at the provided place for the provided number is 1. Otherwise, return false.
+ * Split the provided string into substrings at every index where the
+ * provided condition returns true, and return them as a generator.
+ * @param str - The string to divide.
+ * @param condition - A function that returns true for character indexes
+ * where the string should be split. Must accept a number parameter for
+ * the character index being tested, and may optionally accept a second
+ * parameter for the string being split.
+ * @returns A generator of substrings of the provided string.
+ */
+export function* splitStringWhere(
+  str: string,
+  condition:
+    | ((charIndex: number) => boolean)
+    | ((charIndex: number, str: string) => boolean)
+): Generator<string> {
+  let segmentStart = 0;
+  for (let i = 0; i < str.length; ++i) {
+    if (condition(i, str)) {
+      yield str.substring(segmentStart, i);
+      segmentStart = i;
+    }
+  }
+  yield str.substring(segmentStart);
+}
+
+/**
+ * Return true if the bit at the provided place for the provided number is 1.
+ * Otherwise, return false.
  * @param number - An integer containing the bit value to be checked.
- * @param place - The zero-based bit position to check, counting from the rightmost bit.
- * @returns True if the bit at the provided place for the provided number is 1. Otherwise, false.
+ * @param place - The zero-based bit position to check, counting from the
+ * rightmost bit.
+ * @returns True if the bit at the provided place for the provided number is
+ * 1. Otherwise, false.
  */
 export function getBitValue(number: number, place: number): boolean {
   if (!Number.isInteger(number)) {

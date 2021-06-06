@@ -225,11 +225,8 @@ export default class Color {
       this.blueComponent
     );
 
-    const colorString = `#${redNumber
-      .toString(16)
-      .padStart(2, '0')}${greenNumber
-      .toString(16)
-      .padStart(2, '0')}${blueNumber.toString(16).padStart(2, '0')}`;
+    // prettier-ignore
+    const colorString = `#${redNumber .toString(16) .padStart(2, '0')}${greenNumber .toString(16) .padStart(2, '0')}${blueNumber.toString(16).padStart(2, '0')}`;
 
     if (isType(colorString, 'HexadecimalColorString')) {
       return colorString;
