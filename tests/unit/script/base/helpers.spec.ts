@@ -1,4 +1,8 @@
-import { getBitValue, segmentString } from '@/script/base/helpers';
+import {
+  getBitValue,
+  segmentString,
+  splitStringWhere,
+} from '@/script/base/helpers';
 import { expect } from 'chai';
 
 describe('helpers', function () {
@@ -26,6 +30,29 @@ describe('helpers', function () {
       expect(() => [...segmentString('aabbcc', -3)]).to.throw(
         'Parameter segmentLength must be greater than 0.'
       );
+    });
+  });
+
+  describe('splitStringWhere()', function () {
+    it('Splits on a character index that meets the provided condition.', function () {
+      expect([
+        ...splitStringWhere(
+          't000000t0000t00',
+          (charIndex, str) => str[charIndex] === 't'
+        ),
+      ]).to.eql(['', 't000000', 't0000', 't00']);
+      expect([
+        ...splitStringWhere(
+          '000000-000/0000x0j',
+          (charIndex, str) => str[charIndex] !== '0'
+        ),
+      ]).to.eql(['000000', '-000', '/0000', 'x0', 'j']);
+    });
+
+    it('Returns the whole string when no character indexes meet the condition.', function () {
+      expect([...splitStringWhere('t000000t0000t00', () => false)]).to.eql([
+        't000000t0000t00',
+      ]);
     });
   });
   describe('getBitValue()', function () {

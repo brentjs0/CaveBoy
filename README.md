@@ -15,5 +15,5 @@ This project is still under development and does not yet have a functional relea
   - [x] Arrangements ("Tiles"/"Metatiles"/"Blocks")
   - [ ] Tilesets
   - [x] Palette Sets ("Palettes"/"Palette Groups")
-  - [ ] Graphic Sets ("Map Palettes"/"Areas")
+  - [x] Sector Graphics Sets ("Map Palettes"/"Areas")
   - [ ] Tileset Files
