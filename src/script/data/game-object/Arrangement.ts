@@ -19,7 +19,7 @@ import times from 'lodash/times';
  */
 export default class Arrangement {
   /**
-   * The cells of the arrangment in order from left to right, top to bottom.
+   * The cells of the arrangement in order from left to right, top to bottom.
    */
   public cells: ArrangementCell[];
 

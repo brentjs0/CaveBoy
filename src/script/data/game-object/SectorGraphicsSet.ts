@@ -15,8 +15,22 @@ import CaveBoyError from '@/script/base/error/CaveBoyError';
  * This class roughly correlates to the EbMapPalette type in the CoilSnake source.
  */
 export default class SectorGraphicsSet {
+  /**
+   * The five-bit number (0 through 31) that uniquely identifies this
+   * SectorGraphicsSet.
+   */
   public idNumber: Uint5;
+
+  /**
+   * The number of the Tileset from which to retrieve Arrangements
+   * for Sectors that use this SectorGraphicsSet.
+   */
   public tilesetNumber: number;
+
+  /**
+   * An array of 1 to 8 PaletteSets that can be assigned to Sectors
+   * that use this SectorGraphicsSet.
+   */
   public paletteSets: PaletteSet[];
 
   /**

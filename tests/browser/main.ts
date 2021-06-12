@@ -8,5 +8,7 @@ import '../unit/script/data/game-object/MinitileLayer.spec';
 import '../unit/script/data/game-object/MinitilePalette.spec';
 import '../unit/script/data/game-object/PaletteSet.spec';
 import '../unit/script/data/game-object/SectorGraphicsSet.spec';
+import '../unit/script/data/game-object/Tileset.spec';
+import '../unit/script/base/data-marshaling.spec';
 import '../unit/script/base/helpers.spec';
 import '../unit/script/base/primitive-types.spec';

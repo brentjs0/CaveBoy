@@ -12,6 +12,10 @@ module.exports = {
         use: 'ts-loader',
         exclude: /\/node_modules\//,
       },
+      {
+        test: /\.fts$/,
+        use: 'raw-loader',
+      },
     ],
   },
   resolve: {
@@ -24,6 +28,7 @@ module.exports = {
       '.vue',
       '.json',
       '.wasm',
+      '.fts',
     ],
     alias: {
       '@': path.resolve(__dirname, './src/'),
