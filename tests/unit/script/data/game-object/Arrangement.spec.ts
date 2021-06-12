@@ -167,12 +167,12 @@ describe('Arrangement', function () {
         ...blk, ...mbn, ...mbn, ...dbn, ...dbn, ...dbn, ...mbn, ...mbn,    ...blk, ...mbn, ...mbn, ...dbn, ...dbn, ...dbn, ...mbn, ...mbn,    ...blk, ...mbn, ...mbn, ...dbn, ...dbn, ...dbn, ...mbn, ...mbn,    ...mbn, ...mbn, ...dbn, ...dbn, ...dbn, ...mbn, ...mbn, ...blk,
       ]);
 
-      const arrangmentImageData = new Arrangement(
+      const arrangementImageData = new Arrangement(
         '0d27800c75800c96800d4c800d7e800d7d800d7e800d7f800d94800d95800d94800d96800da3800da3800da3804da320'
       ).getImageData(minitiles, paletteSet);
 
       const [canvas, context] = createCanvas(4, 32, 32);
-      context.putImageData(arrangmentImageData, 0, 0);
+      context.putImageData(arrangementImageData, 0, 0);
       // prettier-ignore
       document.styleSheets[1].insertRule(`
         .arrangement {
@@ -182,7 +182,7 @@ describe('Arrangement', function () {
         }
       `);
 
-      expect(arrangmentImageData.data).to.eql(expectedDataValue);
+      expect(arrangementImageData.data).to.eql(expectedDataValue);
     });
   });
 

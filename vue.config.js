@@ -13,10 +13,7 @@ module.exports = {
       config.optimization.minimize = false;
     }
 
-    const htmlWebpackPlugin = config.plugins.filter(
-      (p) => p instanceof HtmlWebpackPlugin
-    )[0];
-    htmlWebpackPlugin.options.title = 'CaveBoy';
+    config.plugins[5].options.title = 'CaveBoy';
   },
   lintOnSave: 'warning',
   outputDir: nodeEnv === 'production' ? 'dist' : 'dev',
