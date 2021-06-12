@@ -15,5 +15,9 @@ This project is still under development and does not yet have a functional relea
   - [x] Arrangements ("Tiles"/"Metatiles"/"Blocks")
   - [x] Tilesets
   - [x] Palette Sets ("Palettes"/"Palette Groups")
-  - [x] Sector Graphics Sets ("Map Palettes"/"Areas")
+  - [x] Graphic Sets ("Map Palettes"/"Areas")
   - [x] Tileset Files
+- [ ] Milestone: Decode and encode remaining map objects.
+  - [ ] Sectors from map_sectors.yml
+  - [ ] MapCells from map_tiles.map
+- [ ] Milestone: Draw the full map

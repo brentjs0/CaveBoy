@@ -1,24 +1,24 @@
 import CaveBoyError from '@/script/base/error/CaveBoyError';
 import {
-  CoilSnakeSectorGraphicsSetString,
+  CoilSnakeGraphicSetString,
   isType,
 } from '@/script/base/primitive-types';
-import SectorGraphicsSet from '@/script/data/game-object/SectorGraphicsSet';
+import GraphicSet from '@/script/data/game-object/GraphicSet';
 import Tileset from '@/script/data/game-object/Tileset';
 
 /**
- * Return the Tileset and SectorGraphicsSets encoded in the provided *.fts
+ * Return the Tileset and GraphicSets encoded in the provided *.fts
  * file contents.
  * @param tilesetNumber - The number of the tileset being parsed. The
  * filename usually contains this number.
  * @param ftsFileContents - The string contents of an *.fts file.
- * @returns The Tileset and SectorGraphicsSets encoded in the provided *.fts
+ * @returns The Tileset and GraphicSets encoded in the provided *.fts
  * file contents.
  */
 export function parseFTSFileContents(
   tilesetNumber: number,
   ftsFileContents: string
-): [Tileset, SectorGraphicsSet[]] {
+): [Tileset, GraphicSet[]] {
   const ftsFileRegions: string[] = ftsFileContents.split(
     /(?:\n\n\n|\r\n\r\n\r\n|\r\r\r)/
   );
@@ -28,45 +28,42 @@ export function parseFTSFileContents(
   }
 
   const tileset = new Tileset(ftsFileRegions[0], ftsFileRegions[2]);
-  const sectorGraphicsSets = [];
+  const graphicSets = [];
 
-  for (let coilSnakeSectorGraphicsSetString of splitCoilSnakeSectorGraphicsSetStrings(
+  for (let coilSnakeGraphicSetString of splitCoilSnakeGraphicSetStrings(
     ftsFileRegions[1]
   )) {
-    let sectorGraphicsSet = new SectorGraphicsSet(
-      coilSnakeSectorGraphicsSetString,
-      tilesetNumber
-    );
-    sectorGraphicsSets[sectorGraphicsSet.idNumber] = sectorGraphicsSet;
+    let graphicSet = new GraphicSet(coilSnakeGraphicSetString, tilesetNumber);
+    graphicSets[graphicSet.idNumber] = graphicSet;
   }
 
-  return [tileset, sectorGraphicsSets];
+  return [tileset, graphicSets];
 }
 
 /**
- * Return the provided Tileset and its related SectorGraphicsSets
+ * Return the provided Tileset and its related GraphicSets
  * from the provided array serialized in the format of an *.fts file.
  * @param tilesetNumber - The number of the tileset being parsed. This
  * will most likely correspond with the filename.
  * @param tileset - The Tileset containing the Minitiles and Arrangements
  * to be serialized.
- * @param sectorGraphicsSets - An array containing all of the
- * SectorGraphicsSets related to the provide Tileset.
- * @returns The provided Tileset and its related SectorGraphicsSets
+ * @param graphicSets - An array containing all of the
+ * GraphicSets related to the provide Tileset.
+ * @returns The provided Tileset and its related GraphicSets
  * from the provided array serialized in the format of an *.fts file.
  */
 export function buildFTSFileContents(
   tilesetNumber: number,
   tileset: Tileset,
-  sectorGraphicsSets: SectorGraphicsSet[]
+  graphicSets: GraphicSet[]
 ): string {
   const minitileRegion = tileset.minitiles
     .map((mt) => mt.toCoilSnakeMinitileString())
     .join('\n\n');
 
-  const sectorGraphicsSetRegion = sectorGraphicsSets
+  const graphicSetRegion = graphicSets
     .filter((sgs) => sgs.tilesetNumber == tilesetNumber)
-    .map((sgs) => sgs.toCoilSnakeSectorGraphicsSetString())
+    .map((sgs) => sgs.toCoilSnakeGraphicSetString())
     .join('\n');
 
   const arrangementRegion = tileset.arrangements
@@ -74,71 +71,61 @@ export function buildFTSFileContents(
     .join('\n');
 
   // prettier-ignore
-  return `${minitileRegion}\n\n\n${sectorGraphicsSetRegion}\n\n\n${arrangementRegion}\n`;
+  return `${minitileRegion}\n\n\n${graphicSetRegion}\n\n\n${arrangementRegion}\n`;
 }
 
-function* splitCoilSnakeSectorGraphicsSetStrings(
-  sectorGraphicsSetStringRegion: string
-): Generator<CoilSnakeSectorGraphicsSetString> {
-  sectorGraphicsSetStringRegion = sectorGraphicsSetStringRegion.trim();
+function* splitCoilSnakeGraphicSetStrings(
+  graphicSetStringRegion: string
+): Generator<CoilSnakeGraphicSetString> {
+  graphicSetStringRegion = graphicSetStringRegion.trim();
 
-  if (sectorGraphicsSetStringRegion.length < 290) {
+  if (graphicSetStringRegion.length < 290) {
     throw new CaveBoyError(
-      'The data passed to splitCoilSnakeSectorGraphicsSetStrings() was too short.'
+      'The data passed to splitCoilSnakeGraphicSetStrings() was too short.'
     );
   }
 
-  let currentSectorGraphicsSetSetStartIndex = 0;
-  let currentSectorGraphicsSetId = sectorGraphicsSetStringRegion[0];
-  let coilSnakeSectorGraphicsSetString;
+  let currentGraphicSetSetStartIndex = 0;
+  let currentGraphicSetId = graphicSetStringRegion[0];
+  let coilSnakeGraphicSetString;
 
-  for (let h = -1, i = 0; i < sectorGraphicsSetStringRegion.length; ++h, ++i) {
-    let previousChar = getCharacterIfExists(sectorGraphicsSetStringRegion, h);
-    let char = sectorGraphicsSetStringRegion[i];
+  for (let h = -1, i = 0; i < graphicSetStringRegion.length; ++h, ++i) {
+    let previousChar = getCharacterIfExists(graphicSetStringRegion, h);
+    let char = graphicSetStringRegion[i];
 
     if (
       isEndOfLineCharacter(previousChar) &&
       !isEndOfLineCharacter(char) &&
-      char !== currentSectorGraphicsSetId
+      char !== currentGraphicSetId
     ) {
-      coilSnakeSectorGraphicsSetString = sectorGraphicsSetStringRegion
-        .substring(currentSectorGraphicsSetSetStartIndex, i)
+      coilSnakeGraphicSetString = graphicSetStringRegion
+        .substring(currentGraphicSetSetStartIndex, i)
         .trim();
 
-      if (
-        !isType(
-          coilSnakeSectorGraphicsSetString,
-          'CoilSnakeSectorGraphicsSetString'
-        )
-      ) {
+      if (!isType(coilSnakeGraphicSetString, 'CoilSnakeGraphicSetString')) {
         throw new CaveBoyError(
-          `splitCoilSnakeSectorGraphicsSetStrings() encountered a value that is not a CoilSnakeSectorGraphicsSetString:\n${coilSnakeSectorGraphicsSetString}`
+          `splitCoilSnakeGraphicSetStrings() encountered a value that is not a CoilSnakeGraphicSetString:\n${coilSnakeGraphicSetString}`
         );
       }
 
-      yield coilSnakeSectorGraphicsSetString;
+      yield coilSnakeGraphicSetString;
 
-      currentSectorGraphicsSetSetStartIndex = i;
-      currentSectorGraphicsSetId = char;
+      currentGraphicSetSetStartIndex = i;
+      currentGraphicSetId = char;
     }
   }
 
-  coilSnakeSectorGraphicsSetString = sectorGraphicsSetStringRegion
-    .substring(currentSectorGraphicsSetSetStartIndex)
+  coilSnakeGraphicSetString = graphicSetStringRegion
+    .substring(currentGraphicSetSetStartIndex)
     .trim();
 
-  if (
-    !isType(
-      coilSnakeSectorGraphicsSetString,
-      'CoilSnakeSectorGraphicsSetString'
-    )
-  ) {
+  if (!isType(coilSnakeGraphicSetString, 'CoilSnakeGraphicSetString')) {
     throw new CaveBoyError(
-      `splitCoilSnakeSectorGraphicsSetStrings() encountered a value that is not a CoilSnakeSectorGraphicsSetString:\n${coilSnakeSectorGraphicsSetString}`
+      `splitCoilSnakeGraphicSetStrings() encountered a value that is not a CoilSnakeGraphicSetString:\n${coilSnakeGraphicSetString}`
     );
   }
 
-  yield coilSnakeSectorGraphicsSetString;
+  yield coilSnakeGraphicSetString;
 }
 
 function getCharacterIfExists(str: string, characterIndex: number): string {

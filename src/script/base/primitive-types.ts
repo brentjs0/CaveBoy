@@ -18,7 +18,7 @@ export type TypeName =
   | 'CoilSnakeArrangementCellString'
   | 'CoilSnakePaletteSetString'
   | 'CoilSnakeArrangementString'
-  | 'CoilSnakeSectorGraphicsSetString';
+  | 'CoilSnakeGraphicSetString';
 
 /**
  * A number with no significant fractional value that is within the safe range
@@ -125,10 +125,10 @@ export type CoilSnakeArrangementString = string;
 /**
  *
  * A multi-line string expression of one to eight CoilSnakePaletteSetStrings
- * prefixed with their SectorGraphicsSet number and their PaletteSet number
+ * prefixed with their GraphicSet number and their PaletteSet number
  * within the list. Lines consist of 290 base-32 digits each. Must be lowercase.
  */
-export type CoilSnakeSectorGraphicsSetString = string;
+export type CoilSnakeGraphicSetString = string;
 
 /**
  * A CaveBoy-defined type with the name T.
@@ -149,7 +149,7 @@ export type Type<T extends TypeName> =
   : T extends 'CoilSnakeArrangementCellString' ? CoilSnakeArrangementCellString
   : T extends 'CoilSnakePaletteSetString' ? CoilSnakePaletteSetString
   : T extends 'CoilSnakeArrangementString' ? CoilSnakeArrangementString
-  : T extends 'CoilSnakeSectorGraphicsSetString' ? CoilSnakeSectorGraphicsSetString
+  : T extends 'CoilSnakeGraphicSetString' ? CoilSnakeGraphicSetString
   : never;
 
 /**
@@ -224,7 +224,7 @@ export function isType<T extends TypeName>(
       return typeof value === 'string' && /^[0-9a-v]{288}$/.test(value);
     case 'CoilSnakeArrangementString':
       return typeof value === 'string' && /^[0-9a-f]{96}$/.test(value);
-    case 'CoilSnakeSectorGraphicsSetString':
+    case 'CoilSnakeGraphicSetString':
       return (
         typeof value === 'string' &&
         /^[0-9a-v]0[0-9a-v]{288}(?:(?:\n|\r\n|\r)[0-9a-v][1-7][0-9a-v]{288}){0,7}$/.test(
