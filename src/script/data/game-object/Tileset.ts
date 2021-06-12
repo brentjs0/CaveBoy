@@ -5,10 +5,10 @@ import times from 'lodash/times';
 
 /**
  * A set of Minitiles and their Arrangements that can be
- * associated to one or more SectorGraphicsSets by
+ * associated to one or more GraphicSets by
  * tilesetNumber. Determines the actual Arrangements that
  * populate each MapCell in a Sector with a given
- * SectorGraphicsSet.
+ * GraphicSet.
  *
  * This class roughly correlates to the minitiles,
  * arrangements, and collisions fields of an EbTileset
