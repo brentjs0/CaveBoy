@@ -62,7 +62,7 @@ describe('primitive-types', function () {
   );
 
   testIsTypeForStringType(
-    'CoilSnakeMinitilePaletteString',
+    'CoilSnakeSubpaletteString',
     [
       '000jj6kk8gg6cc4883bbchodagcqpknmflkcjh9hg7443000',
       '000oqj0v00v0l7v0v0k0vv6nt0cj69c67vvvnopghkk0p000',

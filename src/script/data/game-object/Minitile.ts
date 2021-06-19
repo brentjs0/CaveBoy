@@ -5,12 +5,12 @@ import { CoilSnakeMinitileString, isType } from '@/script/base/primitive-types';
 import MinitileLayer, {
   getMinitileLayerPixelCoordinates,
 } from '@/script/data/game-object/MinitileLayer';
-import MinitilePalette from '@/script/data/game-object/MinitilePalette';
+import Subpalette from '@/script/data/game-object/Subpalette';
 
 /**
  * Two sets of 64 color numbers representing an 8 x 8 grid, with one serving as
  * a background layer and another serving as a foreground layer. This class roughly
- * correlates to as set of two of the array elements in the 'tiles' array of an
+ * correlates to a set of two of the array elements in the 'tiles' array of an
  * EbGraphicTileset object in the CoilSnake source, with the background having an
  * index of n and the foreground having an index of n + 512.
  */
@@ -60,7 +60,7 @@ export default class Minitile {
   /**
    * Return an 8 x 8 CaveBoyImageData object displaying the foregroundLayer for
    * this Minitile laid over the backgroundLayer.
-   * @param minitilePalette - The MinitilePalette to reference for mapping color
+   * @param subpalette - The Subpalette to reference for mapping color
    * numbers to Colors.
    * @param flipHorizontally - Whether to return the image with the positions of
    * its pixels flipped horizontally. Optional. Defaults to false.
@@ -74,14 +74,14 @@ export default class Minitile {
    * Minitile laid over the backgroundLayer.
    */
   public getImageData(
-    minitilePalette: MinitilePalette,
+    subpalette: Subpalette,
     flipHorizontally: boolean = false,
     flipVertically: boolean = false,
     colorComponentScalerName?: ColorComponentScalerName
   ): CaveBoyImageData {
     // Get the image data for the foreground layer.
     const cbImageData = this.foregroundLayer.getImageData(
-      minitilePalette,
+      subpalette,
       flipHorizontally,
       flipVertically
     );
@@ -99,7 +99,7 @@ export default class Minitile {
       );
 
       let backgroundPixelValue = this.backgroundLayer.colorNumbers[i];
-      let backgroundColor = minitilePalette.colors[backgroundPixelValue];
+      let backgroundColor = subpalette.colors[backgroundPixelValue];
 
       cbImageData.setPixel(
         x,

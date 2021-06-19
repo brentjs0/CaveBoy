@@ -3,7 +3,7 @@ import Color from '@/script/data/game-object/Color';
 import MinitileLayer, {
   getMinitileLayerPixelCoordinates,
 } from '@/script/data/game-object/MinitileLayer';
-import MinitilePalette from '@/script/data/game-object/MinitilePalette';
+import Subpalette from '@/script/data/game-object/Subpalette';
 import { expect } from 'chai';
 import reverse from 'lodash/reverse';
 import times from 'lodash/times';
@@ -36,21 +36,19 @@ describe('MinitileLayer', function () {
 
   describe('getImageData()', function () {
     it('Generates an 8 x 8 CaveBoyImageData object.', function () {
-      const cbImageData = new MinitileLayer().getImageData(
-        new MinitilePalette()
-      );
+      const cbImageData = new MinitileLayer().getImageData(new Subpalette());
 
       expect(cbImageData.height).to.equal(8);
       expect(cbImageData.width).to.equal(8);
     });
 
     it('Draws the pixels from left to right, wrapping from top to bottom.', function () {
-      const minitilePalette = new MinitilePalette(
+      const subpalette = new Subpalette(
         '000uuqoqjqf9koivv0ieuv1b2vd5ncafevvpoojkkdgha666'
       );
       const cbImageData = new MinitileLayer(
         'fffff00011111f00777772f07777772f7177117f1717171f1717171f1717171f'
-      ).getImageData(minitilePalette);
+      ).getImageData(subpalette);
 
       const eff = new Color(6, 6, 6).toUint8ClampedArray();
       const zro = new Color(0, 0, 0).toUint8ClampedArray(0);
@@ -74,12 +72,12 @@ describe('MinitileLayer', function () {
     });
 
     it('Flips image data horizontally.', function () {
-      const minitilePalette = new MinitilePalette(
+      const subpalette = new Subpalette(
         '000uuqoqjqf9koivv0ieuv1b2vd5ncafevvpoojkkdgha666'
       );
       const cbImageData = new MinitileLayer(
         'fffff00011111f00777772f07777772f7177117f1717171f1717171f1717171f'
-      ).getImageData(minitilePalette, true);
+      ).getImageData(subpalette, true);
 
       const eff = new Color(6, 6, 6).toUint8ClampedArray();
       const zro = new Color(0, 0, 0).toUint8ClampedArray(0);
@@ -103,12 +101,12 @@ describe('MinitileLayer', function () {
     });
 
     it('Flips image data vertically.', function () {
-      const minitilePalette = new MinitilePalette(
+      const subpalette = new Subpalette(
         '000uuqoqjqf9koivv0ieuv1b2vd5ncafevvpoojkkdgha666'
       );
       const cbImageData = new MinitileLayer(
         'fffff00011111f00777772f07777772f7177117f1717171f1717171f1717171f'
-      ).getImageData(minitilePalette, false, true);
+      ).getImageData(subpalette, false, true);
 
       const eff = new Color(6, 6, 6).toUint8ClampedArray();
       const zro = new Color(0, 0, 0).toUint8ClampedArray(0);
@@ -132,12 +130,12 @@ describe('MinitileLayer', function () {
     });
 
     it("Draws the colors correctly using the 'factorOfEight' scaler.", function () {
-      const minitilePalette = new MinitilePalette(
+      const subpalette = new Subpalette(
         '000111222333444555666777888999aaabbbcccdddeeefff'
       );
       const cbImageData = new MinitileLayer(
         '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef'
-      ).getImageData(minitilePalette, false, false, true, 'factorOfEight');
+      ).getImageData(subpalette, false, false, true, 'factorOfEight');
 
       // prettier-ignore
       const expectedDataValue = new Uint8ClampedArray([
@@ -155,12 +153,12 @@ describe('MinitileLayer', function () {
     });
 
     it('Draws index 0 with an alpha of 255 when index0IsTransparent === false.', function () {
-      const minitilePalette = new MinitilePalette(
+      const subpalette = new Subpalette(
         '000111222333444555666777888999aaabbbcccdddeeefff'
       );
       const cbImageData = new MinitileLayer(
         '0000000000000000000000000000000000000000000000000000000000000000'
-      ).getImageData(minitilePalette, false, false, false);
+      ).getImageData(subpalette, false, false, false);
 
       expect(cbImageData.data).to.satisfy(function alphasEqual255(
         data: Uint8ClampedArray

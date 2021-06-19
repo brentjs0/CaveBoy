@@ -1,7 +1,7 @@
 import { isType } from '@/script/base/primitive-types';
 import Color from '@/script/data/game-object/Color';
 import Minitile from '@/script/data/game-object/Minitile';
-import MinitilePalette from '@/script/data/game-object/MinitilePalette';
+import Subpalette from '@/script/data/game-object/Subpalette';
 import { expect } from 'chai';
 import times from 'lodash/times';
 
@@ -24,18 +24,18 @@ describe('Minitile', function () {
   });
   describe('getImageData()', function () {
     it('Generates an 8 x 8 CaveBoyImageData object.', function () {
-      const cbImageData = new Minitile().getImageData(new MinitilePalette());
+      const cbImageData = new Minitile().getImageData(new Subpalette());
       expect(cbImageData.height).to.equal(8);
       expect(cbImageData.width).to.equal(8);
     });
 
     it('Draws overlapping layers with transparency.', function () {
-      const minitilePalette = new MinitilePalette(
+      const subpalette = new Subpalette(
         '000uuqoqjqf9koivv0ieuv1b2vd5ncafevvpoojkkdgha666'
       );
       const cbImageData = new Minitile(
         '8888888888888888888888888888888888888888888888888888888888888888\r000fffff00f111110f277777f2777777f2717111f2171717f2177717f2717717'
-      ).getImageData(minitilePalette);
+      ).getImageData(subpalette);
 
       const one = new Color(30, 30, 26).toUint8ClampedArray();
       const two = new Color(24, 26, 19).toUint8ClampedArray();
@@ -59,12 +59,12 @@ describe('Minitile', function () {
     });
 
     it('Flips image data vertically.', function () {
-      const minitilePalette = new MinitilePalette(
+      const subpalette = new Subpalette(
         '000uuqoqjqf9koivv0ieuv1b2vd5ncafevvpoojkkdgha666'
       );
       const cbImageData = new Minitile(
         '8888888888888888888888888888888888888888888888888888888888888888\r000fffff00f111110f277777f2777777f2717111f2171717f2177717f2717717'
-      ).getImageData(minitilePalette, false, true);
+      ).getImageData(subpalette, false, true);
 
       const one = new Color(30, 30, 26).toUint8ClampedArray();
       const two = new Color(24, 26, 19).toUint8ClampedArray();

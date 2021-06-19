@@ -6,19 +6,19 @@ import {
   isType,
   Uint4,
 } from '@/script/base/primitive-types';
-import MinitilePalette from '@/script/data/game-object/MinitilePalette';
+import Subpalette from '@/script/data/game-object/Subpalette';
 import times from 'lodash/times';
 
 /**
  * A list of 64 color numbers representing an 8 x 8 image. Values are integers
  * between 0 and 15 that each represent the index of a color in a
- * MinitilePalette. This class roughly correlates to a single array element
+ * Subpalette. This class roughly correlates to a single array element
  * in the 'tiles' array of an EbGraphicTileset object in the CoilSnake source.
  */
 export default class MinitileLayer {
   /**
    * A list of 64 4-bit numbers (0-15) representing the indexes of colors in a
-   * MinitilePalette.
+   * Subpalette.
    */
   public colorNumbers: Uint4[];
 
@@ -58,9 +58,9 @@ export default class MinitileLayer {
 
   /**
    * Return an expression of the MinitileLayer as a 64-digit hexadecimal
-   * CoilSnakeMinitilePaletteString.
+   * CoilSnakeSubpaletteString.
    * @returns An expression of the MinitileLayer as a 64-digit hexadecimal
-   * CoilSnakeMinitilePaletteString.
+   * CoilSnakeSubpaletteString.
    */
   public toCoilSnakeMinitileLayerString(): CoilSnakeMinitileLayerString {
     return this.colorNumbers.reduce<CoilSnakeMinitileLayerString>(
@@ -71,8 +71,8 @@ export default class MinitileLayer {
 
   /**
    * Return an 8 x 8 CaveBoyImageData object with each color number from this
-   * MinitileLayer translated to a color using the provided MinitilePalette.
-   * @param minitilePalette - The MinitilePalette to reference for mapping color
+   * MinitileLayer translated to a color using the provided Subpalette.
+   * @param subpalette - The Subpalette to reference for mapping color
    * numbers to Colors.
    * @param flipHorizontally - Whether to return the image with the positions of
    * its pixels flipped horizontally. Optional. Defaults to false.
@@ -85,10 +85,10 @@ export default class MinitileLayer {
    * eight-bit color component values of the image data. Optional. Defaults to
    * the user-configured scaler.
    * @returns An 8 x 8 CaveBoyImageData object with each color number from this
-   * MinitileLayer translated to a color using the provided MinitilePalette.
+   * MinitileLayer translated to a color using the provided Subpalette.
    */
   public getImageData(
-    minitilePalette: MinitilePalette,
+    subpalette: Subpalette,
     flipHorizontally: boolean = false,
     flipVertically: boolean = false,
     index0IsTransparent = true,
@@ -107,7 +107,7 @@ export default class MinitileLayer {
         flipHorizontally,
         flipVertically
       );
-      let color = minitilePalette.colors[colorIndex];
+      let color = subpalette.colors[colorIndex];
 
       cbImageData.setPixel(x, y, color, 255, colorComponentScalerName);
     }

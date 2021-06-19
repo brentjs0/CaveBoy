@@ -16,7 +16,7 @@ describe('ArrangementCell', function () {
 
       expect(arrangementCell.flippedVertically).to.be.true;
       expect(arrangementCell.flippedHorizontally).to.be.true;
-      expect(arrangementCell.minitilePaletteNumber).to.equal(5);
+      expect(arrangementCell.subpaletteNumber).to.equal(5);
       expect(arrangementCell.minitileNumber).to.equal(511);
       expect(arrangementCell.isSolid).to.be.true;
       expect(arrangementCell.flag0x40).to.be.true;
@@ -36,7 +36,7 @@ describe('ArrangementCell', function () {
 
       expect(arrangementCell.flippedVertically).to.be.false;
       expect(arrangementCell.flippedHorizontally).to.be.false;
-      expect(arrangementCell.minitilePaletteNumber).to.equal(0);
+      expect(arrangementCell.subpaletteNumber).to.equal(0);
       expect(arrangementCell.minitileNumber).to.equal(0);
       expect(arrangementCell.isSolid).to.be.false;
       expect(arrangementCell.flag0x40).to.be.false;
@@ -49,7 +49,7 @@ describe('ArrangementCell', function () {
     });
   });
   describe('getImageData()', function () {
-    it('Draws the correct Minitile with the correct MinitilePalette given the provided values.', function () {
+    it('Draws the correct Minitile with the correct Subpalette given the provided values.', function () {
       const paletteSet = new PaletteSet(
         '000000000000000000000000000000000000000000000644' +
           '000000000000000000000000000000000000000000000644' +
@@ -96,7 +96,7 @@ describe('ArrangementCell', function () {
       const arrangementCell = new ArrangementCell();
       arrangementCell.flippedVertically = false;
       arrangementCell.flippedHorizontally = false;
-      arrangementCell.minitilePaletteNumber = 0;
+      arrangementCell.subpaletteNumber = 0;
       arrangementCell.minitileNumber = 511;
       arrangementCell.isSolid = true;
       arrangementCell.flag0x40 = true;

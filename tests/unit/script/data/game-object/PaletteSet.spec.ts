@@ -123,9 +123,7 @@ describe('PaletteSet', function () {
       );
 
       for (let i = 0; i < 6; ++i) {
-        expect(paletteSet.minitilePalettes[i].colors).to.eql(
-          paletteSetColors[i]
-        );
+        expect(paletteSet.subpalettes[i].colors).to.eql(paletteSetColors[i]);
       }
     });
 
@@ -152,7 +150,7 @@ describe('PaletteSet', function () {
       ];
 
       for (let i = 0; i < 6; ++i) {
-        expect(paletteSet.minitilePalettes[i].colors).to.eql(emptyPalette);
+        expect(paletteSet.subpalettes[i].colors).to.eql(emptyPalette);
       }
     });
   });
@@ -160,12 +158,12 @@ describe('PaletteSet', function () {
   describe('toCoilSnakePaletteSetString()', function () {
     it('Generates a valid CoilSnakePaletteSetString.', function () {
       const paletteSet = new PaletteSet();
-      paletteSet.minitilePalettes[0].colors = paletteSetColors[0]; // 000uuqoqjqf9koivv0ieuv1b2vd5ncafevvpoojkkdgha666
-      paletteSet.minitilePalettes[1].colors = paletteSetColors[1]; // 000uuqoqjecljjoenvhevv1b2vd5ncafevmdqfejbdj99666
-      paletteSet.minitilePalettes[2].colors = paletteSetColors[2]; // 000uuqmvnkkdjfbhpvqbvv6b2vd5ncafeuvonqlnlodej668
-      paletteSet.minitilePalettes[3].colors = paletteSetColors[3]; // 000uuqocdk9bg6c0v06fev6b2vd5ncafemksihnedhaac666
-      paletteSet.minitilePalettes[4].colors = paletteSetColors[4]; // 000uuqoqjkkdjjojndi87v6b2vd5ncafevveqnbmf9hc7666
-      paletteSet.minitilePalettes[5].colors = paletteSetColors[5]; // 000uuqoqj0v0kkd0v0v6b0nf2vd5ncafevq7vj8vdasbd666
+      paletteSet.subpalettes[0].colors = paletteSetColors[0]; // 000uuqoqjqf9koivv0ieuv1b2vd5ncafevvpoojkkdgha666
+      paletteSet.subpalettes[1].colors = paletteSetColors[1]; // 000uuqoqjecljjoenvhevv1b2vd5ncafevmdqfejbdj99666
+      paletteSet.subpalettes[2].colors = paletteSetColors[2]; // 000uuqmvnkkdjfbhpvqbvv6b2vd5ncafeuvonqlnlodej668
+      paletteSet.subpalettes[3].colors = paletteSetColors[3]; // 000uuqocdk9bg6c0v06fev6b2vd5ncafemksihnedhaac666
+      paletteSet.subpalettes[4].colors = paletteSetColors[4]; // 000uuqoqjkkdjjojndi87v6b2vd5ncafevveqnbmf9hc7666
+      paletteSet.subpalettes[5].colors = paletteSetColors[5]; // 000uuqoqj0v0kkd0v0v6b0nf2vd5ncafevq7vj8vdasbd666
 
       const coilSnakePaletteSetString = paletteSet.toCoilSnakePaletteSetString();
 

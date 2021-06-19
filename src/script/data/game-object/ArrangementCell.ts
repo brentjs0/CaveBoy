@@ -12,7 +12,7 @@ import Minitile from '@/script/data/game-object/Minitile';
 import PaletteSet from '@/script/data/game-object/PaletteSet';
 
 /**
- * A cell in 4 x 4 Arrangement. Encodes the Minitile number, MinitilePalette
+ * A cell in 4 x 4 Arrangement. Encodes the Minitile number, Subpalette
  * number, flip state, and surface flags for an 8 x 8 pixel map area. This
  * class roughly correlates to a single element in one of the the
  * two-dimensional array elements of the arrangements array of an EbTileset
@@ -27,57 +27,55 @@ export default class ArrangementCell {
   public minitileNumber: Uint9;
 
   /**
-   * The value of minitilePaletteNumber, plus two.
+   * The value of subpaletteNumber, plus two.
    *
    * When Arrangements are initially decompiled by CoilSnake, the
-   * MinitilePalette numbers are encoded with three bits, representing a
-   * value from 0 to 5 with 2 added. The actual MinitilePalette number is
+   * Subpalette numbers are encoded with three bits, representing a
+   * value from 0 to 5 with 2 added. The actual Subpalette number is
    * found by subtracting 2 from the encoded number.
    *
    * However, there is an apparent defect in the decompilation process that
-   * causes some MinitilePalette number values of 0 to be represented as 0
+   * causes some Subpalette number values of 0 to be represented as 0
    * (0b000) rather than as 2 (0b010). In order to prevent encoded
    * Arrangement values from being altered when no intentional change has
    * been made, the original encoded value is stored here and the actual
-   * minitilePaletteNumber is calculated based on this number. The original
-   * encoded value is lost when a new minitilePaletteNumber value is assigned,
+   * subpaletteNumber is calculated based on this number. The original
+   * encoded value is lost when a new subpaletteNumber value is assigned,
    * but this happens when editing Arrangements in EB Project Editor as well.
    */
-  private encodedMinitilePaletteNumber: Uint3;
+  private encodedSubpaletteNumber: Uint3;
 
   /**
-   * The index of the MinitilePalette (0 through 5) that will provide color
+   * The index of the Subpalette (0 through 5) that will provide color
    * values for the Minitile displayed by this cell when it is rendered in
    * the map Sector.
    *
    * The PaletteSet it refers to is determined by the graphicSetNumber and
    * paletteSetNumber assigned to the Sector.
    */
-  public get minitilePaletteNumber(): Uint3 {
-    const minitilePaletteNumber =
-      this.encodedMinitilePaletteNumber === 0
-        ? 0
-        : this.encodedMinitilePaletteNumber - 2;
+  public get subpaletteNumber(): Uint3 {
+    const subpaletteNumber =
+      this.encodedSubpaletteNumber === 0 ? 0 : this.encodedSubpaletteNumber - 2;
 
-    if (!isType(minitilePaletteNumber, 'Uint3')) {
+    if (!isType(subpaletteNumber, 'Uint3')) {
       throw new CaveBoyError(
-        `MinitilePalette number ${minitilePaletteNumber} is not a Uint3.`
+        `Subpalette number ${subpaletteNumber} is not a Uint3.`
       );
     }
 
-    return minitilePaletteNumber;
+    return subpaletteNumber;
   }
 
-  public set minitilePaletteNumber(value: Uint3) {
-    const encodedMinitilePaletteNumber = value + 2;
+  public set subpaletteNumber(value: Uint3) {
+    const encodedSubpaletteNumber = value + 2;
 
-    if (!isType(encodedMinitilePaletteNumber, 'Uint3')) {
+    if (!isType(encodedSubpaletteNumber, 'Uint3')) {
       throw new CaveBoyError(
-        `MinitilePalette number ${encodedMinitilePaletteNumber} is not a Uint3.`
+        `Subpalette number ${encodedSubpaletteNumber} is not a Uint3.`
       );
     }
 
-    this.encodedMinitilePaletteNumber = encodedMinitilePaletteNumber;
+    this.encodedSubpaletteNumber = encodedSubpaletteNumber;
   }
 
   /**
@@ -152,7 +150,7 @@ export default class ArrangementCell {
    * Instantiate an ArrangementCell, optionally with its field values initialized
    * by parsing the provided CoilSnakeArrangementCellString.
    * @param coilSnakeArrangementCellString - A CoilSnakeArrangementCellString
-   * expression of the Minitile number, Minitile Palette number, flip state,
+   * expression of the Minitile number, Subpalette number, flip state,
    * and surface flags for this ArrangementCell. Optional. Default property
    * values are used if no value is provided.
    */
@@ -171,13 +169,13 @@ export default class ArrangementCell {
       // Bit 21 is unused.
 
       // Bits 20 through 18 (000[0 00]00 0000 0000 0000 0000).
-      const encodedMinitilePaletteNumber = (arrangementCellData >>> 18) & 0b111;
-      if (!isType(encodedMinitilePaletteNumber, 'Uint3')) {
+      const encodedSubpaletteNumber = (arrangementCellData >>> 18) & 0b111;
+      if (!isType(encodedSubpaletteNumber, 'Uint3')) {
         throw new CaveBoyError(
-          `Parsed minitilePaletteNumber value '${encodedMinitilePaletteNumber}' is invalid.`
+          `Parsed subpaletteNumber value '${encodedSubpaletteNumber}' is invalid.`
         );
       }
-      this.encodedMinitilePaletteNumber = encodedMinitilePaletteNumber;
+      this.encodedSubpaletteNumber = encodedSubpaletteNumber;
 
       // Bits 17 through 8 (0000 00[00 0000 0000] 0000 0000).
       const minitileNumber = (arrangementCellData >>> 8) & 0b1111111111;
@@ -200,7 +198,7 @@ export default class ArrangementCell {
     } else if (coilSnakeArrangementCellString === undefined) {
       this.flippedVertically = false;
       this.flippedHorizontally = false;
-      this.encodedMinitilePaletteNumber = 0;
+      this.encodedSubpaletteNumber = 0;
       this.minitileNumber = 0;
       this.isSolid = false;
       this.flag0x40 = false;
@@ -219,20 +217,20 @@ export default class ArrangementCell {
 
   /**
    * Return an 8 x 8 CaveBoyImageData object displaying the Minitile
-   * referenced by this ArrangementCell rendered with the MinitilePalette
+   * referenced by this ArrangementCell rendered with the Subpalette
    * referenced by this ArrangementCell, given the provided Minitile array
    * and PaletteSet. The flip state of the image is determined by
    * ArrangementCell's flippedHorizontally and flippedVertically values.
    * @param minitiles - The array of Minitiles from which to retrieve the
    * displayed Minitile using this ArrangementCell's minitileNumber.
    * @param paletteSet - The PaletteSet from which to retrieve the applied
-   * MinitilePalette using this ArrangementCell's minitilePaletteNumber.
+   * Subpalette using this ArrangementCell's subpaletteNumber.
    * @param colorComponentScalerName - The name of the ColorComponentScaler to
    * use when converting from the five-bit component values of the Colors to the
    * eight-bit color component values of the image data. Optional. Defaults to
    * the user-configured scaler.
    * @returns An 8 x 8 CaveBoyImageData object displaying the Minitile
-   * referenced by this ArrangementCell rendered with the MinitilePalette
+   * referenced by this ArrangementCell rendered with the Subpalette
    * referenced by this ArrangementCell, with the configured flip state.
    */
   public getImageData(
@@ -241,7 +239,7 @@ export default class ArrangementCell {
     colorComponentScalerName?: ColorComponentScalerName
   ): CaveBoyImageData {
     return minitiles[this.minitileNumber].getImageData(
-      paletteSet.minitilePalettes[this.minitilePaletteNumber],
+      paletteSet.subpalettes[this.subpaletteNumber],
       this.flippedHorizontally,
       this.flippedVertically,
       colorComponentScalerName
@@ -264,7 +262,7 @@ export default class ArrangementCell {
       arrangementCellData |= 0b010000000000000000000000;
     }
 
-    arrangementCellData |= this.encodedMinitilePaletteNumber << 18;
+    arrangementCellData |= this.encodedSubpaletteNumber << 18;
     arrangementCellData |= this.minitileNumber << 8;
 
     if (this.isSolid) {

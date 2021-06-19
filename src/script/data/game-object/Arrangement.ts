@@ -55,7 +55,7 @@ export default class Arrangement {
    * @param minitiles - The array of Minitiles from which to retrieve the
    * displayed Minitile for each cell.
    * @param paletteSet - The PaletteSet from which to retrieve the applied
-   * MinitilePalette for each cell.
+   * Subpalette for each cell.
    * @param colorComponentScalerName - The name of the ColorComponentScaler to
    * use when converting from the five-bit component values of the Colors to the
    * eight-bit color component values of the image data. Optional. Defaults to

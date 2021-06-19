@@ -20,7 +20,7 @@ describe('Arrangement', function () {
       const arrangementCell = new ArrangementCell();
       arrangementCell.flippedVertically = true;
       arrangementCell.flippedHorizontally = true;
-      arrangementCell.minitilePaletteNumber = 5;
+      arrangementCell.subpaletteNumber = 5;
       arrangementCell.minitileNumber = 511;
       arrangementCell.isSolid = true;
       arrangementCell.flag0x40 = true;
@@ -41,7 +41,7 @@ describe('Arrangement', function () {
   });
 
   describe('getImageData()', function () {
-    it('Draws the correct Minitiles with the correct MinitilePalette given the provided values.', function () {
+    it('Draws the correct Minitiles with the correct Subpalette given the provided values.', function () {
       const paletteSet = new PaletteSet(
         '000uuqoqjqf9koivv0ieuv1b2vd5ncafevvpoojkkdgha666' +
           '000uuqoqjecljjoenvhevv1b2vd5ncafevmdqfejbdj99666' +

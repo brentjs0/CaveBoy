@@ -60,7 +60,7 @@ export type CoilSnakeColorString = Lowercase<string>;
  * A string expression of a 16-color palette as encoded by CoilSnake.
  * Consists of 48 base-32 digits. Must be lowercase.
  */
-export type CoilSnakeMinitilePaletteString = string;
+export type CoilSnakeSubpaletteString = string;
 
 /**
  * A 64-character string expression of a minitile layer image as encoded by
@@ -77,7 +77,7 @@ export type CoilSnakeMinitileLayerString = string;
 export type CoilSnakeMinitileString = string;
 
 /**
- * A string expression containing the Minitile number, Minitile Palette number,
+ * A string expression containing the Minitile number, Subpalette number,
  * flip state, and surface flags for a single cell of a 4 x 4 arrangement.
  * Encoded by CoilSnake as a string of six hexadecimal digits. Must be lowercase.
  *
@@ -92,7 +92,7 @@ export type CoilSnakeMinitileString = string;
 export type CoilSnakeArrangementCellString = string;
 
 /**
- * A string expression of a set of six sixteen-color MinitilePalettes as
+ * A string expression of a set of six sixteen-color Subpalettes as
  * encoded by CoilSnake. Consists of 288 base-32 digits. Must be lowercase.
  */
 export type CoilSnakePaletteSetString = string;
@@ -122,7 +122,7 @@ export type TypeName =
   | 'Uint9'
   | 'HexadecimalColorString'
   | 'CoilSnakeColorString'
-  | 'CoilSnakeMinitilePaletteString'
+  | 'CoilSnakeSubpaletteString'
   | 'CoilSnakeMinitileLayerString'
   | 'CoilSnakeMinitileString'
   | 'CoilSnakeArrangementCellString'
@@ -143,7 +143,7 @@ export type Type<T extends TypeName> =
  : T extends 'Uint9' ? Uint9
  : T extends 'HexadecimaColorString' ? HexadecimalColorString
  : T extends 'CoilSnakeColorString' ? CoilSnakeColorString
- : T extends 'CoilSnakeMinitilePaletteString' ? CoilSnakeMinitilePaletteString
+ : T extends 'CoilSnakeSubpaletteString' ? CoilSnakeSubpaletteString
  : T extends 'CoilSnakeMinitileLayerString' ? CoilSnakeMinitileLayerString
  : T extends 'CoilSnakeMinitileString' ? CoilSnakeMinitileString
  : T extends 'CoilSnakeArrangementCellString' ? CoilSnakeArrangementCellString
@@ -184,7 +184,7 @@ export function isType<T extends TypeName>(
       );
     case 'CoilSnakeColorString':
       return typeof value === 'string' && /^[0-9a-v]{3}$/.test(value);
-    case 'CoilSnakeMinitilePaletteString':
+    case 'CoilSnakeSubpaletteString':
       return typeof value === 'string' && /^[0-9a-v]{48}$/.test(value);
     case 'CoilSnakeMinitileLayerString':
       return typeof value === 'string' && /^[0-9a-f]{64}$/.test(value);
