@@ -2,6 +2,7 @@ import { isType } from '@/script/base/primitive-types';
 import Color from '@/script/data/game-object/Color';
 import PaletteSet from '@/script/data/game-object/PaletteSet';
 import { expect } from 'chai';
+import { createCanvas } from '../../../../test-methods';
 
 describe('PaletteSet', function () {
   const paletteSetColors = [

@@ -1,8 +1,10 @@
 import { isType } from '@/script/base/primitive-types';
 import Color from '@/script/data/game-object/Color';
 import MinitilePalette from '@/script/data/game-object/MinitilePalette';
+import PaletteSet from '@/script/data/game-object/PaletteSet';
 import { expect } from 'chai';
 import times from 'lodash/times';
+import { createCanvas } from '../../../../test-methods';
 
 describe('MinitilePalette', function () {
   describe('constructor()', function () {
@@ -42,12 +44,12 @@ describe('MinitilePalette', function () {
 
   describe('getPreviewImageData()', function () {
     it('Generates an 8 x 2 CaveBoyImageData object.', function () {
-      const minitilePalette = new MinitilePalette(
+      const imageData = new MinitilePalette(
         '000jj6kk8gg6cc4883bbchodagcqpknmflkcjh9hg7443000'
       ).getPreviewImageData();
 
-      expect(minitilePalette.height).to.equal(2);
-      expect(minitilePalette.width).to.equal(8);
+      expect(imageData.height).to.equal(2);
+      expect(imageData.width).to.equal(8);
     });
 
     it('Draws the colors from left to right, wrapping from top to bottom.', function () {

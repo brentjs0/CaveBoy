@@ -1,9 +1,41 @@
+import { isValidNumber } from '@/script/base/primitive-types';
+import { expect } from 'chai';
 import {
   testIsTypeForIntType,
   testIsTypeForStringType,
 } from '../../../test-methods';
 
 describe('primitive-types', function () {
+  describe('isValidNumber()', function () {
+    it('Returns true for numbers that meet constraints', function () {
+      expect(isValidNumber(0, 0)).to.be.true;
+      expect(isValidNumber(50.12345, -999, 51, false)).to.be.true;
+      expect(isValidNumber(1, undefined, 1)).to.be.true;
+    });
+
+    it('Returns false for non-number values.', function () {
+      expect(isValidNumber(undefined, 0)).to.be.false;
+      expect(isValidNumber(null, 0)).to.be.false;
+      expect(isValidNumber(() => 99, 0)).to.be.false;
+      expect(isValidNumber('random string', 0)).to.be.false;
+    });
+
+    it('Returns false for numbers below range when validRangeLow is given.', function () {
+      expect(isValidNumber(-901, -900)).to.be.false;
+      expect(isValidNumber(-0.0001, 0)).to.be.false;
+    });
+
+    it('Returns false for numbers above range when validRangeHigh is given.', function () {
+      expect(isValidNumber(2, undefined, 1)).to.be.false;
+      expect(isValidNumber(-0.0001, undefined, -3)).to.be.false;
+    });
+
+    it('Returns false for non-integers when mustBeInteger is true.', function () {
+      expect(isValidNumber(2.5)).to.be.false;
+      expect(isValidNumber(-0.0001)).to.be.false;
+    });
+  });
+
   testIsTypeForIntType(
     'SafeInteger',
     Number.MIN_SAFE_INTEGER,

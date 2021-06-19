@@ -69,16 +69,16 @@ describe('helpers', function () {
       }
     });
     it('Throws an Error when number is not an integer.', function () {
-      expect(() => getBitValue(0.5, 1)).to.throw;
+      expect(() => getBitValue(0.5, 1)).to.throw();
     });
     it('Throws an Error when place is not an integer.', function () {
-      expect(() => getBitValue(0, 0.5)).to.throw;
+      expect(() => getBitValue(0, 0.5)).to.throw();
     });
     it('Throws an Error when place is 31 or greater.', function () {
-      expect(() => getBitValue(0, 31)).to.throw;
+      expect(() => getBitValue(0, 31)).to.throw();
     });
     it('Throws an Error when place is negative.', function () {
-      expect(() => getBitValue(0, -1)).to.throw;
+      expect(() => getBitValue(0, -1)).to.throw();
     });
   });
 });

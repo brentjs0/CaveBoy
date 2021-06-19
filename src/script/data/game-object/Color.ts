@@ -226,7 +226,8 @@ export default class Color {
     );
 
     // prettier-ignore
-    const colorString = `#${redNumber .toString(16) .padStart(2, '0')}${greenNumber .toString(16) .padStart(2, '0')}${blueNumber.toString(16).padStart(2, '0')}`;
+    const colorString = 
+      `#${redNumber.toString(16).padStart(2, '0')}${greenNumber.toString(16).padStart(2, '0')}${blueNumber.toString(16).padStart(2, '0')}`;
 
     if (isType(colorString, 'HexadecimalColorString')) {
       return colorString;

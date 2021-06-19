@@ -2,9 +2,15 @@ import CaveBoyError from '@/script/base/error/CaveBoyError';
 import {
   CoilSnakeGraphicSetString,
   isType,
+  isValidNumber,
 } from '@/script/base/primitive-types';
 import GraphicSet from '@/script/data/game-object/GraphicSet';
 import Tileset from '@/script/data/game-object/Tileset';
+import jsYaml from 'js-yaml';
+import {
+  CSMapSector,
+  validateCSMapSector,
+} from '../data/yaml-object/CSMapSector';
 
 /**
  * Return the Tileset and GraphicSets encoded in the provided *.fts
@@ -74,6 +80,15 @@ export function buildFTSFileContents(
   return `${minitileRegion}\n\n\n${graphicSetRegion}\n\n\n${arrangementRegion}\n`;
 }
 
+/**
+ * Return a generator of CoilSnakeGraphicSetString substrings of
+ * the provided graphic set string region (which is second of the three
+ * regions in an *.fts file).
+ * @param graphicSetStringRegion - The string contents of the second of
+ * the three regions in an *.fts file.
+ * @returns A generator of CoilSnakeGraphicSetString substrings of the
+ * provided graphic set string region
+ */
 function* splitCoilSnakeGraphicSetStrings(
   graphicSetStringRegion: string
 ): Generator<CoilSnakeGraphicSetString> {
@@ -126,6 +141,77 @@ function* splitCoilSnakeGraphicSetStrings(
   }
 
   yield coilSnakeGraphicSetString;
+}
+
+/**
+ * Return an array of all the map sector objects
+ * in the provided string contents of a map_sectors.yml
+ * file.
+ * @param mapSectorsFileContents - The contents of a
+ * map_sectors.yml file as a string.
+ * @returns An array of all the map sector objects in
+ * the provided string.
+ */
+export function parseMapSectorsFileContents(
+  mapSectorsFileContents: string
+): CSMapSector[] {
+  const parsedYaml = jsYaml.load(mapSectorsFileContents);
+  if (
+    typeof parsedYaml !== 'object' ||
+    parsedYaml === null ||
+    Array.isArray(parsedYaml)
+  ) {
+    throw new CaveBoyError(
+      'map_sectors.yml could not be parsed as a YAML object.'
+    );
+  }
+
+  const csMapSectors: CSMapSector[] = [];
+  let yamlEntries: [string, any][] = Object.entries(parsedYaml);
+  for (let [propertyName, csMapSector] of yamlEntries) {
+    let elementNumber = parseInt(propertyName, 10);
+    if (!isValidNumber(elementNumber, 0)) {
+      throw new CaveBoyError(
+        `map_sectors.yml element number '${propertyName}' was not a valid number.`
+      );
+    }
+    let elementValidationMessages = [...validateCSMapSector(csMapSector)];
+    if (elementValidationMessages.length > 0) {
+      let errorMessage =
+        `map_sectors.yml element ${elementNumber} was invalid:\n * ` +
+        elementValidationMessages.join('\n * ');
+
+      throw new CaveBoyError(errorMessage);
+    }
+
+    csMapSectors[elementNumber] = csMapSector;
+  }
+
+  // This accounts for undefined elements, unlike Array.prototype.length().
+  let elementCount = csMapSectors.reduce((total, _) => ++total, 0);
+  if (elementCount !== 2560) {
+    throw new CaveBoyError(
+      `map_sectors.yml did not contain 2560 unique element numbers. Are there missing or duplicated numbers?`
+    );
+  }
+
+  return csMapSectors;
+}
+
+/**
+ * Return an array of objects as YAML with unquoted numeric keys
+ * at the top level for each index.
+ * @param objects - An array of objects to serialize as YAML.
+ * @returns An array of objects as YAML with unquoted numeric keys.
+ */
+export function dumpArrayAsYAMLWithNumericKeys(objects: object[]): string {
+  let nodes = [];
+  for (let i = 0; i < objects.length; ++i) {
+    let node = `${i}:\n  `;
+    node += jsYaml.dump(objects[i]).trim().split('\n').join('\n  ');
+    nodes.push(node);
+  }
+  return `${nodes.join('\n')}\n`;
 }
 
 function getCharacterIfExists(str: string, characterIndex: number): string {

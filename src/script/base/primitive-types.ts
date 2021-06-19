@@ -1,24 +1,5 @@
 import CaveBoyError from '@/script/base/error/CaveBoyError';
-
-/**
- * A name of one of the types defined by CaveBoy.
- */
-export type TypeName =
-  | 'SafeInteger'
-  | 'Uint3'
-  | 'Uint4'
-  | 'Uint5'
-  | 'Uint8'
-  | 'Uint9'
-  | 'HexadecimalColorString'
-  | 'CoilSnakeColorString'
-  | 'CoilSnakeMinitilePaletteString'
-  | 'CoilSnakeMinitileLayerString'
-  | 'CoilSnakeMinitileString'
-  | 'CoilSnakeArrangementCellString'
-  | 'CoilSnakePaletteSetString'
-  | 'CoilSnakeArrangementString'
-  | 'CoilSnakeGraphicSetString';
+import { isInteger } from 'lodash';
 
 /**
  * A number with no significant fractional value that is within the safe range
@@ -123,7 +104,6 @@ export type CoilSnakePaletteSetString = string;
 export type CoilSnakeArrangementString = string;
 
 /**
- *
  * A multi-line string expression of one to eight CoilSnakePaletteSetStrings
  * prefixed with their GraphicSet number and their PaletteSet number
  * within the list. Lines consist of 290 base-32 digits each. Must be lowercase.
@@ -131,26 +111,46 @@ export type CoilSnakeArrangementString = string;
 export type CoilSnakeGraphicSetString = string;
 
 /**
- * A CaveBoy-defined type with the name T.
+ * A name of one of the types defined by CaveBoy.
+ */
+export type TypeName =
+  | 'SafeInteger'
+  | 'Uint3'
+  | 'Uint4'
+  | 'Uint5'
+  | 'Uint8'
+  | 'Uint9'
+  | 'HexadecimalColorString'
+  | 'CoilSnakeColorString'
+  | 'CoilSnakeMinitilePaletteString'
+  | 'CoilSnakeMinitileLayerString'
+  | 'CoilSnakeMinitileString'
+  | 'CoilSnakeArrangementCellString'
+  | 'CoilSnakePaletteSetString'
+  | 'CoilSnakeArrangementString'
+  | 'CoilSnakeGraphicSetString';
+
+/**
+ * A CaveBoy-defined primitive type with the name T.
  */
 // prettier-ignore
 export type Type<T extends TypeName> =
-    T extends 'SafeInteger' ? SafeInteger
-  : T extends 'Uint3' ? Uint3
-  : T extends 'Uint4' ? Uint4
-  : T extends 'Uint5' ? Uint5
-  : T extends 'Uint8' ? Uint8
-  : T extends 'Uint9' ? Uint9
-  : T extends 'HexadecimaColorString' ? HexadecimalColorString
-  : T extends 'CoilSnakeColorString' ? CoilSnakeColorString
-  : T extends 'CoilSnakeMinitilePaletteString' ? CoilSnakeMinitilePaletteString
-  : T extends 'CoilSnakeMinitileLayerString' ? CoilSnakeMinitileLayerString
-  : T extends 'CoilSnakeMinitileString' ? CoilSnakeMinitileString
-  : T extends 'CoilSnakeArrangementCellString' ? CoilSnakeArrangementCellString
-  : T extends 'CoilSnakePaletteSetString' ? CoilSnakePaletteSetString
-  : T extends 'CoilSnakeArrangementString' ? CoilSnakeArrangementString
-  : T extends 'CoilSnakeGraphicSetString' ? CoilSnakeGraphicSetString
-  : never;
+   T extends 'SafeInteger' ? SafeInteger
+ : T extends 'Uint3' ? Uint3
+ : T extends 'Uint4' ? Uint4
+ : T extends 'Uint5' ? Uint5
+ : T extends 'Uint8' ? Uint8
+ : T extends 'Uint9' ? Uint9
+ : T extends 'HexadecimaColorString' ? HexadecimalColorString
+ : T extends 'CoilSnakeColorString' ? CoilSnakeColorString
+ : T extends 'CoilSnakeMinitilePaletteString' ? CoilSnakeMinitilePaletteString
+ : T extends 'CoilSnakeMinitileLayerString' ? CoilSnakeMinitileLayerString
+ : T extends 'CoilSnakeMinitileString' ? CoilSnakeMinitileString
+ : T extends 'CoilSnakeArrangementCellString' ? CoilSnakeArrangementCellString
+ : T extends 'CoilSnakePaletteSetString' ? CoilSnakePaletteSetString
+ : T extends 'CoilSnakeArrangementString' ? CoilSnakeArrangementString
+ : T extends 'CoilSnakeGraphicSetString' ? CoilSnakeGraphicSetString
+ : never;
 
 /**
  * Return true if the provided value meets the constraints to be considered the
@@ -168,40 +168,15 @@ export function isType<T extends TypeName>(
     case 'SafeInteger':
       return Number.isSafeInteger(value);
     case 'Uint3':
-      return (
-        typeof value === 'number' &&
-        Number.isInteger(value) &&
-        value >= 0 &&
-        value <= 7
-      );
+      return isValidNumber(value, 0, 7);
     case 'Uint4':
-      return (
-        typeof value === 'number' &&
-        Number.isInteger(value) &&
-        value >= 0 &&
-        value <= 15
-      );
+      return isValidNumber(value, 0, 15);
     case 'Uint5':
-      return (
-        typeof value === 'number' &&
-        Number.isInteger(value) &&
-        value >= 0 &&
-        value <= 31
-      );
+      return isValidNumber(value, 0, 31);
     case 'Uint8':
-      return (
-        typeof value === 'number' &&
-        Number.isInteger(value) &&
-        value >= 0 &&
-        value <= 255
-      );
+      return isValidNumber(value, 0, 255);
     case 'Uint9':
-      return (
-        typeof value === 'number' &&
-        Number.isInteger(value) &&
-        value >= 0 &&
-        value <= 511
-      );
+      return isValidNumber(value, 0, 511);
     case 'HexadecimalColorString':
       return (
         typeof value === 'string' &&
@@ -234,4 +209,32 @@ export function isType<T extends TypeName>(
     default:
       throw new CaveBoyError(`Type constraints for '${type}' are not defined.`);
   }
+}
+
+/**
+ * Return true if the provided value is a number that meets the specified
+ * constraints.
+ * @param value - The value to check.
+ * @param validRangeLow - The lowest possible value for which to return true.
+ * Optional. No lower bound is enforced if omitted.
+ * @param validRangeHigh - The highest possible value for which to return true.
+ * Optional. No upper bound is enforced if omitted.
+ * @param mustBeInteger - Whethe to require that the value be an integer in
+ * order to return true.
+ * @returns true if the provided value is a number that meets the specified
+ * constraints. Otherwise false.
+ */
+export function isValidNumber(
+  value: any,
+  validRangeLow?: number,
+  validRangeHigh?: number,
+  mustBeInteger: boolean = true
+) {
+  return (
+    typeof value === 'number' &&
+    !isNaN(value) &&
+    (validRangeLow === undefined || value >= validRangeLow) &&
+    (validRangeHigh === undefined || value <= validRangeHigh) &&
+    (!mustBeInteger || Number.isInteger(value))
+  );
 }
