@@ -2,13 +2,13 @@ import { isType } from '@/script/base/primitive-types';
 import ArrangementCell from '@/script/data/game-object/ArrangementCell';
 import Color from '@/script/data/game-object/Color';
 import Minitile from '@/script/data/game-object/Minitile';
-import PaletteSet from '@/script/data/game-object/PaletteSet';
+import Palette from '@/script/data/game-object/Palette';
 import { expect } from 'chai';
 import times from 'lodash/times';
 
 describe('ArrangementCell', function () {
   describe('constructor()', function () {
-    it('Initializes values from a CoilSnakeArrangementCellString.', function () {
+    it('Initializes values from a CSArrangementCellString.', function () {
       const arrangementCell = new ArrangementCell(
         // VH?PPP0TTTTTTTTTSSSSSSSS
         (0b110111011111111111111111).toString(16)
@@ -50,7 +50,7 @@ describe('ArrangementCell', function () {
   });
   describe('getImageData()', function () {
     it('Draws the correct Minitile with the correct Subpalette given the provided values.', function () {
-      const paletteSet = new PaletteSet(
+      const palette = new Palette(
         '000000000000000000000000000000000000000000000644' +
           '000000000000000000000000000000000000000000000644' +
           '000000000000000000000000000000000000000000000644' +
@@ -68,7 +68,7 @@ describe('ArrangementCell', function () {
       const cbImageData = new ArrangementCell(
         // VH?PPP0TTTTTTTTTSSSSSSSS
         (0b000111000000001011111111).toString(16)
-      ).getImageData(minitiles, paletteSet);
+      ).getImageData(minitiles, palette);
 
       const one = new Color(30, 30, 26).toUint8ClampedArray();
       const two = new Color(24, 26, 19).toUint8ClampedArray();
@@ -91,8 +91,8 @@ describe('ArrangementCell', function () {
       expect(cbImageData.data).to.eql(expectedDataValue);
     });
   });
-  describe('toCoilSnakeArrangementCellString()', function () {
-    it('Generates a valid CoilSnakeArrangementCellString.', function () {
+  describe('toCSArrangementCellString()', function () {
+    it('Generates a valid CSArrangementCellString.', function () {
       const arrangementCell = new ArrangementCell();
       arrangementCell.flippedVertically = false;
       arrangementCell.flippedHorizontally = false;
@@ -107,11 +107,10 @@ describe('ArrangementCell', function () {
       arrangementCell.coversUpperBody = true;
       arrangementCell.coversLowerBody = true;
 
-      const coilSnakeArrangementCellString = arrangementCell.toCoilSnakeArrangementCellString();
-      expect(coilSnakeArrangementCellString).to.equal('09ffff');
-      expect(
-        isType(coilSnakeArrangementCellString, 'CoilSnakeArrangementCellString')
-      ).to.be.true;
+      const csArrangementCellString = arrangementCell.toCSArrangementCellString();
+      expect(csArrangementCellString).to.equal('09ffff');
+      expect(isType(csArrangementCellString, 'CSArrangementCellString')).to.be
+        .true;
     });
   });
 });

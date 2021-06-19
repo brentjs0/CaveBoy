@@ -3,13 +3,13 @@ import { ColorComponentScalerName } from '@/script/base/ColorComponentScaler';
 import CaveBoyError from '@/script/base/error/CaveBoyError';
 import { getBitValue } from '@/script/base/helpers';
 import {
-  CoilSnakeArrangementCellString,
+  CSArrangementCellString,
   isType,
   Uint3,
   Uint9,
 } from '@/script/base/primitive-types';
 import Minitile from '@/script/data/game-object/Minitile';
-import PaletteSet from '@/script/data/game-object/PaletteSet';
+import Palette from '@/script/data/game-object/Palette';
 
 /**
  * A cell in 4 x 4 Arrangement. Encodes the Minitile number, Subpalette
@@ -50,8 +50,8 @@ export default class ArrangementCell {
    * values for the Minitile displayed by this cell when it is rendered in
    * the map Sector.
    *
-   * The PaletteSet it refers to is determined by the graphicSetNumber and
-   * paletteSetNumber assigned to the Sector.
+   * The Palette it refers to is determined by the graphicSetNumber and
+   * paletteNumber assigned to the Sector.
    */
   public get subpaletteNumber(): Uint3 {
     const subpaletteNumber =
@@ -148,19 +148,15 @@ export default class ArrangementCell {
 
   /**
    * Instantiate an ArrangementCell, optionally with its field values initialized
-   * by parsing the provided CoilSnakeArrangementCellString.
-   * @param coilSnakeArrangementCellString - A CoilSnakeArrangementCellString
+   * by parsing the provided CSArrangementCellString.
+   * @param csArrangementCellString - A CSArrangementCellString
    * expression of the Minitile number, Subpalette number, flip state,
    * and surface flags for this ArrangementCell. Optional. Default property
    * values are used if no value is provided.
    */
-  public constructor(
-    coilSnakeArrangementCellString?: CoilSnakeArrangementCellString
-  ) {
-    if (
-      isType(coilSnakeArrangementCellString, 'CoilSnakeArrangementCellString')
-    ) {
-      let arrangementCellData = parseInt(coilSnakeArrangementCellString, 16);
+  public constructor(csArrangementCellString?: CSArrangementCellString) {
+    if (isType(csArrangementCellString, 'CSArrangementCellString')) {
+      let arrangementCellData = parseInt(csArrangementCellString, 16);
 
       // Bits 23 through 22 ([00]00 0000 0000 0000 0000 0000).
       this.flippedVertically = getBitValue(arrangementCellData, 23);
@@ -195,7 +191,7 @@ export default class ArrangementCell {
       this.inflictsSunstroke = getBitValue(arrangementCellData, 2);
       this.coversUpperBody = getBitValue(arrangementCellData, 1);
       this.coversLowerBody = getBitValue(arrangementCellData, 0);
-    } else if (coilSnakeArrangementCellString === undefined) {
+    } else if (csArrangementCellString === undefined) {
       this.flippedVertically = false;
       this.flippedHorizontally = false;
       this.encodedSubpaletteNumber = 0;
@@ -210,7 +206,7 @@ export default class ArrangementCell {
       this.coversLowerBody = false;
     } else {
       throw new CaveBoyError(
-        `An invalid combination of arguments was provided to the CoilSnakeArrangementCell constructor: ${arguments}.`
+        `An invalid combination of arguments was provided to the CSArrangementCell constructor: ${arguments}.`
       );
     }
   }
@@ -219,11 +215,11 @@ export default class ArrangementCell {
    * Return an 8 x 8 CaveBoyImageData object displaying the Minitile
    * referenced by this ArrangementCell rendered with the Subpalette
    * referenced by this ArrangementCell, given the provided Minitile array
-   * and PaletteSet. The flip state of the image is determined by
+   * and Palette. The flip state of the image is determined by
    * ArrangementCell's flippedHorizontally and flippedVertically values.
    * @param minitiles - The array of Minitiles from which to retrieve the
    * displayed Minitile using this ArrangementCell's minitileNumber.
-   * @param paletteSet - The PaletteSet from which to retrieve the applied
+   * @param palette - The Palette from which to retrieve the applied
    * Subpalette using this ArrangementCell's subpaletteNumber.
    * @param colorComponentScalerName - The name of the ColorComponentScaler to
    * use when converting from the five-bit component values of the Colors to the
@@ -235,11 +231,11 @@ export default class ArrangementCell {
    */
   public getImageData(
     minitiles: Minitile[],
-    paletteSet: PaletteSet,
+    palette: Palette,
     colorComponentScalerName?: ColorComponentScalerName
   ): CaveBoyImageData {
     return minitiles[this.minitileNumber].getImageData(
-      paletteSet.subpalettes[this.subpaletteNumber],
+      palette.subpalettes[this.subpaletteNumber],
       this.flippedHorizontally,
       this.flippedVertically,
       colorComponentScalerName
@@ -248,11 +244,11 @@ export default class ArrangementCell {
 
   /**
    * Return an expression of this ArrangementCell as a six-digit hexadecimal
-   * CoilSnakeArrangementCellString.
+   * CSArrangementCellString.
    * @returns An expression of this ArrangementCell as a six-digit hexadecimal
-   * CoilSnakeArrangementCellString.
+   * CSArrangementCellString.
    */
-  public toCoilSnakeArrangementCellString(): CoilSnakeArrangementCellString {
+  public toCSArrangementCellString(): CSArrangementCellString {
     let arrangementCellData = 0b000000000000000000000000;
 
     if (this.flippedVertically) {

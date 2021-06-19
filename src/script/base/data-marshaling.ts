@@ -1,6 +1,6 @@
 import CaveBoyError from '@/script/base/error/CaveBoyError';
 import {
-  CoilSnakeGraphicSetString,
+  CSGraphicSetString,
   isType,
   isValidNumber,
 } from '@/script/base/primitive-types';
@@ -36,10 +36,8 @@ export function parseFTSFileContents(
   const tileset = new Tileset(ftsFileRegions[0], ftsFileRegions[2]);
   const graphicSets = [];
 
-  for (let coilSnakeGraphicSetString of splitCoilSnakeGraphicSetStrings(
-    ftsFileRegions[1]
-  )) {
-    let graphicSet = new GraphicSet(coilSnakeGraphicSetString, tilesetNumber);
+  for (let csGraphicSetString of splitCSGraphicSetStrings(ftsFileRegions[1])) {
+    let graphicSet = new GraphicSet(csGraphicSetString, tilesetNumber);
     graphicSets[graphicSet.idNumber] = graphicSet;
   }
 
@@ -64,16 +62,16 @@ export function buildFTSFileContents(
   graphicSets: GraphicSet[]
 ): string {
   const minitileRegion = tileset.minitiles
-    .map((mt) => mt.toCoilSnakeMinitileString())
+    .map((mt) => mt.toCSMinitileString())
     .join('\n\n');
 
   const graphicSetRegion = graphicSets
     .filter((sgs) => sgs.tilesetNumber == tilesetNumber)
-    .map((sgs) => sgs.toCoilSnakeGraphicSetString())
+    .map((sgs) => sgs.toCSGraphicSetString())
     .join('\n');
 
   const arrangementRegion = tileset.arrangements
-    .map((a) => a.toCoilSnakeArrangementString())
+    .map((a) => a.toCSArrangementString())
     .join('\n');
 
   // prettier-ignore
@@ -81,28 +79,28 @@ export function buildFTSFileContents(
 }
 
 /**
- * Return a generator of CoilSnakeGraphicSetString substrings of
+ * Return a generator of CSGraphicSetString substrings of
  * the provided graphic set string region (which is second of the three
  * regions in an *.fts file).
  * @param graphicSetStringRegion - The string contents of the second of
  * the three regions in an *.fts file.
- * @returns A generator of CoilSnakeGraphicSetString substrings of the
+ * @returns A generator of CSGraphicSetString substrings of the
  * provided graphic set string region
  */
-function* splitCoilSnakeGraphicSetStrings(
+function* splitCSGraphicSetStrings(
   graphicSetStringRegion: string
-): Generator<CoilSnakeGraphicSetString> {
+): Generator<CSGraphicSetString> {
   graphicSetStringRegion = graphicSetStringRegion.trim();
 
   if (graphicSetStringRegion.length < 290) {
     throw new CaveBoyError(
-      'The data passed to splitCoilSnakeGraphicSetStrings() was too short.'
+      'The data passed to splitCSGraphicSetStrings() was too short.'
     );
   }
 
   let currentGraphicSetSetStartIndex = 0;
   let currentGraphicSetId = graphicSetStringRegion[0];
-  let coilSnakeGraphicSetString;
+  let csGraphicSetString;
 
   for (let h = -1, i = 0; i < graphicSetStringRegion.length; ++h, ++i) {
     let previousChar = getCharacterIfExists(graphicSetStringRegion, h);
@@ -113,34 +111,34 @@ function* splitCoilSnakeGraphicSetStrings(
       !isEndOfLineCharacter(char) &&
       char !== currentGraphicSetId
     ) {
-      coilSnakeGraphicSetString = graphicSetStringRegion
+      csGraphicSetString = graphicSetStringRegion
         .substring(currentGraphicSetSetStartIndex, i)
         .trim();
 
-      if (!isType(coilSnakeGraphicSetString, 'CoilSnakeGraphicSetString')) {
+      if (!isType(csGraphicSetString, 'CSGraphicSetString')) {
         throw new CaveBoyError(
-          `splitCoilSnakeGraphicSetStrings() encountered a value that is not a CoilSnakeGraphicSetString:\n${coilSnakeGraphicSetString}`
+          `splitCSGraphicSetStrings() encountered a value that is not a CSGraphicSetString:\n${csGraphicSetString}`
         );
       }
 
-      yield coilSnakeGraphicSetString;
+      yield csGraphicSetString;
 
       currentGraphicSetSetStartIndex = i;
       currentGraphicSetId = char;
     }
   }
 
-  coilSnakeGraphicSetString = graphicSetStringRegion
+  csGraphicSetString = graphicSetStringRegion
     .substring(currentGraphicSetSetStartIndex)
     .trim();
 
-  if (!isType(coilSnakeGraphicSetString, 'CoilSnakeGraphicSetString')) {
+  if (!isType(csGraphicSetString, 'CSGraphicSetString')) {
     throw new CaveBoyError(
-      `splitCoilSnakeGraphicSetStrings() encountered a value that is not a CoilSnakeGraphicSetString:\n${coilSnakeGraphicSetString}`
+      `splitCSGraphicSetStrings() encountered a value that is not a CSGraphicSetString:\n${csGraphicSetString}`
     );
   }
 
-  yield coilSnakeGraphicSetString;
+  yield csGraphicSetString;
 }
 
 /**

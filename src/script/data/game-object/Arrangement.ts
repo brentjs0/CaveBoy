@@ -2,13 +2,10 @@ import CaveBoyImageData from '@/script/base/CaveBoyImageData';
 import { ColorComponentScalerName } from '@/script/base/ColorComponentScaler';
 import CaveBoyError from '@/script/base/error/CaveBoyError';
 import { segmentString } from '@/script/base/helpers';
-import {
-  CoilSnakeArrangementString,
-  isType,
-} from '@/script/base/primitive-types';
+import { CSArrangementString, isType } from '@/script/base/primitive-types';
 import ArrangementCell from '@/script/data/game-object/ArrangementCell';
 import Minitile from '@/script/data/game-object/Minitile';
-import PaletteSet from '@/script/data/game-object/PaletteSet';
+import Palette from '@/script/data/game-object/Palette';
 import times from 'lodash/times';
 
 /**
@@ -25,25 +22,25 @@ export default class Arrangement {
 
   /**
    * Instantiate an Arrangement, optionally with its cells initialized by parsing
-   * the provided CoilSnakeArrangementString.
-   * @param coilSnakeArrangementString - A CoilSnakeArrangementString expression
+   * the provided CSArrangementString.
+   * @param csArrangementString - A CSArrangementString expression
    * of the sixteen cells contained in the arrangement. Optional. Default cells
    * are created if no value is provided.
    */
-  public constructor(coilSnakeArrangementString?: CoilSnakeArrangementString) {
-    if (isType(coilSnakeArrangementString, 'CoilSnakeArrangementString')) {
+  public constructor(csArrangementString?: CSArrangementString) {
+    if (isType(csArrangementString, 'CSArrangementString')) {
       this.cells = [];
-      for (let coilSnakeArrangementCellString of segmentString(
-        coilSnakeArrangementString,
+      for (let csArrangementCellString of segmentString(
+        csArrangementString,
         6
       )) {
-        this.cells.push(new ArrangementCell(coilSnakeArrangementCellString));
+        this.cells.push(new ArrangementCell(csArrangementCellString));
       }
-    } else if (coilSnakeArrangementString === undefined) {
+    } else if (csArrangementString === undefined) {
       this.cells = times(16, () => new ArrangementCell());
     } else {
       throw new CaveBoyError(
-        `An invalid combination of arguments was provided to the CoilSnakeArrangement constructor: ${arguments}.`
+        `An invalid combination of arguments was provided to the CSArrangement constructor: ${arguments}.`
       );
     }
   }
@@ -51,10 +48,10 @@ export default class Arrangement {
   /**
    * Return a 32 x 32 CaveBoyImageData object displaying the cells of the
    * arrangement as they would appear in-game with the provided Minitiles and
-   * PaletteSet.
+   * Palette.
    * @param minitiles - The array of Minitiles from which to retrieve the
    * displayed Minitile for each cell.
-   * @param paletteSet - The PaletteSet from which to retrieve the applied
+   * @param palette - The Palette from which to retrieve the applied
    * Subpalette for each cell.
    * @param colorComponentScalerName - The name of the ColorComponentScaler to
    * use when converting from the five-bit component values of the Colors to the
@@ -62,11 +59,11 @@ export default class Arrangement {
    * the user-configured scaler.
    * @returns A 32 x 32 CaveBoyImageData object displaying the cells of the
    * arrangement as they would appear in-game with the provided Minitiles and
-   * PaletteSet.
+   * Palette.
    */
   public getImageData(
     minitiles: Minitile[],
-    paletteSet: PaletteSet,
+    palette: Palette,
     colorComponentScalerName?: ColorComponentScalerName
   ): CaveBoyImageData {
     const cbImageData = new CaveBoyImageData(32, 32);
@@ -77,7 +74,7 @@ export default class Arrangement {
       cbImageData.putImageData(
         this.cells[cellNumber].getImageData(
           minitiles,
-          paletteSet,
+          palette,
           colorComponentScalerName
         ),
         targetXOrigin,
@@ -90,13 +87,13 @@ export default class Arrangement {
 
   /**
    * Return an expression of this ArrangementCell as a 96-digit hexadecimal
-   * CoilSnakeArrangementString.
+   * CSArrangementString.
    * @returns An expression of this ArrangementCell as a 96-digit hexadecimal
-   * CoilSnakeArrangementString.
+   * CSArrangementString.
    */
-  public toCoilSnakeArrangementString(): CoilSnakeArrangementString {
-    return this.cells.reduce<CoilSnakeArrangementString>(
-      (as, ac) => (as += ac.toCoilSnakeArrangementCellString()),
+  public toCSArrangementString(): CSArrangementString {
+    return this.cells.reduce<CSArrangementString>(
+      (as, ac) => (as += ac.toCSArrangementCellString()),
       ''
     );
   }

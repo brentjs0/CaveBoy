@@ -10,7 +10,7 @@ import times from 'lodash/times';
 
 describe('MinitileLayer', function () {
   describe('constructor()', function () {
-    it('Initializes values from a CoilSnakeMinitileLayerString.', function () {
+    it('Initializes values from a CSMinitileLayerString.', function () {
       const minitileLayer = new MinitileLayer(
         'fffff00011111f00777772f07777772f7177117f1717171f1717171f1717171f'
       );
@@ -173,8 +173,8 @@ describe('MinitileLayer', function () {
     });
   });
 
-  describe('toCoilSnakeMinitileLayerString()', function () {
-    it('Generates a valid CoilSnakeMinitileLayerString.', function () {
+  describe('toCSMinitileLayerString()', function () {
+    it('Generates a valid CSMinitileLayerString.', function () {
       const minitileLayer = new MinitileLayer();
       for (let i = 0; i < minitileLayer.colorNumbers.length; ++i) {
         let newIndex = i % 16;
@@ -183,15 +183,13 @@ describe('MinitileLayer', function () {
         }
       }
 
-      const coilSnakeMinitileLayerString = minitileLayer.toCoilSnakeMinitileLayerString();
+      const csMinitileLayerString = minitileLayer.toCSMinitileLayerString();
 
-      expect(coilSnakeMinitileLayerString).to.equal(
+      expect(csMinitileLayerString).to.equal(
         '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef'
       );
 
-      expect(
-        isType(coilSnakeMinitileLayerString, 'CoilSnakeMinitileLayerString')
-      ).to.be.true;
+      expect(isType(csMinitileLayerString, 'CSMinitileLayerString')).to.be.true;
     });
   });
 

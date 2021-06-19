@@ -3,19 +3,19 @@ import Arrangement from '@/script/data/game-object/Arrangement';
 import ArrangementCell from '@/script/data/game-object/ArrangementCell';
 import Color from '@/script/data/game-object/Color';
 import Minitile from '@/script/data/game-object/Minitile';
-import PaletteSet from '@/script/data/game-object/PaletteSet';
+import Palette from '@/script/data/game-object/Palette';
 import { expect } from 'chai';
 import times from 'lodash/times';
 import { createCanvas } from '../../../../test-methods';
 
 describe('Arrangement', function () {
   describe('constructor()', function () {
-    it('Initializes cells from a CoilSnakeArrangementString.', function () {
-      let coilSnakeArrangementString = (0b110111011111111111111111)
+    it('Initializes cells from a CSArrangementString.', function () {
+      let csArrangementString = (0b110111011111111111111111)
         .toString(16)
         .repeat(16);
 
-      const arrangement = new Arrangement(coilSnakeArrangementString);
+      const arrangement = new Arrangement(csArrangementString);
 
       const arrangementCell = new ArrangementCell();
       arrangementCell.flippedVertically = true;
@@ -42,7 +42,7 @@ describe('Arrangement', function () {
 
   describe('getImageData()', function () {
     it('Draws the correct Minitiles with the correct Subpalette given the provided values.', function () {
-      const paletteSet = new PaletteSet(
+      const palette = new Palette(
         '000uuqoqjqf9koivv0ieuv1b2vd5ncafevvpoojkkdgha666' +
           '000uuqoqjecljjoenvhevv1b2vd5ncafevmdqfejbdj99666' +
           '000uuqmvnkkdjfbhpvqbvv6b2vd5ncafeuvonqlnlodej668' +
@@ -169,7 +169,7 @@ describe('Arrangement', function () {
 
       const arrangementImageData = new Arrangement(
         '0d27800c75800c96800d4c800d7e800d7d800d7e800d7f800d94800d95800d94800d96800da3800da3800da3804da320'
-      ).getImageData(minitiles, paletteSet);
+      ).getImageData(minitiles, palette);
 
       const [canvas, context] = createCanvas(4, 32, 32);
       context.putImageData(arrangementImageData, 0, 0);
@@ -186,22 +186,19 @@ describe('Arrangement', function () {
     });
   });
 
-  describe('toCoilSnakeArrangementString()', function () {
-    it('Generates a valid CoilSnakeArrangementString.', function () {
-      let expectedCoilSnakeArrangementString = (0b110111011111111111111111)
+  describe('toCSArrangementString()', function () {
+    it('Generates a valid CSArrangementString.', function () {
+      let expectedCSArrangementString = (0b110111011111111111111111)
         .toString(16)
         .repeat(16);
 
-      let actualCoilSnakeArrangementString = new Arrangement(
-        expectedCoilSnakeArrangementString
-      ).toCoilSnakeArrangementString();
+      let actualCSArrangementString = new Arrangement(
+        expectedCSArrangementString
+      ).toCSArrangementString();
 
-      expect(actualCoilSnakeArrangementString).to.equal(
-        expectedCoilSnakeArrangementString
-      );
-      expect(
-        isType(actualCoilSnakeArrangementString, 'CoilSnakeArrangementString')
-      ).to.be.true;
+      expect(actualCSArrangementString).to.equal(expectedCSArrangementString);
+      expect(isType(actualCSArrangementString, 'CSArrangementString')).to.be
+        .true;
     });
   });
 });

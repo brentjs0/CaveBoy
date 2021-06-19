@@ -2,7 +2,7 @@ import CaveBoyImageData from '@/script/base/CaveBoyImageData';
 import { ColorComponentScalerName } from '@/script/base/ColorComponentScaler';
 import CaveBoyError from '@/script/base/error/CaveBoyError';
 import {
-  CoilSnakeMinitileLayerString,
+  CSMinitileLayerString,
   isType,
   Uint4,
 } from '@/script/base/primitive-types';
@@ -24,22 +24,18 @@ export default class MinitileLayer {
 
   /**
    * Instantiate a MinitileLayer, optionally with its color numbers initialized
-   * by parsing the provided CoilSnakeMinitileLayerString.
-   * @param coilSnakeMinitileLayerString - A CoilSnakeMinitileLayerString
+   * by parsing the provided CSMinitileLayerString.
+   * @param csMinitileLayerString - A CSMinitileLayerString
    * expression of the color numbers in the layer. Optional. All values default
    * to 0 if no argument is provided.
    */
-  public constructor(
-    coilSnakeMinitileLayerString?: CoilSnakeMinitileLayerString
-  ) {
-    if (coilSnakeMinitileLayerString === undefined) {
+  public constructor(csMinitileLayerString?: CSMinitileLayerString) {
+    if (csMinitileLayerString === undefined) {
       this.colorNumbers = times(64, () => 0);
-    } else if (
-      isType(coilSnakeMinitileLayerString, 'CoilSnakeMinitileLayerString')
-    ) {
+    } else if (isType(csMinitileLayerString, 'CSMinitileLayerString')) {
       this.colorNumbers = [];
-      for (let i = 0; i < coilSnakeMinitileLayerString.length; ++i) {
-        let character = coilSnakeMinitileLayerString.charAt(i);
+      for (let i = 0; i < csMinitileLayerString.length; ++i) {
+        let character = csMinitileLayerString.charAt(i);
         let digitValue = parseInt(character, 16);
         if (isType(digitValue, 'Uint4')) {
           this.colorNumbers.push(digitValue);
@@ -58,12 +54,12 @@ export default class MinitileLayer {
 
   /**
    * Return an expression of the MinitileLayer as a 64-digit hexadecimal
-   * CoilSnakeSubpaletteString.
+   * CSSubpaletteString.
    * @returns An expression of the MinitileLayer as a 64-digit hexadecimal
-   * CoilSnakeSubpaletteString.
+   * CSSubpaletteString.
    */
-  public toCoilSnakeMinitileLayerString(): CoilSnakeMinitileLayerString {
-    return this.colorNumbers.reduce<CoilSnakeMinitileLayerString>(
+  public toCSMinitileLayerString(): CSMinitileLayerString {
+    return this.colorNumbers.reduce<CSMinitileLayerString>(
       (mtls, colorIndex) => (mtls += colorIndex.toString(16)),
       ''
     );

@@ -55,14 +55,14 @@ describe('primitive-types', function () {
   );
 
   testIsTypeForStringType(
-    'CoilSnakeColorString',
+    'CSColorString',
     ['vvv', '07u', '123'],
     ['w00', 'vv', 'a00a'],
     'lower'
   );
 
   testIsTypeForStringType(
-    'CoilSnakeSubpaletteString',
+    'CSSubpaletteString',
     [
       '000jj6kk8gg6cc4883bbchodagcqpknmflkcjh9hg7443000',
       '000oqj0v00v0l7v0v0k0vv6nt0cj69c67vvvnopghkk0p000',
@@ -77,7 +77,7 @@ describe('primitive-types', function () {
   );
 
   testIsTypeForStringType(
-    'CoilSnakeMinitileLayerString',
+    'CSMinitileLayerString',
     [
       'ffffffebffffffebffffff6bffffff6cfffff6bcfffff6bcfffffbbbffff6bbb',
       'dbaa999adba999aacbaaa2abbaeeaaabba2922bcbee2abdda2922abcee2ba2bc',
@@ -92,7 +92,7 @@ describe('primitive-types', function () {
   );
 
   testIsTypeForStringType(
-    'CoilSnakeMinitileString',
+    'CSMinitileString',
     [
       'bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc\nbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc',
       '999999af99999af19999af11999af11f9aaf11f2aaf11fffaf111111ffffffff\r0000000f000000f100000f110000f11f000f11f200f11fff0f111111ffffffff',
@@ -111,14 +111,14 @@ describe('primitive-types', function () {
   );
 
   testIsTypeForStringType(
-    'CoilSnakeArrangementCellString',
+    'CSArrangementCellString',
     ['abcdef', '000000', '01999e', '10bafd'],
     ['t12345', 'abcde', '0000000'],
     'lower'
   );
 
   testIsTypeForStringType(
-    'CoilSnakePaletteSetString',
+    'CSPaletteString',
     [
       '000uuqoqjqf9koivv0ieuv1b2vd5ncafevvpoojkkdgha666000uuqoqjecljjoenvhevv1b2vd5ncafevmdqfejbdj99666000uuqmvnkkdjfbhpvqbvv6b2vd5ncafeuvonqlnlodej668000uuqocdk9bg6c0v06fev6b2vd5ncafemksihnedhaac666000uuqoqjkkdjjojndi87v6b2vd5ncafevveqnbmf9hc7666000uuqoqj0v0kkd0v0v6b0nf2vd5ncafevq7vj8vdasbd666',
       '000gnmdkhbcdhkidb06gih7d0de0ac189kvphpkdjgacb444000gnmdkh17ecfg6dg078h7d0de0ac1898de8bc7aa788444000gnmkvpchidjghpvbfmh7d0de0ac189dimcfhaddadd444000gnm9de8bc79a0v06feh7d0de0ac189dfjbdgabd889444000gnmdkhkkdjfhjndbchh7d0de0ac189dimcfhadd9a8444000gnmdkh0v0kkd0v0bbd0af0de0ac189dimcfhadd9a8444',
@@ -133,7 +133,7 @@ describe('primitive-types', function () {
   );
 
   testIsTypeForStringType(
-    'CoilSnakeArrangementString',
+    'CSArrangementString',
     [
       'abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdef',
       '0c14800c14800c14800c14800c14800c14800c14800c14800c14800c14800c14800c14800c14800c14800c14800c1480',
@@ -145,7 +145,7 @@ describe('primitive-types', function () {
   );
 
   testIsTypeForStringType(
-    'CoilSnakeGraphicSetString',
+    'CSGraphicSetString',
     [
       'g0000hhcaca8a8cebhheffcaa8kjgcfbedbbb8a75853622565000hhcaca8a8cebhheffcaa8kjgcfbedbbb8a75853622565000p65aca8a8cebhheffcgif9fvmkhgecrrma75853622565000hhcaca8a8ceb6b6ffcaa87b8klggfa897a758536225650000vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0000vvgef0vvedca980vv0vv0vvljdhf9898a75853622565\ng10000vvtvtptpkjmvrlvogrj5gb7qoihf9cb5utrtrpsnl888000fcl0vvptpkjm0vv0vv0vv0vv0vv0vv0vvutrtrpsnl8880000vv0vv0vvutsmmm0vv0vv0vvvmsvhjncfutrtrpsnl888000vtttvtptpkjmvslvogrj5gb7uusqpokifutrtrpsnl888000ehrtvtptpdhhvslkjfrj5gb7d950vv0vvutrtrpsnl888000uuvrqqihf0vv0vv0vvqc9ka90vv0vv0vvutrtrpsnl888\ng20000vvvuvvqsljh0vvvliqkdkd30vv0vv0vvurqrmm0vv888000eae0vvvqsrpn0vv0vv0vv0vv0vv0vv0vvvuuvtpunk888000jp9vuvvqsljhvnmvliqkdkd3huvluv9g6tuvlrv0vv8880000vv0vvvqsljh0vvvliqkdkd3vsstpplfeurqrmm0vv8880000vvvuvvqsljhvnmvliqkdkd3ojhviosdhurqrmmoih888000vvvssvqniqplkhcvmqvfnpehvtsvokoh9urqrmmoih888\ng3000kr9vvrtrnnidvqksmfpk9je5ck5sl6lg8of9ld7ia4888000vtovvrtrnnidvqksmfpk9je5rjbodhgc5uuvutqpli888000er0vvs0vvnidvqksmfpk9je5luvqvvbg70vv0vv0vv888000plivvrtrnnidtspsmfpk9je5qjaje7d94of9ld7ia4888000qkduuuqqqmmuihsvtfvmbpf6vtpqpmkjgof9ld7ia4888000prquuusqqmoshjnvtkpk9je5vtotpmlifof9ld7ia4888',
       'i0000uuhrreomckfa9n88j87f7ojamhbkd8e9jrn8qk9ql7444000klgrsnmni4fk0jlahr4fkvlbohcldbvvkrn8oibql7444000uuhrrenkdmnirpgrsnomckfamgbib9vvkrn8qk9ql7444000aecrsnmnikd89n88j87f7ojaohcldbrrern8qk9ql7444000ilcrsnmnikgc9n88j87f7rsnohcmgbvvkrn8qk9mni444000tovrreomcbadihre9j5chojalgakd8vvkrn8qk9ql7444',

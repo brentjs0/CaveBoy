@@ -1,11 +1,11 @@
 import { isType } from '@/script/base/primitive-types';
 import Color from '@/script/data/game-object/Color';
-import PaletteSet from '@/script/data/game-object/PaletteSet';
+import Palette from '@/script/data/game-object/Palette';
 import { expect } from 'chai';
 import { createCanvas } from '../../../../test-methods';
 
-describe('PaletteSet', function () {
-  const paletteSetColors = [
+describe('Palette', function () {
+  const paletteColors = [
     [
       new Color(0, 0, 0),
       new Color(30, 30, 26),
@@ -117,18 +117,18 @@ describe('PaletteSet', function () {
   ];
 
   describe('constructor()', function () {
-    it('Initializes values from a CoilSnakePaletteSetString.', function () {
-      const paletteSet = new PaletteSet(
+    it('Initializes values from a CSPaletteString.', function () {
+      const palette = new Palette(
         '000uuqoqjqf9koivv0ieuv1b2vd5ncafevvpoojkkdgha666000uuqoqjecljjoenvhevv1b2vd5ncafevmdqfejbdj99666000uuqmvnkkdjfbhpvqbvv6b2vd5ncafeuvonqlnlodej668000uuqocdk9bg6c0v06fev6b2vd5ncafemksihnedhaac666000uuqoqjkkdjjojndi87v6b2vd5ncafevveqnbmf9hc7666000uuqoqj0v0kkd0v0v6b0nf2vd5ncafevq7vj8vdasbd666'
       );
 
       for (let i = 0; i < 6; ++i) {
-        expect(paletteSet.subpalettes[i].colors).to.eql(paletteSetColors[i]);
+        expect(palette.subpalettes[i].colors).to.eql(paletteColors[i]);
       }
     });
 
     it('Creates an empty instance with default palettes.', function () {
-      const paletteSet = new PaletteSet();
+      const palette = new Palette();
 
       const emptyPalette = [
         new Color(0, 0, 0),
@@ -150,29 +150,28 @@ describe('PaletteSet', function () {
       ];
 
       for (let i = 0; i < 6; ++i) {
-        expect(paletteSet.subpalettes[i].colors).to.eql(emptyPalette);
+        expect(palette.subpalettes[i].colors).to.eql(emptyPalette);
       }
     });
   });
 
-  describe('toCoilSnakePaletteSetString()', function () {
-    it('Generates a valid CoilSnakePaletteSetString.', function () {
-      const paletteSet = new PaletteSet();
-      paletteSet.subpalettes[0].colors = paletteSetColors[0]; // 000uuqoqjqf9koivv0ieuv1b2vd5ncafevvpoojkkdgha666
-      paletteSet.subpalettes[1].colors = paletteSetColors[1]; // 000uuqoqjecljjoenvhevv1b2vd5ncafevmdqfejbdj99666
-      paletteSet.subpalettes[2].colors = paletteSetColors[2]; // 000uuqmvnkkdjfbhpvqbvv6b2vd5ncafeuvonqlnlodej668
-      paletteSet.subpalettes[3].colors = paletteSetColors[3]; // 000uuqocdk9bg6c0v06fev6b2vd5ncafemksihnedhaac666
-      paletteSet.subpalettes[4].colors = paletteSetColors[4]; // 000uuqoqjkkdjjojndi87v6b2vd5ncafevveqnbmf9hc7666
-      paletteSet.subpalettes[5].colors = paletteSetColors[5]; // 000uuqoqj0v0kkd0v0v6b0nf2vd5ncafevq7vj8vdasbd666
+  describe('toCSPaletteString()', function () {
+    it('Generates a valid CSPaletteString.', function () {
+      const palette = new Palette();
+      palette.subpalettes[0].colors = paletteColors[0]; // 000uuqoqjqf9koivv0ieuv1b2vd5ncafevvpoojkkdgha666
+      palette.subpalettes[1].colors = paletteColors[1]; // 000uuqoqjecljjoenvhevv1b2vd5ncafevmdqfejbdj99666
+      palette.subpalettes[2].colors = paletteColors[2]; // 000uuqmvnkkdjfbhpvqbvv6b2vd5ncafeuvonqlnlodej668
+      palette.subpalettes[3].colors = paletteColors[3]; // 000uuqocdk9bg6c0v06fev6b2vd5ncafemksihnedhaac666
+      palette.subpalettes[4].colors = paletteColors[4]; // 000uuqoqjkkdjjojndi87v6b2vd5ncafevveqnbmf9hc7666
+      palette.subpalettes[5].colors = paletteColors[5]; // 000uuqoqj0v0kkd0v0v6b0nf2vd5ncafevq7vj8vdasbd666
 
-      const coilSnakePaletteSetString = paletteSet.toCoilSnakePaletteSetString();
+      const csPaletteString = palette.toCSPaletteString();
 
-      expect(coilSnakePaletteSetString).to.equal(
+      expect(csPaletteString).to.equal(
         '000uuqoqjqf9koivv0ieuv1b2vd5ncafevvpoojkkdgha666000uuqoqjecljjoenvhevv1b2vd5ncafevmdqfejbdj99666000uuqmvnkkdjfbhpvqbvv6b2vd5ncafeuvonqlnlodej668000uuqocdk9bg6c0v06fev6b2vd5ncafemksihnedhaac666000uuqoqjkkdjjojndi87v6b2vd5ncafevveqnbmf9hc7666000uuqoqj0v0kkd0v0v6b0nf2vd5ncafevq7vj8vdasbd666'
       );
 
-      expect(isType(coilSnakePaletteSetString, 'CoilSnakePaletteSetString')).to
-        .be.true;
+      expect(isType(csPaletteString, 'CSPaletteString')).to.be.true;
     });
   });
 });

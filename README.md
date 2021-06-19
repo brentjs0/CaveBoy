@@ -14,7 +14,7 @@ This project is still under development and does not yet have a functional relea
   - [x] Arrangement Cells
   - [x] Arrangements ("Tiles"/"Metatiles"/"Blocks")
   - [x] Tilesets
-  - [x] Palette Sets ("Palettes"/"Palette Groups")
+  - [x] Palettes
   - [x] Graphic Sets ("Map Palettes"/"Areas")
   - [x] Tileset Files
 - [ ] Milestone: Decode and encode remaining map objects.

@@ -1,7 +1,7 @@
 import CaveBoyImageData from '@/script/base/CaveBoyImageData';
 import { ColorComponentScalerName } from '@/script/base/ColorComponentScaler';
 import CaveBoyError from '@/script/base/error/CaveBoyError';
-import { CoilSnakeMinitileString, isType } from '@/script/base/primitive-types';
+import { CSMinitileString, isType } from '@/script/base/primitive-types';
 import MinitileLayer, {
   getMinitileLayerPixelCoordinates,
 } from '@/script/data/game-object/MinitileLayer';
@@ -27,19 +27,17 @@ export default class Minitile {
 
   /**
    * Instantiate a Minitile, optionally with its layers initialized by
-   * parsing the provided CoilSnakeMinitileString.
-   * @param coilSnakeMinitileString - A CoilSnakeMinitileString expression of
+   * parsing the provided CSMinitileString.
+   * @param csMinitileString - A CSMinitileString expression of
    * the color numbers in both layers. Optional. All values default to 0 if
    * no argument is provided.
    */
-  public constructor(coilSnakeMinitileString?: CoilSnakeMinitileString) {
-    if (coilSnakeMinitileString === undefined) {
+  public constructor(csMinitileString?: CSMinitileString) {
+    if (csMinitileString === undefined) {
       this.backgroundLayer = new MinitileLayer();
       this.foregroundLayer = new MinitileLayer();
-    } else if (isType(coilSnakeMinitileString, 'CoilSnakeMinitileString')) {
-      const minitileLayerStrings = coilSnakeMinitileString.split(
-        /(?:\n|\r\n|\r)/
-      );
+    } else if (isType(csMinitileString, 'CSMinitileString')) {
+      const minitileLayerStrings = csMinitileString.split(/(?:\n|\r\n|\r)/);
       this.backgroundLayer = new MinitileLayer(minitileLayerStrings[0]);
       this.foregroundLayer = new MinitileLayer(minitileLayerStrings[1]);
     } else {
@@ -50,11 +48,11 @@ export default class Minitile {
   }
 
   /**
-   * Return an expression of the MinitileLayer as a CoilSnakeMinitileString.
-   * @returns An expression of the MinitileLayer as a CoilSnakeMinitileString.
+   * Return an expression of the MinitileLayer as a CSMinitileString.
+   * @returns An expression of the MinitileLayer as a CSMinitileString.
    */
-  public toCoilSnakeMinitileString(): CoilSnakeMinitileString {
-    return `${this.backgroundLayer.toCoilSnakeMinitileLayerString()}\n${this.foregroundLayer.toCoilSnakeMinitileLayerString()}`;
+  public toCSMinitileString(): CSMinitileString {
+    return `${this.backgroundLayer.toCSMinitileLayerString()}\n${this.foregroundLayer.toCSMinitileLayerString()}`;
   }
 
   /**

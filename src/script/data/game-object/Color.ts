@@ -4,7 +4,7 @@ import {
 } from '@/script/base/ColorComponentScaler';
 import CaveBoyError from '@/script/base/error/CaveBoyError';
 import {
-  CoilSnakeColorString,
+  CSColorString,
   HexadecimalColorString,
   isType,
   Uint5,
@@ -71,16 +71,16 @@ export default class Color {
 
   /**
    * Instantiate a Color with its component values parsed from a
-   * three-digit base-32 CoilSnakeColorString ('xxx').
-   * @param coilSnakeColorString A CoilSnakeColorString expression
+   * three-digit base-32 CSColorString ('xxx').
+   * @param csColorString A CSColorString expression
    * of the color to be parsed.
    */
-  public constructor(coilSnakeColorString: CoilSnakeColorString);
+  public constructor(csColorString: CSColorString);
 
   public constructor(
     param1:
       | Uint5
-      | CoilSnakeColorString
+      | CSColorString
       | HexadecimalColorString
       | undefined = undefined,
     param2: ColorComponentScalerName | Uint5 | undefined = undefined,
@@ -97,8 +97,8 @@ export default class Color {
       !isType(param2, 'Uint5')
     ) {
       this.constructFromHexadecimalColorString(param1, param2);
-    } else if (isType(param1, 'CoilSnakeColorString') && param2 === undefined) {
-      this.constructFromCoilSnakeColorString(param1);
+    } else if (isType(param1, 'CSColorString') && param2 === undefined) {
+      this.constructFromCSColorString(param1);
     } else if (
       !(param1 === undefined && param2 === undefined && param3 === undefined)
     ) {
@@ -173,12 +173,10 @@ export default class Color {
     }
   }
 
-  private constructFromCoilSnakeColorString(
-    coilSnakeColorString: CoilSnakeColorString
-  ): void {
-    const redComponent: number = parseInt(coilSnakeColorString[0], 32);
-    const greenComponent: number = parseInt(coilSnakeColorString[1], 32);
-    const blueComponent: number = parseInt(coilSnakeColorString[2], 32);
+  private constructFromCSColorString(csColorString: CSColorString): void {
+    const redComponent: number = parseInt(csColorString[0], 32);
+    const greenComponent: number = parseInt(csColorString[1], 32);
+    const blueComponent: number = parseInt(csColorString[2], 32);
 
     if (
       isType(redComponent, 'Uint5') &&
@@ -192,7 +190,7 @@ export default class Color {
       );
     } else {
       throw new CaveBoyError(
-        `The provided CoilSnakeColorString '${coilSnakeColorString}' could not be parsed into a Color.`
+        `The provided CSColorString '${csColorString}' could not be parsed into a Color.`
       );
     }
   }
@@ -240,23 +238,23 @@ export default class Color {
 
   /**
    * Return an expression of the Color as a three-digit base-32
-   * CoilSnakeColorString in the format 'xxx'.
+   * CSColorString in the format 'xxx'.
    * @returns An expression of the Color as a three-digit base-32
-   * CoilSnakeColorString in the format 'xxx'.
+   * CSColorString in the format 'xxx'.
    */
-  public toCoilSnakeColorString(): CoilSnakeColorString {
+  public toCSColorString(): CSColorString {
     const colorString = `${this.redComponent.toString(
       32
     )}${this.greenComponent.toString(32)}${this.blueComponent.toString(
       32
     )}`.toLowerCase();
 
-    if (isType(colorString, 'CoilSnakeColorString')) {
+    if (isType(colorString, 'CSColorString')) {
       return colorString;
     }
 
     throw new CaveBoyError(
-      `Color expression '${colorString}' is not a CoilSnakeColorString.`
+      `Color expression '${colorString}' is not a CSColorString.`
     );
   }
 

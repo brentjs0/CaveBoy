@@ -1,14 +1,14 @@
 import { isType } from '@/script/base/primitive-types';
 import Color from '@/script/data/game-object/Color';
 import Subpalette from '@/script/data/game-object/Subpalette';
-import PaletteSet from '@/script/data/game-object/PaletteSet';
+import Palette from '@/script/data/game-object/Palette';
 import { expect } from 'chai';
 import times from 'lodash/times';
 import { createCanvas } from '../../../../test-methods';
 
 describe('Subpalette', function () {
   describe('constructor()', function () {
-    it('Initializes values from a CoilSnakeSubpaletteString.', function () {
+    it('Initializes values from a CSSubpaletteString.', function () {
       const subpalette = new Subpalette(
         '000jj6kk8gg6cc4883bbchodagcqpknmflkcjh9hg7443000'
       );
@@ -107,8 +107,8 @@ describe('Subpalette', function () {
     });
   });
 
-  describe('toCoilSnakeSubpaletteString()', function () {
-    it('Generates a valid CoilSnakeSubpaletteString.', function () {
+  describe('toCSSubpaletteString()', function () {
+    it('Generates a valid CSSubpaletteString.', function () {
       const subpalette = new Subpalette();
       subpalette.colors[0] = new Color(0, 0, 0); // 000
       subpalette.colors[1] = new Color(19, 19, 6); // jj6
@@ -127,14 +127,13 @@ describe('Subpalette', function () {
       subpalette.colors[14] = new Color(4, 4, 3); // 443
       subpalette.colors[15] = new Color(0, 0, 0); // 000
 
-      const coilSnakeSubpaletteString = subpalette.toCoilSnakeSubpaletteString();
+      const csSubpaletteString = subpalette.toCSSubpaletteString();
 
-      expect(coilSnakeSubpaletteString).to.equal(
+      expect(csSubpaletteString).to.equal(
         '000jj6kk8gg6cc4883bbchodagcqpknmflkcjh9hg7443000'
       );
 
-      expect(isType(coilSnakeSubpaletteString, 'CoilSnakeSubpaletteString')).to
-        .be.true;
+      expect(isType(csSubpaletteString, 'CSSubpaletteString')).to.be.true;
     });
   });
 });

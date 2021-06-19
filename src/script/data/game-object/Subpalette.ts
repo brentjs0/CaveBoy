@@ -2,10 +2,7 @@ import CaveBoyImageData from '@/script/base/CaveBoyImageData';
 import { ColorComponentScalerName } from '@/script/base/ColorComponentScaler';
 import CaveBoyError from '@/script/base/error/CaveBoyError';
 import { segmentString } from '@/script/base/helpers';
-import {
-  CoilSnakeSubpaletteString,
-  isType,
-} from '@/script/base/primitive-types';
+import { CSSubpaletteString, isType } from '@/script/base/primitive-types';
 import Color from '@/script/data/game-object/Color';
 
 /**
@@ -22,22 +19,19 @@ export default class Subpalette {
 
   /**
    * Instantiate a Subpalette, optionally with its Color values initialized
-   * by parsing the provided CoilSnakeSubpaletteString.
-   * @param coilSnakeSubpaletteString - A CoilSnakeSubpaletteString
+   * by parsing the provided CSSubpaletteString.
+   * @param csSubpaletteString - A CSSubpaletteString
    * expression of the colors in the palette, in order. Optional. Default Colors
    * are created if no value is provided.
    */
-  public constructor(coilSnakeSubpaletteString?: CoilSnakeSubpaletteString) {
+  public constructor(csSubpaletteString?: CSSubpaletteString) {
     this.colors = [];
 
-    if (isType(coilSnakeSubpaletteString, 'CoilSnakeSubpaletteString')) {
-      for (let coilSnakeColorString of segmentString(
-        coilSnakeSubpaletteString,
-        3
-      )) {
-        this.colors.push(new Color(coilSnakeColorString));
+    if (isType(csSubpaletteString, 'CSSubpaletteString')) {
+      for (let csColorString of segmentString(csSubpaletteString, 3)) {
+        this.colors.push(new Color(csColorString));
       }
-    } else if (coilSnakeSubpaletteString === undefined) {
+    } else if (csSubpaletteString === undefined) {
       // This mimics the in-game pattern of "empty" palettes being all black
       // except for the last color, which is 6-4-4.
       for (let i = 0; i < 15; ++i) {
@@ -79,14 +73,14 @@ export default class Subpalette {
 
   /**
    * Return an expression of the Subpalette as a 48-digit base-32
-   * CoilSnakeSubpaletteString.
+   * CSSubpaletteString.
    * @returns An expression of the Subpalette as a 48-digit base-32
-   * CoilSnakeSubpaletteString.
+   * CSSubpaletteString.
    */
-  public toCoilSnakeSubpaletteString(): CoilSnakeSubpaletteString {
-    // Concatenate all of the Color.toCoilSnakeColorString() values, in order.
-    return this.colors.reduce<CoilSnakeSubpaletteString>(
-      (mtps, color) => (mtps += color.toCoilSnakeColorString()),
+  public toCSSubpaletteString(): CSSubpaletteString {
+    // Concatenate all of the Color.toCSColorString() values, in order.
+    return this.colors.reduce<CSSubpaletteString>(
+      (mtps, color) => (mtps += color.toCSColorString()),
       ''
     );
   }

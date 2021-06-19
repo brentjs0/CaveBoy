@@ -54,32 +54,32 @@ export type HexadecimalColorString = string;
  * A three-character string color expression in the format 'xxx', where
  * 'x' is a base-32 digit. Must be lowercase.
  */
-export type CoilSnakeColorString = Lowercase<string>;
+export type CSColorString = Lowercase<string>;
 
 /**
- * A string expression of a 16-color palette as encoded by CoilSnake.
+ * A string expression of a 16-color palette as encoded by CS.
  * Consists of 48 base-32 digits. Must be lowercase.
  */
-export type CoilSnakeSubpaletteString = string;
+export type CSSubpaletteString = string;
 
 /**
  * A 64-character string expression of a minitile layer image as encoded by
- * CoilSnake. Consists of 64 hexadecimal digits. Must be lowercase.
+ * CS. Consists of 64 hexadecimal digits. Must be lowercase.
  */
-export type CoilSnakeMinitileLayerString = string;
+export type CSMinitileLayerString = string;
 
 /**
- * A string expression of a two-layer minitile image as encoded by CoilSnake.
+ * A string expression of a two-layer minitile image as encoded by CS.
  * Consists of two strings of 64 hexadecimal digits each separated by a
  * carriage return ('\r'), a new line ('\n'), or both ('\r\n'). Must be
  * lowercase.
  */
-export type CoilSnakeMinitileString = string;
+export type CSMinitileString = string;
 
 /**
  * A string expression containing the Minitile number, Subpalette number,
  * flip state, and surface flags for a single cell of a 4 x 4 arrangement.
- * Encoded by CoilSnake as a string of six hexadecimal digits. Must be lowercase.
+ * Encoded by CS as a string of six hexadecimal digits. Must be lowercase.
  *
  * In binary, the data is encoded as follows: `VH?P PPTT TTTT TTTT SSSS SSSS`
  * - `V` = Vertical flip (1 for flipped, 0 for unflipped)
@@ -89,26 +89,26 @@ export type CoilSnakeMinitileString = string;
  * - `T` = Minitile number (value must not exceed 511, despite using 10 bits)
  * - `S` = The eight surface flags, which include collision data
  */
-export type CoilSnakeArrangementCellString = string;
+export type CSArrangementCellString = string;
 
 /**
  * A string expression of a set of six sixteen-color Subpalettes as
- * encoded by CoilSnake. Consists of 288 base-32 digits. Must be lowercase.
+ * encoded by CS. Consists of 288 base-32 digits. Must be lowercase.
  */
-export type CoilSnakePaletteSetString = string;
+export type CSPaletteString = string;
 
 /**
  * A string expression of a set of sixteen six-digit ArrangementCells as
- * encoded by CoilSnake. Consists of 96 hexadecimal digits. Must be lowercase.
+ * encoded by CS. Consists of 96 hexadecimal digits. Must be lowercase.
  */
-export type CoilSnakeArrangementString = string;
+export type CSArrangementString = string;
 
 /**
- * A multi-line string expression of one to eight CoilSnakePaletteSetStrings
- * prefixed with their GraphicSet number and their PaletteSet number
+ * A multi-line string expression of one to eight CSPaletteStrings
+ * prefixed with their GraphicSet number and their Palette number
  * within the list. Lines consist of 290 base-32 digits each. Must be lowercase.
  */
-export type CoilSnakeGraphicSetString = string;
+export type CSGraphicSetString = string;
 
 /**
  * A name of one of the types defined by CaveBoy.
@@ -121,14 +121,14 @@ export type TypeName =
   | 'Uint8'
   | 'Uint9'
   | 'HexadecimalColorString'
-  | 'CoilSnakeColorString'
-  | 'CoilSnakeSubpaletteString'
-  | 'CoilSnakeMinitileLayerString'
-  | 'CoilSnakeMinitileString'
-  | 'CoilSnakeArrangementCellString'
-  | 'CoilSnakePaletteSetString'
-  | 'CoilSnakeArrangementString'
-  | 'CoilSnakeGraphicSetString';
+  | 'CSColorString'
+  | 'CSSubpaletteString'
+  | 'CSMinitileLayerString'
+  | 'CSMinitileString'
+  | 'CSArrangementCellString'
+  | 'CSPaletteString'
+  | 'CSArrangementString'
+  | 'CSGraphicSetString';
 
 /**
  * A CaveBoy-defined primitive type with the name T.
@@ -142,14 +142,14 @@ export type Type<T extends TypeName> =
  : T extends 'Uint8' ? Uint8
  : T extends 'Uint9' ? Uint9
  : T extends 'HexadecimaColorString' ? HexadecimalColorString
- : T extends 'CoilSnakeColorString' ? CoilSnakeColorString
- : T extends 'CoilSnakeSubpaletteString' ? CoilSnakeSubpaletteString
- : T extends 'CoilSnakeMinitileLayerString' ? CoilSnakeMinitileLayerString
- : T extends 'CoilSnakeMinitileString' ? CoilSnakeMinitileString
- : T extends 'CoilSnakeArrangementCellString' ? CoilSnakeArrangementCellString
- : T extends 'CoilSnakePaletteSetString' ? CoilSnakePaletteSetString
- : T extends 'CoilSnakeArrangementString' ? CoilSnakeArrangementString
- : T extends 'CoilSnakeGraphicSetString' ? CoilSnakeGraphicSetString
+ : T extends 'CSColorString' ? CSColorString
+ : T extends 'CSSubpaletteString' ? CSSubpaletteString
+ : T extends 'CSMinitileLayerString' ? CSMinitileLayerString
+ : T extends 'CSMinitileString' ? CSMinitileString
+ : T extends 'CSArrangementCellString' ? CSArrangementCellString
+ : T extends 'CSPaletteString' ? CSPaletteString
+ : T extends 'CSArrangementString' ? CSArrangementString
+ : T extends 'CSGraphicSetString' ? CSGraphicSetString
  : never;
 
 /**
@@ -182,24 +182,24 @@ export function isType<T extends TypeName>(
         typeof value === 'string' &&
         /^#(?:[0-9a-f]{6}|[0-9a-f]{3})$/i.test(value)
       );
-    case 'CoilSnakeColorString':
+    case 'CSColorString':
       return typeof value === 'string' && /^[0-9a-v]{3}$/.test(value);
-    case 'CoilSnakeSubpaletteString':
+    case 'CSSubpaletteString':
       return typeof value === 'string' && /^[0-9a-v]{48}$/.test(value);
-    case 'CoilSnakeMinitileLayerString':
+    case 'CSMinitileLayerString':
       return typeof value === 'string' && /^[0-9a-f]{64}$/.test(value);
-    case 'CoilSnakeMinitileString':
+    case 'CSMinitileString':
       return (
         typeof value === 'string' &&
         /^[0-9a-f]{64}(?:\n|\r\n|\r)[0-9a-f]{64}$/.test(value)
       );
-    case 'CoilSnakeArrangementCellString':
+    case 'CSArrangementCellString':
       return typeof value === 'string' && /^[0-9a-f]{6}$/.test(value);
-    case 'CoilSnakePaletteSetString':
+    case 'CSPaletteString':
       return typeof value === 'string' && /^[0-9a-v]{288}$/.test(value);
-    case 'CoilSnakeArrangementString':
+    case 'CSArrangementString':
       return typeof value === 'string' && /^[0-9a-f]{96}$/.test(value);
-    case 'CoilSnakeGraphicSetString':
+    case 'CSGraphicSetString':
       return (
         typeof value === 'string' &&
         /^[0-9a-v]0[0-9a-v]{288}(?:(?:\n|\r\n|\r)[0-9a-v][1-7][0-9a-v]{288}){0,7}$/.test(
