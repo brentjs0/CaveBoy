@@ -7,7 +7,12 @@ import {
   EnumTypeName,
   isEnumType,
 } from '@/script/base/enum-types';
-import { isValidNumber } from '@/script/base/primitive-types';
+import {
+  isType,
+  isValidNumber,
+  Uint3,
+  Uint5,
+} from '@/script/base/primitive-types';
 
 /**
  * An object representing an element in the map_sectors.yml file
@@ -16,16 +21,38 @@ import { isValidNumber } from '@/script/base/primitive-types';
 export type CSMapSector = {
   'Item': number;
   'Music': number;
-  'Palette': number;
+  'Palette': Uint3;
   'Setting': CSMapSectorSetting;
   'Teleport': CSMapSectorTeleport;
-  'Tileset': number;
+  'Tileset': Uint5;
   'Town Map': CSMapSectorTownMap;
-  'Town Map Arrow': CSMapSectorTownMapImage;
-  'Town Map Image': CSMapSectorTownMapArrow;
+  'Town Map Arrow': CSMapSectorTownMapArrow;
+  'Town Map Image': CSMapSectorTownMapImage;
   'Town Map X': number;
   'Town Map Y': number;
 };
+
+/**
+ * Instantiate and return a CSMapSector object with default values
+ * for all properties.
+ * @returns A CSMapSector object with default values for all
+ * properties.
+ */
+export function createCSMapSector(): CSMapSector {
+  return {
+    'Item': 0,
+    'Music': 0,
+    'Palette': 0,
+    'Setting': CSMapSectorSetting.None,
+    'Teleport': CSMapSectorTeleport.Enabled,
+    'Tileset': 0,
+    'Town Map': CSMapSectorTownMap.None,
+    'Town Map Arrow': CSMapSectorTownMapArrow.None,
+    'Town Map Image': CSMapSectorTownMapImage.None,
+    'Town Map X': 0,
+    'Town Map Y': 0,
+  };
+}
 
 /**
  * Check if the provided value conforms to all of the required
@@ -49,11 +76,11 @@ export function* validateCSMapSector(value: any): Generator<string> {
     yield "'Music' must be a non-negative integer.";
   }
 
-  if (!isValidNumber(value.Palette, 0, 7)) {
+  if (!isType(value.Palette, 'Uint3')) {
     yield "'Palette' must be an integer from 0 to 7.";
   }
 
-  if (!isValidNumber(value.Tileset, 0, 31)) {
+  if (!isType(value.Tileset, 'Uint5')) {
     yield "'Tileset' must be an integer from 0 to 31.";
   }
 

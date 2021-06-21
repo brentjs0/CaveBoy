@@ -167,29 +167,29 @@ export function parseMapSectorsFileContents(
   const csMapSectors: CSMapSector[] = [];
   let yamlEntries: [string, any][] = Object.entries(parsedYaml);
   for (let [propertyName, csMapSector] of yamlEntries) {
-    let elementNumber = parseInt(propertyName, 10);
-    if (!isValidNumber(elementNumber, 0)) {
+    let entryNumber = parseInt(propertyName, 10);
+    if (!isValidNumber(entryNumber, 0)) {
       throw new CaveBoyError(
-        `map_sectors.yml element number '${propertyName}' was not a valid number.`
+        `map_sectors.yml entry number '${propertyName}' was not a valid number.`
       );
     }
     let elementValidationMessages = [...validateCSMapSector(csMapSector)];
     if (elementValidationMessages.length > 0) {
       let errorMessage =
-        `map_sectors.yml element ${elementNumber} was invalid:\n * ` +
+        `map_sectors.yml entry ${entryNumber} was invalid:\n * ` +
         elementValidationMessages.join('\n * ');
 
       throw new CaveBoyError(errorMessage);
     }
 
-    csMapSectors[elementNumber] = csMapSector;
+    csMapSectors[entryNumber] = csMapSector;
   }
 
   // This accounts for undefined elements, unlike Array.prototype.length().
   let elementCount = csMapSectors.reduce((total, _) => ++total, 0);
   if (elementCount !== 2560) {
     throw new CaveBoyError(
-      `map_sectors.yml did not contain 2560 unique element numbers. Are there missing or duplicated numbers?`
+      `map_sectors.yml did not contain 2560 unique entry numbers. Are there missing or duplicated numbers?`
     );
   }
 

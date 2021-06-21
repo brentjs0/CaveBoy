@@ -2,7 +2,10 @@ import {
   CSMapSectorSetting,
   CSMapSectorTeleport,
 } from '@/script/base/enum-types';
-import { validateCSMapSector } from '@/script/data/yaml-object/CSMapSector';
+import {
+  createCSMapSector,
+  validateCSMapSector,
+} from '@/script/data/yaml-object/CSMapSector';
 import { expect } from 'chai';
 
 describe('CSMapSector', function () {
@@ -21,6 +24,13 @@ describe('CSMapSector', function () {
       'Town Map Y': 0,
     };
   }
+
+  describe('createCSMapSector()', function () {
+    it('Returns a valid CSMapSector.', function () {
+      const csMapSector = createCSMapSector();
+      expect([...validateCSMapSector(csMapSector)].length).to.equal(0);
+    });
+  });
 
   describe('validateCSMapSector()', function () {
     it('Returns nothing for a valid CSMapSector.', function () {
