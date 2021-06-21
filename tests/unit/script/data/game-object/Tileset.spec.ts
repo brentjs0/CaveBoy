@@ -3,7 +3,7 @@ import Minitile from '@/script/data/game-object/Minitile';
 import Tileset from '@/script/data/game-object/Tileset';
 import { expect } from 'chai';
 
-import ftsFile10Contents from '../../../../assets/10.fts';
+import ftsFile10Contents from '../../../../assets/project/Tilesets/10.fts';
 
 describe('Tileset', function () {
   describe('constructor()', function () {

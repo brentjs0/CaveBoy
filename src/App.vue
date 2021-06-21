@@ -16,6 +16,7 @@
   import FileControl from '@/components/FileControl.vue';
   import JSZip from 'jszip';
   import CaveBoyError from '@/script/base/error/CaveBoyError';
+  import jsYaml from 'js-yaml';
 
   @Options({
     components: {
@@ -47,9 +48,16 @@
 
           projectFileJSZipObject.async('string').then(function (value: string) {
             console.log(`Found Project.snake file at '${projectFilePath}':`);
-            //let project: string | number | object | null | undefined = jsyaml.load(value);
+            let project:
+              | string
+              | number
+              | object
+              | null
+              | undefined = jsYaml.load(value);
 
-            //document.title = `${project.Title} - CaveBoy`;
+            if (typeof project === 'object' && project !== null) {
+              document.title = `${(project as any).Title} - CaveBoy`;
+            }
           });
 
           return jsZip;

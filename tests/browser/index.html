@@ -12,6 +12,11 @@
         display: flex;
       }
 
+      #canvases {
+        display: flex;
+        flex-direction: column;
+      }
+
       #mocha,
       #canvases {
         margin: 15px;
@@ -66,6 +71,7 @@
       .test-canvas {
         image-rendering: pixelated;
         image-rendering: -moz-crisp-edges;
+        margin-block-end: 1em;
       }
 
       .arrangement {

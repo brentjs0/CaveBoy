@@ -3,7 +3,7 @@ import { expect } from 'chai';
 
 describe('Color', function () {
   describe('constructor()', function () {
-    it('Initializes values from a CoilSnakeColorString.', function () {
+    it('Initializes values from a CSColorString.', function () {
       const color: Color = new Color('7vd');
       expect(color.redComponent).to.equal(7);
       expect(color.greenComponent).to.equal(31);
@@ -46,10 +46,10 @@ describe('Color', function () {
     });
   });
 
-  describe('toCoilSnakeColorString()', function () {
-    it('Generates CoilSnakeColorStrings.', function () {
+  describe('toCSColorString()', function () {
+    it('Generates CSColorStrings.', function () {
       const color = new Color(31, 15, 0);
-      expect(color.toCoilSnakeColorString()).to.equal('vf0');
+      expect(color.toCSColorString()).to.equal('vf0');
     });
   });
 

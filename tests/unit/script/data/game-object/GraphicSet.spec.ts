@@ -1,11 +1,11 @@
 import { isType } from '@/script/base/primitive-types';
-import PaletteSet from '@/script/data/game-object/PaletteSet';
+import Palette from '@/script/data/game-object/Palette';
 import GraphicSet from '@/script/data/game-object/GraphicSet';
 import { expect } from 'chai';
 
 describe('GraphicSet', function () {
   describe('constructor()', function () {
-    it('Initializes values from a CoilSnakeGraphicSetString.', function () {
+    it('Initializes values from a CSGraphicSetString.', function () {
       const graphicSetA = new GraphicSet(
         'a00009p8jshfqhkdaphfk9bljjcdc7g7jc1d70hhlefhdbb777000ffe0vvfqhjgl0vv0vv0vv0vv0vv0vv0vvvusutppne7770000vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv000qtpjshfqhkdaphfk9bljjcdcvmlojkhcdhhlefhdbb777000usqjhcffd0vv0vvk9bjfiddcibe0vv0vvhhlefhdbb777000qtpjshfqhkdaphfk9bljjcdcvmlojkhcdhhlefhdbb777\n' +
           'a1000gm1pmijifdb7hfcdcaaa9srmag7nmiifchgffecbb88880000vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv000qrlpmijifgd90vvdcaaa90vvpmikhddb6hgffecbb8888000am0pmijif0vvhfcdb9aa98d0srmnmihfchgffecbb88880000vvpoljvvnmihge0vv0vv0vvpj7ke6bb9hgffecbb88880000vvpoljifgd9hgedb9aa9srmpj7ke6bb9hgffecbb8888\n' +
@@ -20,7 +20,7 @@ describe('GraphicSet', function () {
 
       expect(graphicSetA.idNumber).to.equal(10);
       expect(graphicSetA.tilesetNumber).to.equal(20);
-      expect(graphicSetA.paletteSets.length).to.equal(8);
+      expect(graphicSetA.palettes.length).to.equal(8);
 
       const graphicSetB = new GraphicSet(
         'i0000uuhrreomckfa9n88j87f7ojamhbkd8e9jrn8qk9ql7444000klgrsnmni4fk0jlahr4fkvlbohcldbvvkrn8oibql7444000uuhrrenkdmnirpgrsnomckfamgbib9vvkrn8qk9ql7444000aecrsnmnikd89n88j87f7ojaohcldbrrern8qk9ql7444000ilcrsnmnikgc9n88j87f7rsnohcmgbvvkrn8qk9mni444000tovrreomcbadihre9j5chojalgakd8vvkrn8qk9ql7444',
@@ -29,41 +29,40 @@ describe('GraphicSet', function () {
 
       expect(graphicSetB.idNumber).to.equal(18);
       expect(graphicSetB.tilesetNumber).to.equal(9);
-      expect(graphicSetB.paletteSets.length).to.equal(1);
+      expect(graphicSetB.palettes.length).to.equal(1);
     });
 
     it('Creates an empty instance with default field values.', function () {
       const graphicSet = new GraphicSet(11);
       expect(graphicSet.idNumber).to.equal(11);
       expect(graphicSet.tilesetNumber).to.equal(0);
-      expect(graphicSet.paletteSets.length).to.equal(1);
-      expect(graphicSet.paletteSets[0]).to.eql(new PaletteSet());
+      expect(graphicSet.palettes.length).to.equal(1);
+      expect(graphicSet.palettes[0]).to.eql(new Palette());
     });
   });
 
-  describe('toCoilSnakeGraphicSetString()', function () {
-    it('Generates a valid CoilSnakeGraphicSetString.', function () {
+  describe('toCSGraphicSetString()', function () {
+    it('Generates a valid CSGraphicSetString.', function () {
       const graphicSet = new GraphicSet(31);
-      graphicSet.paletteSets[0] = new PaletteSet(
+      graphicSet.palettes[0] = new Palette(
         '0009p8jshfqhkdaphfk9bljjcdc7g7jc1d70hhlefhdbb777000ffe0vvfqhjgl0vv0vv0vv0vv0vv0vv0vvvusutppne7770000vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv000qtpjshfqhkdaphfk9bljjcdcvmlojkhcdhhlefhdbb777000usqjhcffd0vv0vvk9bjfiddcibe0vv0vvhhlefhdbb777000qtpjshfqhkdaphfk9bljjcdcvmlojkhcdhhlefhdbb777'
       );
-      graphicSet.paletteSets[1] = new PaletteSet(
+      graphicSet.palettes[1] = new Palette(
         '000gm1pmijifdb7hfcdcaaa9srmag7nmiifchgffecbb88880000vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv000qrlpmijifgd90vvdcaaa90vvpmikhddb6hgffecbb8888000am0pmijif0vvhfcdb9aa98d0srmnmihfchgffecbb88880000vvpoljvvnmihge0vv0vv0vvpj7ke6bb9hgffecbb88880000vvpoljifgd9hgedb9aa9srmpj7ke6bb9hgffecbb8888'
       );
-      graphicSet.paletteSets[2] = new PaletteSet(
+      graphicSet.palettes[2] = new Palette(
         '000arbsegqaatj7lcei9cnonccenuvruuglh9cm7ai59f8880000vvuokqaah4a0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv8880008r6seg0vvkad0vviabqnoiab0vv0vv0vv0vv0vv0vv888000gpbsegq9atj70vviabqnoccefvvlsvaf3glvcfq0vv8880000vv0vvqaatj7o8biabqrrccerrqmnoefh9cm7ai59f8880000vv0vvjmifefjipdcjqrriiirrqmnoefh9cm7ai59f888'
       );
 
-      const coilSnakeGraphicSetString = graphicSet.toCoilSnakeGraphicSetString();
+      const csGraphicSetString = graphicSet.toCSGraphicSetString();
 
-      expect(coilSnakeGraphicSetString).to.equal(
+      expect(csGraphicSetString).to.equal(
         'v00009p8jshfqhkdaphfk9bljjcdc7g7jc1d70hhlefhdbb777000ffe0vvfqhjgl0vv0vv0vv0vv0vv0vv0vvvusutppne7770000vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv000qtpjshfqhkdaphfk9bljjcdcvmlojkhcdhhlefhdbb777000usqjhcffd0vv0vvk9bjfiddcibe0vv0vvhhlefhdbb777000qtpjshfqhkdaphfk9bljjcdcvmlojkhcdhhlefhdbb777\n' +
           'v1000gm1pmijifdb7hfcdcaaa9srmag7nmiifchgffecbb88880000vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv000qrlpmijifgd90vvdcaaa90vvpmikhddb6hgffecbb8888000am0pmijif0vvhfcdb9aa98d0srmnmihfchgffecbb88880000vvpoljvvnmihge0vv0vv0vvpj7ke6bb9hgffecbb88880000vvpoljifgd9hgedb9aa9srmpj7ke6bb9hgffecbb8888\n' +
           'v2000arbsegqaatj7lcei9cnonccenuvruuglh9cm7ai59f8880000vvuokqaah4a0vv0vv0vv0vv0vv0vv0vv0vv0vv0vv8880008r6seg0vvkad0vviabqnoiab0vv0vv0vv0vv0vv0vv888000gpbsegq9atj70vviabqnoccefvvlsvaf3glvcfq0vv8880000vv0vvqaatj7o8biabqrrccerrqmnoefh9cm7ai59f8880000vv0vvjmifefjipdcjqrriiirrqmnoefh9cm7ai59f888'
       );
 
-      expect(isType(coilSnakeGraphicSetString, 'CoilSnakeGraphicSetString')).to
-        .be.true;
+      expect(isType(csGraphicSetString, 'CSGraphicSetString')).to.be.true;
     });
   });
 });

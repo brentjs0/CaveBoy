@@ -41,19 +41,17 @@ export default class Tileset {
     ftsArrangementRegionString?: string
   ) {
     if (typeof ftsMinitileRegionString === 'string') {
-      const coilSnakeMinitileStrings = ftsMinitileRegionString.split(
+      const csMinitileStrings = ftsMinitileRegionString.split(
         /(?:\n\n|\r\n\r\n|\r\r)/
       );
 
-      if (coilSnakeMinitileStrings.length !== 512) {
+      if (csMinitileStrings.length !== 512) {
         throw new CaveBoyError(
-          'Parameter ftsMinitileRegionString could not be divided into 512 CoilSnakeMinitileStrings.'
+          'Parameter ftsMinitileRegionString could not be divided into 512 CSMinitileStrings.'
         );
       }
 
-      this.minitiles = coilSnakeMinitileStrings.map(
-        (csmts) => new Minitile(csmts)
-      );
+      this.minitiles = csMinitileStrings.map((csmts) => new Minitile(csmts));
     } else if (ftsMinitileRegionString === undefined) {
       this.minitiles = times(512, () => new Minitile());
     } else {
@@ -63,17 +61,17 @@ export default class Tileset {
     }
 
     if (typeof ftsArrangementRegionString === 'string') {
-      const coilSnakeArrangementStrings = ftsArrangementRegionString
+      const csArrangementStrings = ftsArrangementRegionString
         .split(/(?:\r\n|\n|\r)/)
         .filter((csas) => csas !== '');
 
-      if (coilSnakeArrangementStrings.length !== 1024) {
+      if (csArrangementStrings.length !== 1024) {
         throw new CaveBoyError(
-          'Parameter ftsArrangementRegionString could not be divided into 1024 CoilSnakeArrangementStrings.'
+          'Parameter ftsArrangementRegionString could not be divided into 1024 CSArrangementStrings.'
         );
       }
 
-      this.arrangements = coilSnakeArrangementStrings.map(
+      this.arrangements = csArrangementStrings.map(
         (csas) => new Arrangement(csas)
       );
     } else if (ftsArrangementRegionString === undefined) {

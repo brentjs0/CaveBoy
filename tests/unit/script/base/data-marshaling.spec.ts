@@ -1,12 +1,16 @@
 import {
   buildFTSFileContents,
+  dumpArrayAsYAMLWithNumericKeys,
   parseFTSFileContents,
+  parseMapSectorsFileContents,
 } from '@/script/base/data-marshaling';
 import Arrangement from '@/script/data/game-object/Arrangement';
 import Minitile from '@/script/data/game-object/Minitile';
 import GraphicSet from '@/script/data/game-object/GraphicSet';
 import { expect } from 'chai';
-import ftsFile10Contents from '../../../assets/10.fts';
+import ftsFile10Contents from '../../../assets/project/Tilesets/10.fts';
+import mapSectorsFileContents from '../../../assets/project/map_sectors.yml';
+import jsYaml from 'js-yaml';
 
 describe('data-marshaling', function () {
   describe('parseFTSFileContents()', function () {
@@ -67,9 +71,72 @@ describe('data-marshaling', function () {
         graphicSets
       );
 
-      console.log(newFTSFile10Contents);
-
       expect(ftsFile10Contents).to.equal(newFTSFile10Contents);
+    });
+  });
+
+  describe('parseMapSectorsFileContents()', function () {
+    it('Returns all Sectors from the file', function () {
+      expect(
+        parseMapSectorsFileContents(mapSectorsFileContents).length
+      ).to.equal(2560);
+    });
+
+    it("Throws an Error when mapSectorsFileContents doesn't parse as an object.", function () {
+      const yamlArray = '- zero\n- one\n- two';
+      expect(() => parseMapSectorsFileContents(yamlArray)).to.throw();
+    });
+
+    it('Throws an Error when object keys are not numeric strings.', function () {
+      let yaml: string = mapSectorsFileContents;
+      yaml = 'x' + yaml.substring(1);
+      expect(() => parseMapSectorsFileContents(yaml)).to.throw();
+    });
+
+    it('Throws an Error when there are duplicate keys.', function () {
+      let yaml: string = mapSectorsFileContents;
+      yaml = '1' + yaml.substring(1);
+
+      expect(() => parseMapSectorsFileContents(yaml)).to.throw();
+    });
+
+    it("Throws an Error when it doesn't contain 2560 objects.", function () {
+      let yaml: string = mapSectorsFileContents.trim();
+      yaml += `
+2560:
+  Item: 174
+  Palette: 0
+  Town Map X: 116
+  Town Map Y: 102
+  Town Map Arrow: none
+  Music: 120
+  Setting: indoors
+  Town Map Image: threed
+  Town Map: threed
+  Teleport: disabled
+  Tileset: 25`;
+
+      expect(() => parseMapSectorsFileContents(yaml)).to.throw();
+    });
+
+    it('Throws an Error when any element fails validation.', function () {
+      const yaml = mapSectorsFileContents.replace(
+        '  Town Map X: 184',
+        '  Town Map X: cornbread'
+      );
+
+      expect(() => parseMapSectorsFileContents(yaml)).to.throw();
+    });
+  });
+
+  describe('dumpArrayAsYAMLWithNumericKeys()', function () {
+    it('Encodes decoded map_sectors.yml files identically.', function () {
+      const csMapSectors = parseMapSectorsFileContents(mapSectorsFileContents);
+      const newMapSectorsFileContents = dumpArrayAsYAMLWithNumericKeys(
+        csMapSectors
+      );
+
+      expect(mapSectorsFileContents).to.equal(newMapSectorsFileContents);
     });
   });
 });

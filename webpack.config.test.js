@@ -13,7 +13,7 @@ module.exports = {
         exclude: /\/node_modules\//,
       },
       {
-        test: /\.fts$/,
+        test: /\.(?:fts|map|yml)$/,
         use: 'raw-loader',
       },
     ],
@@ -29,6 +29,8 @@ module.exports = {
       '.json',
       '.wasm',
       '.fts',
+      '.map',
+      '.yml',
     ],
     alias: {
       '@': path.resolve(__dirname, './src/'),
