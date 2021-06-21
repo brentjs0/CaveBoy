@@ -18,6 +18,6 @@ This project is still under development and does not yet have a functional relea
   - [x] Graphic Sets ("Map Palettes"/"Areas")
   - [x] Tileset Files
 - [ ] Milestone: Decode and encode remaining map objects.
-  - [ ] Sectors from map_sectors.yml
+  - [x] Sectors from map_sectors.yml
   - [ ] MapCells from map_tiles.map
 - [ ] Milestone: Draw the full map
