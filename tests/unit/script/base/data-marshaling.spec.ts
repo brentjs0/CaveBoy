@@ -1,8 +1,10 @@
 import {
   buildFTSFileContents,
+  buildMapTilesFileContents,
   dumpArrayAsYAMLWithNumericKeys,
   parseFTSFileContents,
   parseMapSectorsFileContents,
+  parseMapTilesFileContents,
 } from '@/script/base/data-marshaling';
 import Arrangement from '@/script/data/game-object/Arrangement';
 import Minitile from '@/script/data/game-object/Minitile';
@@ -10,7 +12,9 @@ import GraphicSet from '@/script/data/game-object/GraphicSet';
 import { expect } from 'chai';
 import ftsFile10Contents from '../../../assets/project/Tilesets/10.fts';
 import mapSectorsFileContents from '../../../assets/project/map_sectors.yml';
+import mapTilesFileContents from '../../../assets/project/map_tiles.map';
 import jsYaml from 'js-yaml';
+import { isValidNumber } from '@/script/base/primitive-types';
 
 describe('data-marshaling', function () {
   describe('parseFTSFileContents()', function () {
@@ -137,6 +141,67 @@ describe('data-marshaling', function () {
       );
 
       expect(mapSectorsFileContents).to.equal(newMapSectorsFileContents);
+    });
+  });
+
+  describe('parseMapTilesFileContents()', function () {
+    it('Returns 81920 valid Arrangement numbers from the file.', function () {
+      const arrangementNumbers = parseMapTilesFileContents(
+        mapTilesFileContents
+      );
+
+      expect(arrangementNumbers.length).to.equal(81920);
+
+      for (let arrangementNumber of arrangementNumbers) {
+        expect(isValidNumber(arrangementNumber, 0, 1023)).to.be.true;
+      }
+    });
+
+    it("Throws an exception when any row's item count isn't 256.", function () {
+      const fileWithMissingItems = mapTilesFileContents.replace(' 3a6', '');
+      expect(() => parseMapTilesFileContents(fileWithMissingItems)).to.throw();
+
+      const fileWithExtraItems = mapTilesFileContents.replace(
+        ' 3a6',
+        ' 3a6 3a6'
+      );
+      expect(() => parseMapTilesFileContents(fileWithExtraItems)).to.throw();
+    });
+
+    it("Throws an exception when the row count isn't 320.", function () {
+      const fileWithMissingRow = mapTilesFileContents.substring(0, 1024);
+      expect(() => parseMapTilesFileContents(fileWithMissingRow)).to.throw();
+
+      const fileWithExtraRow =
+        mapTilesFileContents +
+        '14a 0db 000 000 000 000 000 000 046 01b 05e 05f 06d 0e9 0ea 0eb 072 046 072 139 13a 0c9 112 12c 12f 130 131 132 04d 06e 072 06e 04d 046 0e3 0e4 0e5 0e6 0e7 0e8 0ff 046 072 139 13a 0c9 112 12c 12f 130 131 132 04d 06e 072 06e 04d 046 0e3 0e4 0e5 0e6 0e7 0e8 0ff 046 0e3 0e4 0e5 0e6 0e7 0e8 0ff 046 072 139 13a 0c9 112 12c 12f 130 131 132 04d 06d 072 06e 04d 046 0e3 0e4 0e5 0e6 0e7 0e8 0ff 046 0e3 0e4 0e5 0e6 0e7 0e8 0ff 046 0e3 0e4 0e5 0e6 0e7 0e8 0ff 046 0e3 0e4 0e5 0e6 0e7 0e8 0ff 046 0e3 0e4 0e5 0e6 0e7 1d0 201 202 203 204 205 0eb 01b 01b 104 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 105 000 000 000 000 000 000 000 000 104 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 10b 105 0b9 0ba 0bb 0bc 0bc 0bd 0be 0bf\n';
+      expect(() => parseMapTilesFileContents(fileWithExtraRow)).to.throw();
+    });
+
+    it('Throws an exception for non-numeric items.', function () {
+      const fileWithNonNumericItems = mapTilesFileContents.replace('3a6', ';');
+      expect(() =>
+        parseMapTilesFileContents(fileWithNonNumericItems)
+      ).to.throw();
+    });
+
+    it('Throws an exception for out-of-range numbers.', function () {
+      const fileWithNegativeItems = mapTilesFileContents.replace('3a6', '-1');
+      expect(() => parseMapTilesFileContents(fileWithNegativeItems)).to.throw();
+
+      const fileWithItemsOver1023 = mapTilesFileContents.replace('3a6', '400');
+      expect(() => parseMapTilesFileContents(fileWithItemsOver1023)).to.throw();
+    });
+  });
+
+  describe('buildMapTilesFileContents()', function () {
+    it('Encodes a parsed map_tiles.map file identically', function () {
+      const arrangementNumbers = parseMapTilesFileContents(
+        mapTilesFileContents
+      );
+      expect(buildMapTilesFileContents(arrangementNumbers)).to.equal(
+        mapTilesFileContents
+      );
     });
   });
 });

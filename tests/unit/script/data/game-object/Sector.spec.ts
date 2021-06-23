@@ -48,7 +48,7 @@ describe('Sector', function () {
       expect(new Sector()).to.eql(new Sector(createCSMapSector()));
     });
   });
-  
+
   describe('getCSMapSector()', function () {
     it('Returns a CSMapSector with all field changes applied.', function () {
       const sector = new Sector();
@@ -58,11 +58,11 @@ describe('Sector', function () {
       sector.otherAttribute = CSMapSectorSetting.ExitMouseUsable;
       sector.disablePSITeleport = false;
       sector.graphicSetNumber = 2;
-      sector.townMap = CSMapSectorTownMap.Twoson
-      sector.townMapImage = CSMapSectorTownMapImage.Twoson
+      sector.townMap = CSMapSectorTownMap.Twoson;
+      sector.townMapImage = CSMapSectorTownMapImage.Twoson;
       sector.townMapPlayerIconArrow = CSMapSectorTownMapArrow.Right;
-      sector.townMapPlayerIconXPosition = 2
-      sector.townMapPlayerIconYPosition = 2
+      sector.townMapPlayerIconXPosition = 2;
+      sector.townMapPlayerIconYPosition = 2;
 
       const csMapSector = createCSMapSector();
       csMapSector['Item'] = 2;
@@ -76,7 +76,7 @@ describe('Sector', function () {
       csMapSector['Town Map Arrow'] = CSMapSectorTownMapArrow.Right;
       csMapSector['Town Map X'] = 2;
       csMapSector['Town Map Y'] = 2;
-      
+
       expect(sector.getCSMapSector()).to.eql(csMapSector);
     });
 

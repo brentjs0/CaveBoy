@@ -219,8 +219,8 @@ export function isType<T extends TypeName>(
  * Optional. No lower bound is enforced if omitted.
  * @param validRangeHigh - The highest possible value for which to return true.
  * Optional. No upper bound is enforced if omitted.
- * @param mustBeInteger - Whethe to require that the value be an integer in
- * order to return true.
+ * @param mustBeInteger - Whether to require that the value be an integer in
+ * order to return true. Optional. Defaults to true.
  * @returns true if the provided value is a number that meets the specified
  * constraints. Otherwise false.
  */

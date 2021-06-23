@@ -197,6 +197,78 @@ export function parseMapSectorsFileContents(
 }
 
 /**
+ * Return an array of all the Arrangement numbers
+ * in the provided string contents of a map_tiles.map
+ * file.
+ * @param mapSectorsFileContents - The contents of a
+ * map_tiles.map file as a string.
+ * @returns An array of all the Arrangement numbers
+ * in the provided string.
+ */
+export function parseMapTilesFileContents(
+  mapTilesFileContents: string
+): number[] {
+  const arrangementNumbers: number[] = [];
+
+  const rowStrings = mapTilesFileContents.trim().split(/(?:\n|\r\n|\r)/);
+
+  if (rowStrings.length !== 320) {
+    throw new CaveBoyError(
+      'map_tiles.map contained an invalid number of rows.'
+    );
+  }
+
+  for (let rowNumber = 0; rowNumber < 320; ++rowNumber) {
+    let cellStrings = rowStrings[rowNumber].split(' ');
+
+    if (cellStrings.length !== 256) {
+      throw new CaveBoyError(
+        `map_tiles.map row ${rowNumber} contained an invalid number of values.`
+      );
+    }
+
+    for (let columnNumber = 0; columnNumber < 256; ++columnNumber) {
+      let value = parseInt(cellStrings[columnNumber], 16);
+
+      if (!isValidNumber(value, 0, 1023)) {
+        throw new CaveBoyError(
+          `map_tiles.map entry ${columnNumber} of row ${rowNumber} was '${cellStrings[columnNumber]}'. All values must be hexadecimal integers from 0 to 3ff.`
+        );
+      }
+
+      arrangementNumbers.push(value);
+    }
+  }
+
+  return arrangementNumbers;
+}
+
+/**
+ * Return the provided array of 81,920 Arrangement numbers
+ * encoded as a string in the format of a CoilSnake
+ * project's map_tiles.map file.
+ * @param arrangementNumbers - An array of Arrangement
+ * numbers to encode.
+ * @returns The provided array of encoded in the format of
+ * a map_tiles.map file.
+ */
+export function buildMapTilesFileContents(
+  arrangementNumbers: number[]
+): string {
+  let mapTilesFileContents = '';
+  for (let i = 0; i < arrangementNumbers.length; ++i) {
+    mapTilesFileContents += arrangementNumbers[i].toString(16).padStart(3, '0');
+    if ((i + 1) % 256 === 0) {
+      mapTilesFileContents += '\n';
+    } else {
+      mapTilesFileContents += ' ';
+    }
+  }
+
+  return mapTilesFileContents;
+}
+
+/**
  * Return an array of objects as YAML with unquoted numeric keys
  * at the top level for each index.
  * @param objects - An array of objects to serialize as YAML.
