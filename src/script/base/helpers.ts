@@ -68,7 +68,7 @@ export function getBitValue(number: number, place: number): boolean {
     throw new CaveBoyError('Parameter number must be an integer.');
   }
   if (!Number.isInteger(place) || place < 0 || place > 30) {
-    throw new CaveBoyError('Parameter number must be an integer from 0 to 30.');
+    throw new CaveBoyError('Parameter place must be an integer from 0 to 30.');
   }
 
   return (number & Math.pow(2, place)) > 0;

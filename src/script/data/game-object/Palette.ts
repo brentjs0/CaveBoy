@@ -48,7 +48,7 @@ export default class Palette {
    */
   public toCSPaletteString(): CSPaletteString {
     return this.subpalettes.reduce<CSPaletteString>(
-      (pss, sp) => (pss += sp.toCSSubpaletteString()),
+      (ps, sp) => (ps += sp.toCSSubpaletteString()),
       ''
     );
   }

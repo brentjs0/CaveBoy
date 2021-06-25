@@ -2,7 +2,11 @@ import CaveBoyImageData from '@/script/base/CaveBoyImageData';
 import { ColorComponentScalerName } from '@/script/base/ColorComponentScaler';
 import CaveBoyError from '@/script/base/error/CaveBoyError';
 import { segmentString } from '@/script/base/helpers';
-import { CSArrangementString, isType } from '@/script/base/primitive-types';
+import {
+  CSArrangementString,
+  CSPaletteString,
+  isType,
+} from '@/script/base/primitive-types';
 import ArrangementCell from '@/script/data/game-object/ArrangementCell';
 import Minitile from '@/script/data/game-object/Minitile';
 import Palette from '@/script/data/game-object/Palette';
@@ -19,6 +23,8 @@ export default class Arrangement {
    * The cells of the arrangement in order from left to right, top to bottom.
    */
   public cells: ArrangementCell[];
+
+  #cachedBitmapsByCSPaletteString: { [key: string]: ImageBitmap };
 
   /**
    * Instantiate an Arrangement, optionally with its cells initialized by parsing
@@ -43,6 +49,8 @@ export default class Arrangement {
         `An invalid combination of arguments was provided to the CSArrangement constructor: ${arguments}.`
       );
     }
+
+    this.#cachedBitmapsByCSPaletteString = {};
   }
 
   /**
@@ -83,6 +91,32 @@ export default class Arrangement {
     }
 
     return cbImageData;
+  }
+
+  public getImageBitmap(
+    minitiles: Minitile[],
+    palette: Palette,
+    colorComponentScalerName?: ColorComponentScalerName
+  ): Promise<ImageBitmap> {
+    const csPaletteString = palette.toCSPaletteString();
+
+    if (this.#cachedBitmapsByCSPaletteString[csPaletteString] === undefined) {
+      return new Promise<ImageBitmap>(async (resolve, reject) => {
+        try {
+          const imageBitmap = await createImageBitmap(
+            this.getImageData(minitiles, palette, colorComponentScalerName)
+          );
+          this.#cachedBitmapsByCSPaletteString[csPaletteString] = imageBitmap;
+          resolve(imageBitmap);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    }
+
+    return new Promise<ImageBitmap>((resolve, _) =>
+      resolve(this.#cachedBitmapsByCSPaletteString[csPaletteString])
+    );
   }
 
   /**

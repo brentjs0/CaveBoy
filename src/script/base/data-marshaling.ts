@@ -7,10 +7,11 @@ import {
 import GraphicSet from '@/script/data/game-object/GraphicSet';
 import Tileset from '@/script/data/game-object/Tileset';
 import jsYaml from 'js-yaml';
+import Sector from '@/script/data/game-object/Sector';
 import {
   CSMapSector,
   validateCSMapSector,
-} from '../data/yaml-object/CSMapSector';
+} from '@/script/data/yaml-object/CSMapSector';
 
 /**
  * Return the Tileset and GraphicSets encoded in the provided *.fts
@@ -266,6 +267,39 @@ export function buildMapTilesFileContents(
   }
 
   return mapTilesFileContents;
+}
+
+export function parseMapObjects(
+  ftsFileContentsByTilesetNumber: string[],
+  mapSectorsFileContents: string,
+  mapTilesFileContents: string
+): [GraphicSet[], Tileset[], Sector[], number[]] {
+  const graphicSets: GraphicSet[] = [];
+  const tilesets: Tileset[] = [];
+
+  for (
+    let tilesetNumber = 0;
+    tilesetNumber < ftsFileContentsByTilesetNumber.length;
+    ++tilesetNumber
+  ) {
+    let [tileset, graphicSetsInFile] = parseFTSFileContents(
+      tilesetNumber,
+      ftsFileContentsByTilesetNumber[tilesetNumber]
+    );
+
+    tilesets[tilesetNumber] = tileset;
+
+    for (let graphicSet of graphicSetsInFile) {
+      graphicSets[graphicSet.idNumber] = graphicSet;
+    }
+  }
+
+  const sectors = parseMapSectorsFileContents(mapSectorsFileContents).map(
+    (csms) => new Sector(csms)
+  );
+  const arrangementNumbers = parseMapTilesFileContents(mapTilesFileContents);
+
+  return [graphicSets, tilesets, sectors, arrangementNumbers];
 }
 
 /**
