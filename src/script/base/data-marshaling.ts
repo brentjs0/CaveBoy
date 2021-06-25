@@ -295,8 +295,9 @@ export function parseMapObjects(
   }
 
   const sectors = parseMapSectorsFileContents(mapSectorsFileContents).map(
-    (csms) => new Sector(csms)
+    (csms, i) => new Sector(i, csms)
   );
+
   const arrangementNumbers = parseMapTilesFileContents(mapTilesFileContents);
 
   return [graphicSets, tilesets, sectors, arrangementNumbers];
