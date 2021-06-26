@@ -9,10 +9,7 @@ import Tileset from '@/script/data/game-object/Tileset';
 import jsYaml from 'js-yaml';
 import MapCell from '@/script/data/game-object/MapCell';
 import Sector from '@/script/data/game-object/Sector';
-import {
-  CSMapSector,
-  validateCSMapSector,
-} from '@/script/data/yaml-object/CSMapSector';
+import { validateCSMapSector } from '@/script/data/yaml-object/CSMapSector';
 
 /**
  * Return the Tileset and GraphicSets encoded in the provided *.fts
@@ -44,6 +41,40 @@ export function parseFTSFileContents(
   }
 
   return [tileset, graphicSets];
+}
+
+/**
+ * Return all the Tilesets and GraphicSets encoded in the provided
+ * array of *.fts file contents.
+ * @param ftsFileContentsByTilesetNumber - An array holding the
+ * contents of every *.fts file in a project. The indexes of the
+ * array must match the file numbers.
+ * @returns All the Tilesets and GraphicSets encoded in the
+ * provided array of *.fts file contents.
+ */
+export function parseAllFTSFileContents(
+  ftsFileContentsByTilesetNumber: string[]
+): [GraphicSet[], Tileset[]] {
+  const graphicSets: GraphicSet[] = [];
+  const tilesets: Tileset[] = [];
+
+  for (
+    let tilesetNumber = 0;
+    tilesetNumber < ftsFileContentsByTilesetNumber.length;
+    ++tilesetNumber
+  ) {
+    let [tileset, graphicSetsInFile] = parseFTSFileContents(
+      tilesetNumber,
+      ftsFileContentsByTilesetNumber[tilesetNumber]
+    );
+
+    tilesets[tilesetNumber] = tileset;
+
+    // Array.prototype.forEach() skips undefined array elements.
+    graphicSetsInFile.forEach((gs) => (graphicSets[gs.idNumber] = gs));
+  }
+
+  return [graphicSets, tilesets];
 }
 
 /**
@@ -144,17 +175,16 @@ function* splitCSGraphicSetStrings(
 }
 
 /**
- * Return an array of all the map sector objects
- * in the provided string contents of a map_sectors.yml
- * file.
+ * Return an array of all the Sector objects in the
+ * provided string contents of a map_sectors.yml file.
  * @param mapSectorsFileContents - The contents of a
  * map_sectors.yml file as a string.
- * @returns An array of all the map sector objects in
+ * @returns An array of all the Sector objects in
  * the provided string.
  */
 export function parseMapSectorsFileContents(
   mapSectorsFileContents: string
-): CSMapSector[] {
+): Sector[] {
   const parsedYaml = jsYaml.load(mapSectorsFileContents);
   if (
     typeof parsedYaml !== 'object' ||
@@ -166,11 +196,11 @@ export function parseMapSectorsFileContents(
     );
   }
 
-  const csMapSectors: CSMapSector[] = [];
+  const sectors: Sector[] = [];
   let yamlEntries: [string, any][] = Object.entries(parsedYaml);
   for (let [propertyName, csMapSector] of yamlEntries) {
-    let entryNumber = parseInt(propertyName, 10);
-    if (!isValidNumber(entryNumber, 0)) {
+    let idNumber = parseInt(propertyName, 10);
+    if (!isValidNumber(idNumber, 0)) {
       throw new CaveBoyError(
         `map_sectors.yml entry number '${propertyName}' was not a valid number.`
       );
@@ -178,39 +208,38 @@ export function parseMapSectorsFileContents(
     let elementValidationMessages = [...validateCSMapSector(csMapSector)];
     if (elementValidationMessages.length > 0) {
       let errorMessage =
-        `map_sectors.yml entry ${entryNumber} was invalid:\n * ` +
+        `map_sectors.yml entry ${idNumber} was invalid:\n * ` +
         elementValidationMessages.join('\n * ');
 
       throw new CaveBoyError(errorMessage);
     }
 
-    csMapSectors[entryNumber] = csMapSector;
+    sectors[idNumber] = new Sector(idNumber, csMapSector);
   }
 
   // This accounts for undefined elements, unlike Array.prototype.length().
-  let elementCount = csMapSectors.reduce((total, _) => ++total, 0);
+  let elementCount = sectors.reduce((total, _) => ++total, 0);
   if (elementCount !== 2560) {
     throw new CaveBoyError(
       `map_sectors.yml did not contain 2560 unique entry numbers. Are there missing or duplicated numbers?`
     );
   }
 
-  return csMapSectors;
+  return sectors;
 }
 
 /**
- * Return an array of all the Arrangement numbers
- * in the provided string contents of a map_tiles.map
- * file.
+ * Return an array of all the MapCells in the provided
+ * string contents of a map_tiles.map file.
  * @param mapSectorsFileContents - The contents of a
  * map_tiles.map file as a string.
- * @returns An array of all the Arrangement numbers
- * in the provided string.
+ * @returns An array of all the MapCells in the provided
+ * string contents of a map_tiles.map file.
  */
 export function parseMapTilesFileContents(
   mapTilesFileContents: string
-): number[] {
-  const arrangementNumbers: number[] = [];
+): MapCell[] {
+  const mapCells: MapCell[] = [];
 
   const rowStrings = mapTilesFileContents.trim().split(/(?:\n|\r\n|\r)/);
 
@@ -220,6 +249,7 @@ export function parseMapTilesFileContents(
     );
   }
 
+  let idNumber = 0;
   for (let rowNumber = 0; rowNumber < 320; ++rowNumber) {
     let cellStrings = rowStrings[rowNumber].split(' ');
 
@@ -231,35 +261,29 @@ export function parseMapTilesFileContents(
 
     for (let columnNumber = 0; columnNumber < 256; ++columnNumber) {
       let value = parseInt(cellStrings[columnNumber], 16);
-
-      if (!isValidNumber(value, 0, 1023)) {
-        throw new CaveBoyError(
-          `map_tiles.map entry ${columnNumber} of row ${rowNumber} was '${cellStrings[columnNumber]}'. All values must be hexadecimal integers from 0 to 3ff.`
-        );
-      }
-
-      arrangementNumbers.push(value);
+      mapCells.push(new MapCell(idNumber, value));
+      ++idNumber;
     }
   }
 
-  return arrangementNumbers;
+  return mapCells;
 }
 
 /**
- * Return the provided array of 81,920 Arrangement numbers
- * encoded as a string in the format of a CoilSnake
- * project's map_tiles.map file.
- * @param arrangementNumbers - An array of Arrangement
- * numbers to encode.
- * @returns The provided array of encoded in the format of
- * a map_tiles.map file.
+ * Return the Arrangement numbers from the provided array of
+ * 81,920 MapCells encoded as a string in the format of a
+ * CoilSnake project's map_tiles.map file.
+ * @param mapCells - An array of MapCell objects containing
+ * the Arrangment numbers to be encoded.
+ * @returns The provided array of MapCells encoded in the
+ * format of a map_tiles.map file.
  */
-export function buildMapTilesFileContents(
-  arrangementNumbers: number[]
-): string {
+export function buildMapTilesFileContents(mapCells: MapCell[]): string {
   let mapTilesFileContents = '';
-  for (let i = 0; i < arrangementNumbers.length; ++i) {
-    mapTilesFileContents += arrangementNumbers[i].toString(16).padStart(3, '0');
+  for (let i = 0; i < mapCells.length; ++i) {
+    mapTilesFileContents += mapCells[i].arrangementNumber
+      .toString(16)
+      .padStart(3, '0');
     if ((i + 1) % 256 === 0) {
       mapTilesFileContents += '\n';
     } else {
@@ -268,42 +292,6 @@ export function buildMapTilesFileContents(
   }
 
   return mapTilesFileContents;
-}
-
-export function parseMapObjects(
-  ftsFileContentsByTilesetNumber: string[],
-  mapSectorsFileContents: string,
-  mapTilesFileContents: string
-): [GraphicSet[], Tileset[], Sector[], MapCell[]] {
-  const graphicSets: GraphicSet[] = [];
-  const tilesets: Tileset[] = [];
-
-  for (
-    let tilesetNumber = 0;
-    tilesetNumber < ftsFileContentsByTilesetNumber.length;
-    ++tilesetNumber
-  ) {
-    let [tileset, graphicSetsInFile] = parseFTSFileContents(
-      tilesetNumber,
-      ftsFileContentsByTilesetNumber[tilesetNumber]
-    );
-
-    tilesets[tilesetNumber] = tileset;
-
-    for (let graphicSet of graphicSetsInFile) {
-      graphicSets[graphicSet.idNumber] = graphicSet;
-    }
-  }
-
-  const sectors = parseMapSectorsFileContents(mapSectorsFileContents).map(
-    (csms, i) => new Sector(i, csms)
-  );
-
-  const mapCells = parseMapTilesFileContents(mapTilesFileContents).map(
-    (an, i) => new MapCell(i, an)
-  );
-
-  return [graphicSets, tilesets, sectors, mapCells];
 }
 
 /**

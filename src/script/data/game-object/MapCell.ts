@@ -1,3 +1,6 @@
+import CaveBoyError from '@/script/base/error/CaveBoyError';
+import { isValidNumber } from '@/script/base/primitive-types';
+
 /**
  * A cell in the 256 x 320 game map. Its value is an index that refers
  * to an Arrangement in a Tilset.
@@ -30,6 +33,12 @@ export default class MapCell {
    * that should be displayed in this MapCell.
    */
   public constructor(idNumber: number, arrangementNumber: number) {
+    if (!isValidNumber(arrangementNumber, 0, 1023)) {
+      throw new CaveBoyError(
+        `The arrangementNumber value of MapCell ${idNumber} was '${arrangementNumber}'. Expected an integer from 0 to 1023.`
+      );
+    }
+
     this.idNumber = idNumber;
     this.arrangementNumber = arrangementNumber;
   }

@@ -6,6 +6,7 @@ import '../unit/script/data/game-object/Arrangement.spec';
 import '../unit/script/data/game-object/ArrangementCell.spec';
 import '../unit/script/data/game-object/Color.spec';
 import '../unit/script/data/game-object/GraphicSet.spec';
+import '../unit/script/data/game-object/MapCell.spec';
 import '../unit/script/data/game-object/Minitile.spec';
 import '../unit/script/data/game-object/MinitileLayer.spec';
 import '../unit/script/data/game-object/Palette.spec';

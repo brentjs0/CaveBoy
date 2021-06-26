@@ -24,7 +24,11 @@ export default class Arrangement {
    */
   public cells: ArrangementCell[];
 
-  #cachedBitmapsByCSPaletteString: { [key: string]: ImageBitmap };
+  /**
+   * A list of ImageBitmap representations of this Arrangement with various
+   * Palettes applied. The keys of the list are each Palette's CSPaletteString.
+   */
+  private cachedBitmapsByCSPaletteString: { [key: string]: ImageBitmap };
 
   /**
    * Instantiate an Arrangement, optionally with its cells initialized by parsing
@@ -50,12 +54,12 @@ export default class Arrangement {
       );
     }
 
-    this.#cachedBitmapsByCSPaletteString = {};
+    this.cachedBitmapsByCSPaletteString = {};
   }
 
   /**
    * Return a 32 x 32 CaveBoyImageData object displaying the cells of the
-   * arrangement as they would appear in-game with the provided Minitiles and
+   * Arrangement as they would appear in-game with the provided Minitiles and
    * Palette.
    * @param minitiles - The array of Minitiles from which to retrieve the
    * displayed Minitile for each cell.
@@ -93,6 +97,22 @@ export default class Arrangement {
     return cbImageData;
   }
 
+  /**
+   * Create or retrieve a cached a 32 x 32 ImageBitmap object displaying
+   * the cells of the Arrangement as they would appear in-game with the
+   * provided Minitiles and Palette.
+   * @param minitiles - The array of Minitiles from which to retrieve the
+   * displayed Minitile for each cell.
+   * @param palette - The Palette from which to retrieve the applied
+   * Subpalette for each cell.
+   * @param colorComponentScalerName - The name of the ColorComponentScaler to
+   * use when converting from the five-bit component values of the Colors to the
+   * eight-bit color component values of the image data. Optional. Defaults to
+   * the user-configured scaler.
+   * @returns A 32 x 32 ImageBitmap object displaying the cells of the
+   * Arrangement as they would appear in-game with the provided Minitiles and
+   * Palette.
+   */
   public getImageBitmap(
     minitiles: Minitile[],
     palette: Palette,
@@ -100,13 +120,13 @@ export default class Arrangement {
   ): Promise<ImageBitmap> {
     const csPaletteString = palette.toCSPaletteString();
 
-    if (this.#cachedBitmapsByCSPaletteString[csPaletteString] === undefined) {
+    if (this.cachedBitmapsByCSPaletteString[csPaletteString] === undefined) {
       return new Promise<ImageBitmap>(async (resolve, reject) => {
         try {
           const imageBitmap = await createImageBitmap(
             this.getImageData(minitiles, palette, colorComponentScalerName)
           );
-          this.#cachedBitmapsByCSPaletteString[csPaletteString] = imageBitmap;
+          this.cachedBitmapsByCSPaletteString[csPaletteString] = imageBitmap;
           resolve(imageBitmap);
         } catch (error) {
           reject(error);
@@ -115,7 +135,7 @@ export default class Arrangement {
     }
 
     return new Promise<ImageBitmap>((resolve, _) =>
-      resolve(this.#cachedBitmapsByCSPaletteString[csPaletteString])
+      resolve(this.cachedBitmapsByCSPaletteString[csPaletteString])
     );
   }
 
