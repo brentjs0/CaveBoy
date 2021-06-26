@@ -11,6 +11,15 @@ import {
   CSMapSector,
 } from '@/script/data/yaml-object/CSMapSector';
 
+/**
+ * A set of values that can be assigned to an 8 x 4 group of MapCells.
+ * Values include Tilesets, Palettes, music settings, and town map
+ * settings among other things.
+ *
+ * This class roughly correlates with the group of values associated
+ * with a given index in all the 'sector_*' array attributes of a
+ * MapModule object in the CoilSnake source.
+ */
 export default class Sector {
   private csMapSector: CSMapSector;
 

@@ -7,6 +7,7 @@ import {
 import GraphicSet from '@/script/data/game-object/GraphicSet';
 import Tileset from '@/script/data/game-object/Tileset';
 import jsYaml from 'js-yaml';
+import MapCell from '@/script/data/game-object/MapCell';
 import Sector from '@/script/data/game-object/Sector';
 import {
   CSMapSector,
@@ -273,7 +274,7 @@ export function parseMapObjects(
   ftsFileContentsByTilesetNumber: string[],
   mapSectorsFileContents: string,
   mapTilesFileContents: string
-): [GraphicSet[], Tileset[], Sector[], number[]] {
+): [GraphicSet[], Tileset[], Sector[], MapCell[]] {
   const graphicSets: GraphicSet[] = [];
   const tilesets: Tileset[] = [];
 
@@ -298,9 +299,11 @@ export function parseMapObjects(
     (csms, i) => new Sector(i, csms)
   );
 
-  const arrangementNumbers = parseMapTilesFileContents(mapTilesFileContents);
+  const mapCells = parseMapTilesFileContents(mapTilesFileContents).map(
+    (an, i) => new MapCell(i, an)
+  );
 
-  return [graphicSets, tilesets, sectors, arrangementNumbers];
+  return [graphicSets, tilesets, sectors, mapCells];
 }
 
 /**

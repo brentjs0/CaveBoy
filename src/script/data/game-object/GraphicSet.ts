@@ -7,7 +7,7 @@ import {
 import CaveBoyError from '@/script/base/error/CaveBoyError';
 
 /**
- * A set of graphics values that can be assigned to a sector. For
+ * A set of graphics values that can be assigned to a Sector. For
  * Sectors to which it is assigned, the GraphicSet determines what
  * Tileset is referenced by the Arrangement number in each map cell,
  * as well as which Palettes can can be applied to the Sector.
