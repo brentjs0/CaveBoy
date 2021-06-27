@@ -26,13 +26,23 @@ export default class Minitile {
   public foregroundLayer: MinitileLayer;
 
   /**
-   * A list of ImageBitmap representations of this Minitile with various
+   * A list of CaveBoyImageData representations of this Minitile with various
    * Subpalettes applied. The keys of the list are each Subpalettes's
    * CSSubpaletteString with a flippedHorizontally and flippedVertically
    * value appended.
    */
-  private cachedBitmapsByCSSubpaletteStringAndFlipState: {
-    [key: string]: ImageBitmap;
+  private cachedImageDataByCSSubpaletteStringAndFlipState: {
+    [key: string]: CaveBoyImageData;
+  };
+
+  /**
+   * A list of HTMLCanvasElement representations of this Minitile with various
+   * Subpalettes applied. The keys of the list are each Subpalettes's
+   * CSSubpaletteString with a flippedHorizontally and flippedVertically
+   * value appended.
+   */
+  private cachedCanvasesByCSSubpaletteStringAndFlipState: {
+    [key: string]: HTMLCanvasElement;
   };
 
   /**
@@ -56,7 +66,8 @@ export default class Minitile {
       );
     }
 
-    this.cachedBitmapsByCSSubpaletteStringAndFlipState = {};
+    this.cachedImageDataByCSSubpaletteStringAndFlipState = {};
+    this.cachedCanvasesByCSSubpaletteStringAndFlipState = {};
   }
 
   /**
@@ -68,8 +79,8 @@ export default class Minitile {
   }
 
   /**
-   * Return an 8 x 8 CaveBoyImageData object displaying the foregroundLayer for
-   * this Minitile laid over the backgroundLayer.
+   * Create or retrieve a cached 8 x 8 CaveBoyImageData object displaying the
+   * foregroundLayer for this Minitile laid over the backgroundLayer.
    * @param subpalette - The Subpalette to reference for mapping color
    * numbers to Colors.
    * @param flipHorizontally - Whether to return the image with the positions of
@@ -89,42 +100,53 @@ export default class Minitile {
     flipVertically: boolean = false,
     colorComponentScalerName?: ColorComponentScalerName
   ): CaveBoyImageData {
-    // Get the image data for the foreground layer.
-    const cbImageData = this.foregroundLayer.getImageData(
-      subpalette,
-      flipHorizontally,
-      flipVertically
-    );
+    const cacheKey = `${subpalette.toCSSubpaletteString()}${flipHorizontally}${flipVertically}`;
 
-    // Draw the background on any spots not covered by foreground pixels.
-    for (let i = 0; i < this.backgroundLayer.colorNumbers.length; ++i) {
-      if (this.foregroundLayer.colorNumbers[i] !== 0) {
-        continue;
-      }
-
-      let [x, y] = getMinitileLayerPixelCoordinates(
-        i,
+    if (
+      this.cachedImageDataByCSSubpaletteStringAndFlipState[cacheKey] ===
+      undefined
+    ) {
+      // Get the image data for the foreground layer.
+      const cbImageData = this.foregroundLayer.getImageData(
+        subpalette,
         flipHorizontally,
         flipVertically
       );
 
-      let backgroundPixelValue = this.backgroundLayer.colorNumbers[i];
-      let backgroundColor = subpalette.colors[backgroundPixelValue];
+      // Draw the background on any spots not covered by foreground pixels.
+      for (let i = 0; i < this.backgroundLayer.colorNumbers.length; ++i) {
+        if (this.foregroundLayer.colorNumbers[i] !== 0) {
+          continue;
+        }
 
-      cbImageData.setPixel(
-        x,
-        y,
-        backgroundColor,
-        255,
-        colorComponentScalerName
-      );
+        let [x, y] = getMinitileLayerPixelCoordinates(
+          i,
+          flipHorizontally,
+          flipVertically
+        );
+
+        let backgroundPixelValue = this.backgroundLayer.colorNumbers[i];
+        let backgroundColor = subpalette.colors[backgroundPixelValue];
+
+        cbImageData.setPixel(
+          x,
+          y,
+          backgroundColor,
+          255,
+          colorComponentScalerName
+        );
+      }
+
+      this.cachedImageDataByCSSubpaletteStringAndFlipState[
+        cacheKey
+      ] = cbImageData;
     }
 
-    return cbImageData;
+    return this.cachedImageDataByCSSubpaletteStringAndFlipState[cacheKey];
   }
 
   /**
-   * Create or retrieve a cached 8 x 8 ImageBitmap object displaying the
+   * Create or retrieve a cached 8 x 8 HTMLCanvasElement object displaying the
    * foregroundLayer for this Minitile laid over the backgroundLayer drawn
    * in the specified flip state using the provided Subpalette.
    * @param subpalette - The Subpalette to reference for mapping color
@@ -137,43 +159,54 @@ export default class Minitile {
    * use when converting from the five-bit component values of the Colors to the
    * eight-bit color component values of the image data. Optional. Defaults to
    * the user-configured scaler.
-   * @returns An 8 x 8 ImageBitmap object displaying the foregroundLayer for
+   * @returns An 8 x 8 HTMLCanvasElement object displaying the foregroundLayer for
    * this Minitile laid over the backgroundLayer drawn in the specified flip
    * state using the provided Subpalette.
    */
-  public getImageBitmap(
+  public getCanvas(
     subpalette: Subpalette,
     flipHorizontally: boolean = false,
     flipVertically: boolean = false,
     colorComponentScalerName?: ColorComponentScalerName
-  ): Promise<ImageBitmap> {
+  ): HTMLCanvasElement {
     const cacheKey = `${subpalette.toCSSubpaletteString()}${flipHorizontally}${flipVertically}`;
 
     if (
-      this.cachedBitmapsByCSSubpaletteStringAndFlipState[cacheKey] === undefined
+      this.cachedCanvasesByCSSubpaletteStringAndFlipState[cacheKey] ===
+      undefined
     ) {
-      return new Promise<ImageBitmap>(async (resolve, reject) => {
-        try {
-          const imageBitmap = await createImageBitmap(
-            this.getImageData(
-              subpalette,
-              flipHorizontally,
-              flipVertically,
-              colorComponentScalerName
-            )
-          );
-          this.cachedBitmapsByCSSubpaletteStringAndFlipState[
-            cacheKey
-          ] = imageBitmap;
-          resolve(imageBitmap);
-        } catch (error) {
-          reject(error);
-        }
+      const minitileCanvas = document.createElement(
+        'CANVAS'
+      ) as HTMLCanvasElement;
+      minitileCanvas.width = 8;
+      minitileCanvas.height = 8;
+
+      const minitileContext = minitileCanvas.getContext('2d', {
+        alpha: false,
       });
+
+      if (minitileContext === null) {
+        throw new CaveBoyError(
+          'Could not retrieve canvas context while drawing Minitile.'
+        );
+      }
+
+      minitileContext.putImageData(
+        this.getImageData(
+          subpalette,
+          flipHorizontally,
+          flipVertically,
+          colorComponentScalerName
+        ),
+        0,
+        0
+      );
+
+      this.cachedCanvasesByCSSubpaletteStringAndFlipState[
+        cacheKey
+      ] = minitileCanvas;
     }
 
-    return new Promise<ImageBitmap>((resolve, _) =>
-      resolve(this.cachedBitmapsByCSSubpaletteStringAndFlipState[cacheKey])
-    );
+    return this.cachedCanvasesByCSSubpaletteStringAndFlipState[cacheKey];
   }
 }

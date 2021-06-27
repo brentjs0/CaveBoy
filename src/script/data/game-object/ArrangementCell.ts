@@ -243,7 +243,7 @@ export default class ArrangementCell {
   }
 
   /**
-   * Return an 8 x 8 ImageBitmap object displaying the Minitile
+   * Return an 8 x 8 HTMLCanvasElement object displaying the Minitile
    * referenced by this ArrangementCell rendered with the Subpalette
    * referenced by this ArrangementCell, given the provided Minitile array
    * and Palette. The flip state of the image is determined by
@@ -256,16 +256,16 @@ export default class ArrangementCell {
    * use when converting from the five-bit component values of the Colors to the
    * eight-bit color component values of the image data. Optional. Defaults to
    * the user-configured scaler.
-   * @returns An 8 x 8 ImageBitmap object displaying the Minitile
+   * @returns An 8 x 8 HTMLCanvasElement object displaying the Minitile
    * referenced by this ArrangementCell rendered with the Subpalette
    * referenced by this ArrangementCell, with the configured flip state.
    */
-  public getImageBitmap(
+  public getCanvas(
     minitiles: Minitile[],
     palette: Palette,
     colorComponentScalerName?: ColorComponentScalerName
-  ): Promise<ImageBitmap> {
-    return minitiles[this.minitileNumber].getImageBitmap(
+  ): HTMLCanvasElement {
+    return minitiles[this.minitileNumber].getCanvas(
       palette.subpalettes[this.subpaletteNumber],
       this.flippedHorizontally,
       this.flippedVertically,

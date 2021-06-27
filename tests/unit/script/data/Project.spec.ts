@@ -1,3 +1,4 @@
+import { getColorComponentScaler } from '@/script/base/ColorComponentScaler';
 import {
   parseAllFTSFileContents,
   parseMapSectorsFileContents,
@@ -77,9 +78,10 @@ async function drawMap(project: Project) {
   const [canvas, context] = createCanvas(
     1,
     mapWidthInCells * arrangementWidthInPixels,
-    mapHeightInCells * arrangementHeightInPixels
+    mapHeightInCells * arrangementHeightInPixels,
     // 3 * 32 * 8,
-    // 4 * 32 * 4
+    // 4 * 32 * 4,
+    false
   );
 
   await Promise.all(
@@ -104,10 +106,15 @@ async function drawMap(project: Project) {
       const tileset = project.tilesets[graphicSet.tilesetNumber];
       const palette = graphicSet.palettes[sector.paletteNumber];
 
-      const imageBitmap = await tileset.arrangements[
+      // const cellCanvas = tileset.arrangements[
+      //   mapCell.arrangementNumber
+      // ].getCanvas(tileset.minitiles, palette);
+      // context.drawImage(cellCanvas, cellXInPixels, cellYInPixels);
+
+      const imageData = tileset.arrangements[
         mapCell.arrangementNumber
-      ].getImageBitmap(tileset.minitiles, palette);
-      context.drawImage(imageBitmap, cellXInPixels, cellYInPixels);
+      ].getImageData(tileset.minitiles, palette, 'factorOfEight');
+      context.putImageData(imageData, cellXInPixels, cellYInPixels);
     })
   );
 }
