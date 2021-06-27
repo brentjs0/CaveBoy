@@ -82,33 +82,34 @@ async function drawMap(project: Project) {
     // 4 * 32 * 4
   );
 
-  for (let mapCell of project.mapCells) {
-    const sectorNumber = mapCell.getZoneIndex(
-      mapWidthInCells,
-      sectorWidthInCells,
-      sectorHeightInCells
-    );
+  await Promise.all(
+    project.mapCells.map(async (mapCell) => {
+      const sectorNumber = mapCell.getZoneIndex(
+        mapWidthInCells,
+        sectorWidthInCells,
+        sectorHeightInCells
+      );
 
-    // if (![0, 1, 2, 32, 33, 34, 64, 65, 66, 96, 97, 98].includes(sectorNumber)) {
-    //   continue;
-    // }
+      // if (![0, 1, 2, 32, 33, 34, 64, 65, 66, 96, 97, 98].includes(sectorNumber)) {
+      //   continue;
+      // }
 
-    const cellXInPixels =
-      mapCell.getXCoordinate(mapWidthInCells) * arrangementWidthInPixels;
-    const cellYInPixels =
-      mapCell.getYCoordinate(mapWidthInCells) * arrangementHeightInPixels;
+      const cellXInPixels =
+        mapCell.getXCoordinate(mapWidthInCells) * arrangementWidthInPixels;
+      const cellYInPixels =
+        mapCell.getYCoordinate(mapWidthInCells) * arrangementHeightInPixels;
 
-    const sector = project.sectors[sectorNumber];
-    const graphicSet = project.graphicSets[sector.graphicSetNumber];
-    const tileset = project.tilesets[graphicSet.tilesetNumber];
-    const palette = graphicSet.palettes[sector.paletteNumber];
+      const sector = project.sectors[sectorNumber];
+      const graphicSet = project.graphicSets[sector.graphicSetNumber];
+      const tileset = project.tilesets[graphicSet.tilesetNumber];
+      const palette = graphicSet.palettes[sector.paletteNumber];
 
-    tileset.arrangements[mapCell.arrangementNumber]
-      .getImageBitmap(tileset.minitiles, palette)
-      .then((imageBitmap) => {
-        context.drawImage(imageBitmap, cellXInPixels, cellYInPixels);
-      });
-  }
+      const imageBitmap = await tileset.arrangements[
+        mapCell.arrangementNumber
+      ].getImageBitmap(tileset.minitiles, palette);
+      context.drawImage(imageBitmap, cellXInPixels, cellYInPixels);
+    })
+  );
 }
 
 const project = createProject();
