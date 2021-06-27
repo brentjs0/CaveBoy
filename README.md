@@ -20,4 +20,4 @@ This project is still under development and does not yet have a functional relea
 - [x] Milestone: Decode and encode remaining map objects.
   - [x] Sectors from map_sectors.yml
   - [x] Arrangement numbers from map_tiles.map
-- [ ] Milestone: Draw the full map
+- [x] Milestone: Draw the full map

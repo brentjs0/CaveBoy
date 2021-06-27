@@ -21,6 +21,18 @@ export default class Arrangement {
   public cells: ArrangementCell[];
 
   /**
+   * A list of CaveBoyImageData representations of this Arrangement with various
+   * Palettes applied. The keys of the list are each Palette's CSPaletteString.
+   */
+  private cachedImageDataByCSPaletteString: { [key: string]: CaveBoyImageData };
+
+  /**
+   * A list of HTMLCanvasElement representations of this Arrangement with various
+   * Palettes applied. The keys of the list are each Palette's CSPaletteString.
+   */
+  private cachedCanvasesByCSPaletteString: { [key: string]: HTMLCanvasElement };
+
+  /**
    * Instantiate an Arrangement, optionally with its cells initialized by parsing
    * the provided CSArrangementString.
    * @param csArrangementString - A CSArrangementString expression
@@ -43,12 +55,15 @@ export default class Arrangement {
         `An invalid combination of arguments was provided to the CSArrangement constructor: ${arguments}.`
       );
     }
+
+    this.cachedImageDataByCSPaletteString = {};
+    this.cachedCanvasesByCSPaletteString = {};
   }
 
   /**
-   * Return a 32 x 32 CaveBoyImageData object displaying the cells of the
-   * arrangement as they would appear in-game with the provided Minitiles and
-   * Palette.
+   * Create or retrieve a cached 32 x 32 CaveBoyImageData object displaying the
+   * cells of the Arrangement as they would appear in-game with the provided
+   * Minitiles and Palette.
    * @param minitiles - The array of Minitiles from which to retrieve the
    * displayed Minitile for each cell.
    * @param palette - The Palette from which to retrieve the applied
@@ -66,23 +81,87 @@ export default class Arrangement {
     palette: Palette,
     colorComponentScalerName?: ColorComponentScalerName
   ): CaveBoyImageData {
-    const cbImageData = new CaveBoyImageData(32, 32);
+    const cacheKey = palette.toCSPaletteString();
 
-    for (let cellNumber = 0; cellNumber < this.cells.length; ++cellNumber) {
-      let targetXOrigin = (cellNumber % 4) * 8;
-      let targetYOrigin = (cellNumber >>> 2) * 8;
-      cbImageData.putImageData(
-        this.cells[cellNumber].getImageData(
+    if (this.cachedImageDataByCSPaletteString[cacheKey] === undefined) {
+      const cbImageData = new CaveBoyImageData(32, 32);
+
+      for (let cellNumber = 0; cellNumber < this.cells.length; ++cellNumber) {
+        let targetXOrigin = (cellNumber % 4) * 8;
+        let targetYOrigin = (cellNumber >>> 2) * 8;
+        cbImageData.putImageData(
+          this.cells[cellNumber].getImageData(
+            minitiles,
+            palette,
+            colorComponentScalerName
+          ),
+          targetXOrigin,
+          targetYOrigin
+        );
+      }
+
+      this.cachedImageDataByCSPaletteString[cacheKey] = cbImageData;
+    }
+
+    return this.cachedImageDataByCSPaletteString[cacheKey];
+  }
+
+  /**
+   * Create or retrieve a cached a 32 x 32 HTMLCanvasElement object displaying
+   * the cells of the Arrangement as they would appear in-game with the
+   * provided Minitiles and Palette.
+   * @param minitiles - The array of Minitiles from which to retrieve the
+   * displayed Minitile for each cell.
+   * @param palette - The Palette from which to retrieve the applied
+   * Subpalette for each cell.
+   * @param colorComponentScalerName - The name of the ColorComponentScaler to
+   * use when converting from the five-bit component values of the Colors to the
+   * eight-bit color component values of the image data. Optional. Defaults to
+   * the user-configured scaler.
+   * @returns A 32 x 32 HTMLCanvasElement object displaying the cells of the
+   * Arrangement as they would appear in-game with the provided Minitiles and
+   * Palette.
+   */
+  public getCanvas(
+    minitiles: Minitile[],
+    palette: Palette,
+    colorComponentScalerName?: ColorComponentScalerName
+  ): HTMLCanvasElement {
+    const cacheKey = palette.toCSPaletteString();
+
+    if (this.cachedCanvasesByCSPaletteString[cacheKey] === undefined) {
+      const arrangementCanvas = document.createElement(
+        'CANVAS'
+      ) as HTMLCanvasElement;
+      arrangementCanvas.width = 32;
+      arrangementCanvas.height = 32;
+
+      const arrangementContext = arrangementCanvas.getContext('2d', {
+        alpha: false,
+      });
+
+      if (arrangementContext === null) {
+        throw new CaveBoyError(
+          'Could not retrieve canvas context while drawing Arrangement.'
+        );
+      }
+
+      for (let i = 0; i < this.cells.length; ++i) {
+        const cellCanvas = this.cells[i].getCanvas(
           minitiles,
           palette,
           colorComponentScalerName
-        ),
-        targetXOrigin,
-        targetYOrigin
-      );
+        );
+
+        const targetXOrigin = (i % 4) * 8;
+        const targetYOrigin = (i >>> 2) * 8;
+        arrangementContext.drawImage(cellCanvas, targetXOrigin, targetYOrigin);
+      }
+
+      this.cachedCanvasesByCSPaletteString[cacheKey] = arrangementCanvas;
     }
 
-    return cbImageData;
+    return this.cachedCanvasesByCSPaletteString[cacheKey];
   }
 
   /**

@@ -151,15 +151,12 @@ export default class Color {
       const colorComponentScaler = getColorComponentScaler(
         colorComponentScalerName
       );
-      const redComponent: Uint5 = colorComponentScaler.convertEightBitToFiveBit(
-        redNumber
-      );
-      const greenComponent: Uint5 = colorComponentScaler.convertEightBitToFiveBit(
-        greenNumber
-      );
-      const blueComponent: Uint5 = colorComponentScaler.convertEightBitToFiveBit(
-        blueNumber
-      );
+      const redComponent: Uint5 =
+        colorComponentScaler.fiveBitValuesByEightBitValue[redNumber];
+      const greenComponent: Uint5 =
+        colorComponentScaler.fiveBitValuesByEightBitValue[greenNumber];
+      const blueComponent: Uint5 =
+        colorComponentScaler.fiveBitValuesByEightBitValue[blueNumber];
 
       this.constructFromComponentValues(
         redComponent,
@@ -213,15 +210,12 @@ export default class Color {
       colorComponentScalerName
     );
 
-    const redNumber: Uint8 = colorComponentScaler.convertFiveBitToEightBit(
-      this.redComponent
-    );
-    const greenNumber: Uint8 = colorComponentScaler.convertFiveBitToEightBit(
-      this.greenComponent
-    );
-    const blueNumber: Uint8 = colorComponentScaler.convertFiveBitToEightBit(
-      this.blueComponent
-    );
+    const redNumber: Uint8 =
+      colorComponentScaler.eightBitValuesByFiveBitValue[this.redComponent];
+    const greenNumber: Uint8 =
+      colorComponentScaler.eightBitValuesByFiveBitValue[this.greenComponent];
+    const blueNumber: Uint8 =
+      colorComponentScaler.eightBitValuesByFiveBitValue[this.blueComponent];
 
     // prettier-ignore
     const colorString = 
@@ -284,9 +278,9 @@ export default class Color {
     );
 
     return new Uint8ClampedArray([
-      colorComponentScaler.convertFiveBitToEightBit(this.redComponent),
-      colorComponentScaler.convertFiveBitToEightBit(this.greenComponent),
-      colorComponentScaler.convertFiveBitToEightBit(this.blueComponent),
+      colorComponentScaler.eightBitValuesByFiveBitValue[this.redComponent],
+      colorComponentScaler.eightBitValuesByFiveBitValue[this.greenComponent],
+      colorComponentScaler.eightBitValuesByFiveBitValue[this.blueComponent],
       alpha,
     ]);
   }

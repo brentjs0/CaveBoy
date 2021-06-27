@@ -1,10 +1,8 @@
 import { isType } from '@/script/base/primitive-types';
 import Color from '@/script/data/game-object/Color';
 import Subpalette from '@/script/data/game-object/Subpalette';
-import Palette from '@/script/data/game-object/Palette';
 import { expect } from 'chai';
 import times from 'lodash/times';
-import { createCanvas } from '../../../../test-methods';
 
 describe('Subpalette', function () {
   describe('constructor()', function () {

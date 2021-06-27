@@ -243,6 +243,37 @@ export default class ArrangementCell {
   }
 
   /**
+   * Return an 8 x 8 HTMLCanvasElement object displaying the Minitile
+   * referenced by this ArrangementCell rendered with the Subpalette
+   * referenced by this ArrangementCell, given the provided Minitile array
+   * and Palette. The flip state of the image is determined by
+   * ArrangementCell's flippedHorizontally and flippedVertically values.
+   * @param minitiles - The array of Minitiles from which to retrieve the
+   * displayed Minitile using this ArrangementCell's minitileNumber.
+   * @param palette - The Palette from which to retrieve the applied
+   * Subpalette using this ArrangementCell's subpaletteNumber.
+   * @param colorComponentScalerName - The name of the ColorComponentScaler to
+   * use when converting from the five-bit component values of the Colors to the
+   * eight-bit color component values of the image data. Optional. Defaults to
+   * the user-configured scaler.
+   * @returns An 8 x 8 HTMLCanvasElement object displaying the Minitile
+   * referenced by this ArrangementCell rendered with the Subpalette
+   * referenced by this ArrangementCell, with the configured flip state.
+   */
+  public getCanvas(
+    minitiles: Minitile[],
+    palette: Palette,
+    colorComponentScalerName?: ColorComponentScalerName
+  ): HTMLCanvasElement {
+    return minitiles[this.minitileNumber].getCanvas(
+      palette.subpalettes[this.subpaletteNumber],
+      this.flippedHorizontally,
+      this.flippedVertically,
+      colorComponentScalerName
+    );
+  }
+
+  /**
    * Return an expression of this ArrangementCell as a six-digit hexadecimal
    * CSArrangementCellString.
    * @returns An expression of this ArrangementCell as a six-digit hexadecimal

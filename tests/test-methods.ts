@@ -4,7 +4,8 @@ import { expect } from 'chai';
 export function createCanvas(
   scale: number = 1,
   width: number = 256,
-  height: number = 128
+  height: number = 128,
+  drawCheckerboard: boolean = true
 ): [HTMLCanvasElement, CanvasRenderingContext2D] {
   const canvas = document.createElement('CANVAS') as HTMLCanvasElement;
   canvas.classList.add('test-canvas');
@@ -18,7 +19,9 @@ export function createCanvas(
   const context = canvas.getContext('2d');
   if (context !== null) {
     context.imageSmoothingEnabled = false;
-    paintCheckerboard(context, width, height);
+    if (drawCheckerboard) {
+      paintCheckerboard(context, width, height);
+    }
 
     const canvasesDiv = document.getElementById('canvases');
     if (canvasesDiv == null) {

@@ -7,17 +7,19 @@ import {
 import CaveBoyError from '@/script/base/error/CaveBoyError';
 
 /**
- * A set of graphics values that can be assigned to a sector. For Sectors to which
- * it is assigned, the GraphicSet determines what Tileset is referenced by
- * the Arrangement number in each map cell, as well as which Palettes can
- * can be applied to the Sector.
+ * A set of graphics values that can be assigned to a Sector. For
+ * Sectors to which it is assigned, the GraphicSet determines what
+ * Tileset is referenced by the Arrangement number in each map cell,
+ * as well as which Palettes can can be applied to the Sector.
  *
- * This class roughly correlates to the EbMapPalette type in the CoilSnake source.
+ * This class roughly correlates to the EbMapPalette type in the
+ * CoilSnake source.
  */
 export default class GraphicSet {
   /**
-   * The five-bit number (0 through 31) that uniquely identifies this
-   * GraphicSet.
+   * The five-bit number (0 through 31) that uniquely identifies
+   * this GraphicSet within a project. This is also its index in
+   * the project's array of 32 GraphicSets.
    */
   public idNumber: Uint5;
 

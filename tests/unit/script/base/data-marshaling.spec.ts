@@ -2,6 +2,7 @@ import {
   buildFTSFileContents,
   buildMapTilesFileContents,
   dumpArrayAsYAMLWithNumericKeys,
+  parseAllFTSFileContents,
   parseFTSFileContents,
   parseMapSectorsFileContents,
   parseMapTilesFileContents,
@@ -10,11 +11,30 @@ import Arrangement from '@/script/data/game-object/Arrangement';
 import Minitile from '@/script/data/game-object/Minitile';
 import GraphicSet from '@/script/data/game-object/GraphicSet';
 import { expect } from 'chai';
+import ftsFile00Contents from '../../../assets/project/Tilesets/00.fts';
+import ftsFile01Contents from '../../../assets/project/Tilesets/01.fts';
+import ftsFile02Contents from '../../../assets/project/Tilesets/02.fts';
+import ftsFile03Contents from '../../../assets/project/Tilesets/03.fts';
+import ftsFile04Contents from '../../../assets/project/Tilesets/04.fts';
+import ftsFile05Contents from '../../../assets/project/Tilesets/05.fts';
+import ftsFile06Contents from '../../../assets/project/Tilesets/06.fts';
+import ftsFile07Contents from '../../../assets/project/Tilesets/07.fts';
+import ftsFile08Contents from '../../../assets/project/Tilesets/08.fts';
+import ftsFile09Contents from '../../../assets/project/Tilesets/09.fts';
 import ftsFile10Contents from '../../../assets/project/Tilesets/10.fts';
+import ftsFile11Contents from '../../../assets/project/Tilesets/11.fts';
+import ftsFile12Contents from '../../../assets/project/Tilesets/12.fts';
+import ftsFile13Contents from '../../../assets/project/Tilesets/13.fts';
+import ftsFile14Contents from '../../../assets/project/Tilesets/14.fts';
+import ftsFile15Contents from '../../../assets/project/Tilesets/15.fts';
+import ftsFile16Contents from '../../../assets/project/Tilesets/16.fts';
+import ftsFile17Contents from '../../../assets/project/Tilesets/17.fts';
+import ftsFile18Contents from '../../../assets/project/Tilesets/18.fts';
+import ftsFile19Contents from '../../../assets/project/Tilesets/19.fts';
 import mapSectorsFileContents from '../../../assets/project/map_sectors.yml';
 import mapTilesFileContents from '../../../assets/project/map_tiles.map';
-import jsYaml from 'js-yaml';
 import { isValidNumber } from '@/script/base/primitive-types';
+import Tileset from '@/script/data/game-object/Tileset';
 
 describe('data-marshaling', function () {
   describe('parseFTSFileContents()', function () {
@@ -59,6 +79,47 @@ describe('data-marshaling', function () {
           10
         )
       );
+    });
+  });
+
+  describe('parseAllFTSFileContents()', function () {
+    it('Returns all GraphicSets and Tilesets from an unaltered set of *.fts files.', function () {
+      const ftsFileContentsByTilesetNumber: string[] = [
+        ftsFile00Contents,
+        ftsFile01Contents,
+        ftsFile02Contents,
+        ftsFile03Contents,
+        ftsFile04Contents,
+        ftsFile05Contents,
+        ftsFile06Contents,
+        ftsFile07Contents,
+        ftsFile08Contents,
+        ftsFile09Contents,
+        ftsFile10Contents,
+        ftsFile11Contents,
+        ftsFile12Contents,
+        ftsFile13Contents,
+        ftsFile14Contents,
+        ftsFile15Contents,
+        ftsFile16Contents,
+        ftsFile17Contents,
+        ftsFile18Contents,
+        ftsFile19Contents,
+      ];
+
+      const [graphicSets, tilesets] = parseAllFTSFileContents(
+        ftsFileContentsByTilesetNumber
+      );
+
+      for (let graphicSet of graphicSets) {
+        expect(graphicSet instanceof GraphicSet).to.be.true;
+      }
+      expect(graphicSets.length).to.equal(32);
+
+      for (let tileset of tilesets) {
+        expect(tileset instanceof Tileset).to.be.true;
+      }
+      expect(tilesets.length).to.equal(20);
     });
   });
 
@@ -135,7 +196,9 @@ describe('data-marshaling', function () {
 
   describe('dumpArrayAsYAMLWithNumericKeys()', function () {
     it('Encodes decoded map_sectors.yml files identically.', function () {
-      const csMapSectors = parseMapSectorsFileContents(mapSectorsFileContents);
+      const csMapSectors = parseMapSectorsFileContents(
+        mapSectorsFileContents
+      ).map((s) => s.getCSMapSector());
       const newMapSectorsFileContents = dumpArrayAsYAMLWithNumericKeys(
         csMapSectors
       );
@@ -146,14 +209,12 @@ describe('data-marshaling', function () {
 
   describe('parseMapTilesFileContents()', function () {
     it('Returns 81920 valid Arrangement numbers from the file.', function () {
-      const arrangementNumbers = parseMapTilesFileContents(
-        mapTilesFileContents
-      );
+      const mapCells = parseMapTilesFileContents(mapTilesFileContents);
 
-      expect(arrangementNumbers.length).to.equal(81920);
+      expect(mapCells.length).to.equal(81920);
 
-      for (let arrangementNumber of arrangementNumbers) {
-        expect(isValidNumber(arrangementNumber, 0, 1023)).to.be.true;
+      for (let mapCell of mapCells) {
+        expect(isValidNumber(mapCell.arrangementNumber, 0, 1023)).to.be.true;
       }
     });
 
@@ -196,10 +257,8 @@ describe('data-marshaling', function () {
 
   describe('buildMapTilesFileContents()', function () {
     it('Encodes a parsed map_tiles.map file identically', function () {
-      const arrangementNumbers = parseMapTilesFileContents(
-        mapTilesFileContents
-      );
-      expect(buildMapTilesFileContents(arrangementNumbers)).to.equal(
+      const mapCells = parseMapTilesFileContents(mapTilesFileContents);
+      expect(buildMapTilesFileContents(mapCells)).to.equal(
         mapTilesFileContents
       );
     });

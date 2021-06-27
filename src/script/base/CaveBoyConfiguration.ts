@@ -21,13 +21,12 @@ export class CaveBoyConfiguration {
  * the default configuration.
  */
 export function getCurrentCaveBoyConfiguration(): CaveBoyConfiguration {
-  if (window) {
-    const caveBoyConfiguration = (window as any).caveBoyConfiguration;
-
-    if (caveBoyConfiguration instanceof CaveBoyConfiguration) {
-      return caveBoyConfiguration;
-    }
+  if (
+    window !== undefined &&
+    !((window as any).caveBoyConfiguration instanceof CaveBoyConfiguration)
+  ) {
+    (window as any).caveBoyConfiguration = new CaveBoyConfiguration();
   }
 
-  return new CaveBoyConfiguration();
+  return (window as any).caveBoyConfiguration;
 }

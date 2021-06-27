@@ -25,7 +25,7 @@ describe('Sector', function () {
       csMapSector['Town Map X'] = 2;
       csMapSector['Town Map Y'] = 2;
 
-      const sector = new Sector(csMapSector);
+      const sector = new Sector(0, csMapSector);
 
       expect(sector.allowedType58ItemNumber).to.equal(2);
       expect(sector.mapMusicEntryNumber).to.equal(2);
@@ -45,13 +45,13 @@ describe('Sector', function () {
     });
 
     it('Creates an empty instance with default field values.', function () {
-      expect(new Sector()).to.eql(new Sector(createCSMapSector()));
+      expect(new Sector(0)).to.eql(new Sector(0, createCSMapSector()));
     });
   });
 
   describe('getCSMapSector()', function () {
     it('Returns a CSMapSector with all field changes applied.', function () {
-      const sector = new Sector();
+      const sector = new Sector(0);
       sector.allowedType58ItemNumber = 2;
       sector.mapMusicEntryNumber = 2;
       sector.paletteNumber = 2;
@@ -85,7 +85,7 @@ describe('Sector', function () {
       (csMapSector1 as any).unknownField1 = 'value 1';
       (csMapSector1 as any).unknownField2 = 'value 2';
 
-      const sector = new Sector(csMapSector1);
+      const sector = new Sector(0, csMapSector1);
       const csMapSector2 = sector.getCSMapSector();
 
       expect((csMapSector2 as any).unknownField1).to.equal('value 1');

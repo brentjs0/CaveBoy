@@ -88,15 +88,12 @@ export default class CaveBoyImageData extends ImageData {
     );
     const rIndex = (y * this.width + x) * 4;
 
-    this.data[rIndex] = colorComponentScaler.convertFiveBitToEightBit(
-      color.redComponent
-    );
-    this.data[rIndex + 1] = colorComponentScaler.convertFiveBitToEightBit(
-      color.greenComponent
-    );
-    this.data[rIndex + 2] = colorComponentScaler.convertFiveBitToEightBit(
-      color.blueComponent
-    );
+    this.data[rIndex] =
+      colorComponentScaler.eightBitValuesByFiveBitValue[color.redComponent];
+    this.data[rIndex + 1] =
+      colorComponentScaler.eightBitValuesByFiveBitValue[color.greenComponent];
+    this.data[rIndex + 2] =
+      colorComponentScaler.eightBitValuesByFiveBitValue[color.blueComponent];
     this.data[rIndex + 3] = alpha;
   }
 
