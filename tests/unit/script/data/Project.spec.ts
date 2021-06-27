@@ -73,43 +73,50 @@ const sectorHeightInCells = 4;
 const arrangementWidthInPixels = 32;
 const arrangementHeightInPixels = 32;
 
+async function drawMap(project: Project) {
+  const [canvas, context] = createCanvas(
+    1,
+    mapWidthInCells * arrangementWidthInPixels,
+    mapHeightInCells * arrangementHeightInPixels
+    // 3 * 32 * 8,
+    // 4 * 32 * 4
+  );
+
+  for (let mapCell of project.mapCells) {
+    const sectorNumber = mapCell.getZoneIndex(
+      mapWidthInCells,
+      sectorWidthInCells,
+      sectorHeightInCells
+    );
+
+    // if (![0, 1, 2, 32, 33, 34, 64, 65, 66, 96, 97, 98].includes(sectorNumber)) {
+    //   continue;
+    // }
+
+    const cellXInPixels =
+      mapCell.getXCoordinate(mapWidthInCells) * arrangementWidthInPixels;
+    const cellYInPixels =
+      mapCell.getYCoordinate(mapWidthInCells) * arrangementHeightInPixels;
+
+    const sector = project.sectors[sectorNumber];
+    const graphicSet = project.graphicSets[sector.graphicSetNumber];
+    const tileset = project.tilesets[graphicSet.tilesetNumber];
+    const palette = graphicSet.palettes[sector.paletteNumber];
+
+    tileset.arrangements[mapCell.arrangementNumber]
+      .getImageBitmap(tileset.minitiles, palette)
+      .then((imageBitmap) => {
+        context.drawImage(imageBitmap, cellXInPixels, cellYInPixels);
+      });
+  }
+}
+
 const project = createProject();
 
 let startTime = new Date();
-const [canvas, context] = createCanvas(
-  1,
-  mapWidthInCells * arrangementWidthInPixels, //3 * 32 * 8,
-  mapHeightInCells * arrangementHeightInPixels //4 * 32 * 4
-);
 
-for (let mapCell of project.mapCells) {
-  const sectorNumber = mapCell.getZoneIndex(
-    mapWidthInCells,
-    sectorWidthInCells,
-    sectorHeightInCells
-  );
-
-  // if (![0, 1, 2, 32, 33, 34, 64, 65, 66, 96, 97, 98].includes(sectorNumber)) {
-  //   continue;
-  // }
-
-  const cellXInPixels =
-    mapCell.getXCoordinate(mapWidthInCells) * arrangementWidthInPixels;
-  const cellYInPixels =
-    mapCell.getYCoordinate(mapWidthInCells) * arrangementHeightInPixels;
-
-  const sector = project.sectors[sectorNumber];
-  const graphicSet = project.graphicSets[sector.graphicSetNumber];
-  const tileset = project.tilesets[graphicSet.tilesetNumber];
-  const palette = graphicSet.palettes[sector.paletteNumber];
-
-  tileset.arrangements[mapCell.arrangementNumber]
-    .getImageBitmap(tileset.minitiles, palette)
-    .then((imageBitmap) => {
-      context.drawImage(imageBitmap, cellXInPixels, cellYInPixels);
-    });
-}
-
-let endTime = new Date();
-let seconds = (endTime.getTime() - startTime.getTime()) / 1000;
-console.log(seconds);
+drawMap(project).then(() => {
+  let endTime = new Date();
+  let seconds = (endTime.getTime() - startTime.getTime()) / 1000;
+  console.log(seconds);
+});
