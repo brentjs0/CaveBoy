@@ -2,11 +2,7 @@ import CaveBoyImageData from '@/script/base/CaveBoyImageData';
 import { ColorComponentScalerName } from '@/script/base/ColorComponentScaler';
 import CaveBoyError from '@/script/base/error/CaveBoyError';
 import { segmentString } from '@/script/base/helpers';
-import {
-  CSArrangementString,
-  CSPaletteString,
-  isType,
-} from '@/script/base/primitive-types';
+import { CSArrangementString, isType } from '@/script/base/primitive-types';
 import ArrangementCell from '@/script/data/game-object/ArrangementCell';
 import Minitile from '@/script/data/game-object/Minitile';
 import Palette from '@/script/data/game-object/Palette';
@@ -118,25 +114,54 @@ export default class Arrangement {
     palette: Palette,
     colorComponentScalerName?: ColorComponentScalerName
   ): Promise<ImageBitmap> {
-    const csPaletteString = palette.toCSPaletteString();
+    return new Promise<ImageBitmap>(async (resolve, reject) => {
+      const cacheKey = palette.toCSPaletteString();
 
-    if (this.cachedBitmapsByCSPaletteString[csPaletteString] === undefined) {
-      return new Promise<ImageBitmap>(async (resolve, reject) => {
-        try {
-          const imageBitmap = await createImageBitmap(
-            this.getImageData(minitiles, palette, colorComponentScalerName)
-          );
-          this.cachedBitmapsByCSPaletteString[csPaletteString] = imageBitmap;
-          resolve(imageBitmap);
-        } catch (error) {
-          reject(error);
-        }
-      });
-    }
+      if (this.cachedBitmapsByCSPaletteString[cacheKey] === undefined) {
+        // const canvas = document.createElement('CANVAS') as HTMLCanvasElement;
+        // canvas.width = 32;
+        // canvas.height = 32;
 
-    return new Promise<ImageBitmap>((resolve, _) =>
-      resolve(this.cachedBitmapsByCSPaletteString[csPaletteString])
-    );
+        // const context = canvas.getContext('2d');
+
+        // if (context === null) {
+        //   reject(
+        //     'Could not retrieve canvas context while drawing Arrangement.'
+        //   );
+        //   return;
+        // }
+
+        // try {
+        //   const minitileImageBitmaps: ImageBitmap[] = await Promise.all(
+        //     this.cells.map((c) =>
+        //       c.getImageBitmap(minitiles, palette, colorComponentScalerName)
+        //     )
+        //   );
+
+        //   for (let i = 0; i < minitileImageBitmaps.length; ++i) {
+        //     let targetXOrigin = (i % 4) * 8;
+        //     let targetYOrigin = (i >>> 2) * 8;
+        //     context.drawImage(
+        //       minitileImageBitmaps[i],
+        //       targetXOrigin,
+        //       targetYOrigin
+        //     );
+        //   }
+
+        //   this.cachedBitmapsByCSPaletteString[
+        //     cacheKey
+        //   ] = await createImageBitmap(context.getImageData(0, 0, 32, 32));
+        // } catch (error) {
+        //   reject(error);
+        // }
+
+        this.cachedBitmapsByCSPaletteString[cacheKey] = await createImageBitmap(
+          this.getImageData(minitiles, palette, colorComponentScalerName)
+        );
+      }
+
+      resolve(this.cachedBitmapsByCSPaletteString[cacheKey]);
+    });
   }
 
   /**

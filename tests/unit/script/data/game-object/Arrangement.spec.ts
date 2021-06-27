@@ -6,7 +6,6 @@ import Minitile from '@/script/data/game-object/Minitile';
 import Palette from '@/script/data/game-object/Palette';
 import { expect } from 'chai';
 import times from 'lodash/times';
-import { createCanvas } from '../../../../test-methods';
 
 describe('Arrangement', function () {
   describe('constructor()', function () {
@@ -170,17 +169,6 @@ describe('Arrangement', function () {
       const arrangementImageData = new Arrangement(
         '0d27800c75800c96800d4c800d7e800d7d800d7e800d7f800d94800d95800d94800d96800da3800da3800da3804da320'
       ).getImageData(minitiles, palette);
-
-      const [canvas, context] = createCanvas(4, 32, 32);
-      context.putImageData(arrangementImageData, 0, 0);
-      // prettier-ignore
-      document.styleSheets[1].insertRule(`
-        .arrangement {
-          background-image: url(${canvas.toDataURL('image/png')});
-          width: ${32 / window.devicePixelRatio}px;
-          height: ${32 / window.devicePixelRatio}px;
-        }
-      `);
 
       expect(arrangementImageData.data).to.eql(expectedDataValue);
     });

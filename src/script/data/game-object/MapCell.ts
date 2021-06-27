@@ -42,4 +42,36 @@ export default class MapCell {
     this.idNumber = idNumber;
     this.arrangementNumber = arrangementNumber;
   }
+
+  public getXCoordinate(mapWidthInCells: number): number {
+    return this.idNumber % mapWidthInCells;
+  }
+
+  public getYCoordinate(mapWidthInCells: number): number {
+    return Math.floor(this.idNumber / mapWidthInCells);
+  }
+
+  public getZoneXCoordinate(mapWidthInCells: number, zoneWidthInCells: number) {
+    return Math.floor(this.getXCoordinate(mapWidthInCells) / zoneWidthInCells);
+  }
+
+  public getZoneYCoordinate(
+    mapWidthInCells: number,
+    zoneHeightInCells: number
+  ) {
+    return Math.floor(this.getYCoordinate(mapWidthInCells) / zoneHeightInCells);
+  }
+
+  public getZoneIndex(
+    mapWidthInCells: number,
+    zoneWidthInCells: number,
+    zoneHeightInCells: number
+  ) {
+    const mapWidthInZones = mapWidthInCells / zoneWidthInCells;
+    return (
+      mapWidthInZones *
+        this.getZoneYCoordinate(mapWidthInCells, zoneHeightInCells) +
+      this.getZoneXCoordinate(mapWidthInCells, zoneWidthInCells)
+    );
+  }
 }

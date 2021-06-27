@@ -203,8 +203,6 @@ describe('data-marshaling', function () {
         csMapSectors
       );
 
-      console.log(newMapSectorsFileContents);
-
       expect(mapSectorsFileContents).to.equal(newMapSectorsFileContents);
     });
   });
@@ -263,12 +261,6 @@ describe('data-marshaling', function () {
       expect(buildMapTilesFileContents(mapCells)).to.equal(
         mapTilesFileContents
       );
-    });
-  });
-
-  describe('parseMapObjects()', function () {
-    it('lol', function () {
-      expect(false).to.be.true;
     });
   });
 });

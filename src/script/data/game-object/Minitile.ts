@@ -26,6 +26,16 @@ export default class Minitile {
   public foregroundLayer: MinitileLayer;
 
   /**
+   * A list of ImageBitmap representations of this Minitile with various
+   * Subpalettes applied. The keys of the list are each Subpalettes's
+   * CSSubpaletteString with a flippedHorizontally and flippedVertically
+   * value appended.
+   */
+  private cachedBitmapsByCSSubpaletteStringAndFlipState: {
+    [key: string]: ImageBitmap;
+  };
+
+  /**
    * Instantiate a Minitile, optionally with its layers initialized by
    * parsing the provided CSMinitileString.
    * @param csMinitileString - A CSMinitileString expression of
@@ -45,6 +55,8 @@ export default class Minitile {
         'The arguments provided to Minitile() were invalid.'
       );
     }
+
+    this.cachedBitmapsByCSSubpaletteStringAndFlipState = {};
   }
 
   /**
@@ -109,5 +121,59 @@ export default class Minitile {
     }
 
     return cbImageData;
+  }
+
+  /**
+   * Create or retrieve a cached 8 x 8 ImageBitmap object displaying the
+   * foregroundLayer for this Minitile laid over the backgroundLayer drawn
+   * in the specified flip state using the provided Subpalette.
+   * @param subpalette - The Subpalette to reference for mapping color
+   * numbers to Colors.
+   * @param flipHorizontally - Whether to return the image with the positions of
+   * its pixels flipped horizontally. Optional. Defaults to false.
+   * @param flipVertically - Whether to return the image with the positions of
+   * its pixels flipped vertically. Optional. Defaults to false.
+   * @param colorComponentScalerName - The name of the ColorComponentScaler to
+   * use when converting from the five-bit component values of the Colors to the
+   * eight-bit color component values of the image data. Optional. Defaults to
+   * the user-configured scaler.
+   * @returns An 8 x 8 ImageBitmap object displaying the foregroundLayer for
+   * this Minitile laid over the backgroundLayer drawn in the specified flip
+   * state using the provided Subpalette.
+   */
+  public getImageBitmap(
+    subpalette: Subpalette,
+    flipHorizontally: boolean = false,
+    flipVertically: boolean = false,
+    colorComponentScalerName?: ColorComponentScalerName
+  ): Promise<ImageBitmap> {
+    const cacheKey = `${subpalette.toCSSubpaletteString()}${flipHorizontally}${flipVertically}`;
+
+    if (
+      this.cachedBitmapsByCSSubpaletteStringAndFlipState[cacheKey] === undefined
+    ) {
+      return new Promise<ImageBitmap>(async (resolve, reject) => {
+        try {
+          const imageBitmap = await createImageBitmap(
+            this.getImageData(
+              subpalette,
+              flipHorizontally,
+              flipVertically,
+              colorComponentScalerName
+            )
+          );
+          this.cachedBitmapsByCSSubpaletteStringAndFlipState[
+            cacheKey
+          ] = imageBitmap;
+          resolve(imageBitmap);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    }
+
+    return new Promise<ImageBitmap>((resolve, _) =>
+      resolve(this.cachedBitmapsByCSSubpaletteStringAndFlipState[cacheKey])
+    );
   }
 }
