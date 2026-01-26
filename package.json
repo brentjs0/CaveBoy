@@ -52,7 +52,7 @@
     "eslint-plugin-vue": "^7.0.0",
     "js-yaml": "^4.1.0",
     "jszip": "^3.6.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "mocha": "^8.4.0",
     "prettier": "^2.2.1",
     "raw-loader": "^4.0.2",
